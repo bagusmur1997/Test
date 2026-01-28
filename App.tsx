@@ -324,17 +324,19 @@ const App: React.FC = () => {
                 Sebelumnya
             </button>
 
-            {/* Dot Navigation */}
+            {/* Dot Navigation - Clickable */}
             <div className="hidden lg:flex gap-1.5 overflow-hidden max-w-lg px-4">
                 {Array.from({ length: TOTAL_STEPS }).map((_, step) => (
-                    <div 
+                    <button 
                         key={step}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 shrink-0 ${
+                        onClick={() => goToStep(step)}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 shrink-0 outline-none hover:scale-150 focus:scale-150 ${
                             currentStep === step 
                             ? (step > 9 ? 'bg-blue-600 scale-125' : 'bg-excel-base scale-125') 
-                            : 'bg-gray-300'
+                            : 'bg-gray-300 hover:bg-gray-400'
                         }`}
-                        title={`Slide ${step}`}
+                        title={`Go to Slide ${step}`}
+                        aria-label={`Go to Slide ${step}`}
                     />
                 ))}
             </div>

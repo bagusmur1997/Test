@@ -49,7 +49,7 @@ export const Cell: React.FC<{
   );
 };
 
-export const FormulaBar: React.FC<{ value: string; label?: string }> = ({ value, label = "A1" }) => (
+export const FormulaBar: React.FC<{ value: string; label?: string; wrapText?: boolean }> = ({ value, label = "A1", wrapText = false }) => (
   <div className="flex items-center gap-2 mb-2 bg-white p-1 rounded border border-gray-300 shadow-sm">
     <div className="w-10 text-xs text-center font-bold text-gray-500 border-r border-gray-300 pr-2">
       {label}
@@ -59,7 +59,7 @@ export const FormulaBar: React.FC<{ value: string; label?: string }> = ({ value,
       <Check size={14} />
       <div className="w-px h-4 bg-gray-300 mx-1"></div>
     </div>
-    <div className="flex-1 font-mono text-sm text-gray-800 truncate">
+    <div className={`flex-1 font-mono text-sm text-gray-800 ${wrapText ? 'whitespace-normal break-all' : 'truncate'}`}>
       {value}
     </div>
   </div>

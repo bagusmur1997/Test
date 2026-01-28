@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
 
 // --- SLIDE 1: GOLDEN RULE ---
@@ -553,6 +553,7 @@ export const LogicFunctionsDemo: React.FC = () => {
 
 // --- SLIDE 6: SUMIFS ---
 export const SumifsDemo: React.FC = () => {
+    const [viewMode, setViewMode] = useState<'theory' | 'practice'>('theory');
     const [regionFilter, setRegionFilter] = useState("Jakarta");
     const [categoryFilter, setCategoryFilter] = useState("Laptop");
 
@@ -572,102 +573,174 @@ export const SumifsDemo: React.FC = () => {
     const formatCurrency = (val: number) => `Rp ${val} Jt`;
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-             <div className="space-y-6">
-                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
-                        <Filter className="text-excel-base" />
-                        Penjumlahan Bersyarat (SUMIFS)
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                        Menjumlahkan angka berdasarkan <span className="font-bold text-excel-dark">lebih dari satu kriteria</span>.
-                    </p>
+        <div className="h-full flex flex-col">
+            {/* Top Toggle */}
+            <div className="flex justify-center mb-6">
+                <div className="bg-gray-200 p-1 rounded-lg inline-flex">
+                    <button 
+                        onClick={() => setViewMode('theory')}
+                        className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${viewMode === 'theory' ? 'bg-white text-excel-dark shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Konsep & Teori
+                    </button>
+                    <button 
+                         onClick={() => setViewMode('practice')}
+                         className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${viewMode === 'practice' ? 'bg-white text-excel-dark shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Simulasi Praktik
+                    </button>
+                </div>
+            </div>
 
-                    <div className="bg-gray-100 p-3 rounded-lg border border-gray-300 font-mono text-xs text-gray-700 mb-4">
-                        <span className="text-green-600 font-bold">=SUMIFS</span>(
-                        <span className="bg-yellow-200 px-1 rounded mx-0.5" title="Kolom Angka">Sum_Range</span>, 
-                        <span className="bg-blue-100 px-1 rounded mx-0.5" title="Kolom Wilayah">Kriteria1_Range</span>, 
-                        <span className="bg-blue-200 px-1 rounded mx-0.5" title="Jakarta">"Syarat1"</span>, 
-                        <span className="bg-purple-100 px-1 rounded mx-0.5" title="Kolom Produk">Kriteria2_Range</span>, 
-                        <span className="bg-purple-200 px-1 rounded mx-0.5" title="Laptop">"Syarat2"</span>
-                        )
-                    </div>
+            {viewMode === 'theory' ? (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full overflow-auto">
+                    <div className="space-y-4">
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                <Filter className="text-excel-base" />
+                                SUMIF vs SUMIFS
+                            </h3>
+                            
+                            {/* SUMIF Card */}
+                            <div className="mb-4 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                <h4 className="font-bold text-blue-800 mb-1">1. SUMIF (Klasik / Satu Syarat)</h4>
+                                <p className="text-xs text-blue-700 mb-2">Analogi: Cari Barang, lalu Total Harganya.</p>
+                                <div className="bg-white p-2 rounded border border-blue-200 font-mono text-[10px] sm:text-xs text-gray-600 break-all whitespace-normal">
+                                    =SUMIF(<span className="text-blue-600">Range_Kriteria</span>, <span className="text-green-600">Syarat</span>, <span className="text-red-600 font-bold">Range_Duit_Di_Belakang</span>)
+                                </div>
+                            </div>
 
-                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 text-sm text-yellow-800">
-                        <b>PENTING:</b> Kolom "Duit/Angka" (Sum Range) harus diletakkan di <u>DEPAN</u> rumus. Ini beda dengan SUMIF biasa!
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 mt-6">
-                        <div>
-                            <label className="text-xs font-bold text-gray-500 uppercase">Filter Wilayah</label>
-                            <select 
-                                value={regionFilter} 
-                                onChange={(e) => setRegionFilter(e.target.value)}
-                                className="w-full mt-1 p-2 border rounded bg-white shadow-sm"
-                            >
-                                <option value="Jakarta">Jakarta</option>
-                                <option value="Bandung">Bandung</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="text-xs font-bold text-gray-500 uppercase">Filter Produk</label>
-                            <select 
-                                value={categoryFilter} 
-                                onChange={(e) => setCategoryFilter(e.target.value)}
-                                className="w-full mt-1 p-2 border rounded bg-white shadow-sm"
-                            >
-                                <option value="Laptop">Laptop</option>
-                                <option value="Mouse">Mouse</option>
-                            </select>
+                             {/* SUMIFS Card */}
+                             <div className="mb-4 bg-purple-50 p-4 rounded-lg border border-purple-100">
+                                <h4 className="font-bold text-purple-800 mb-1">2. SUMIFS (Modern / Banyak Syarat)</h4>
+                                <p className="text-xs text-purple-700 mb-2">Analogi: Amankan Duit dulu, baru filter filter filter.</p>
+                                <div className="bg-white p-2 rounded border border-purple-200 font-mono text-[10px] sm:text-xs text-gray-600 break-all whitespace-normal">
+                                    =SUMIFS(<span className="text-red-600 font-bold">Range_Duit_Di_Depan</span>, <span className="text-blue-600">Range1</span>, <span className="text-green-600">Syarat1</span>, ...)
+                                </div>
+                            </div>
                         </div>
                     </div>
-                 </div>
-             </div>
 
-             <ExcelWindow title="Laporan Penjualan Cabang">
-                <FormulaBar 
-                    value={`=SUMIFS(C2:C6, A2:A6, "${regionFilter}", B2:B6, "${categoryFilter}")`} 
-                    label="Total" 
-                />
-                <div className="grid grid-cols-[30px_1fr_1fr_1fr] text-sm">
-                    <Cell value="" isHeader />
-                    <Cell value="A (Region)" isHeader />
-                    <Cell value="B (Produk)" isHeader />
-                    <Cell value="C (Omzet)" isHeader className="bg-yellow-50" />
+                    <div className="space-y-4">
+                        {/* The Trap */}
+                        <div className="bg-red-50 p-5 rounded-xl border-l-4 border-red-500 shadow-sm">
+                            <h4 className="font-bold text-red-800 flex items-center gap-2 mb-2">
+                                <AlertTriangle size={18} />
+                                PERHATIAN (The Trap)
+                            </h4>
+                            <p className="text-sm text-red-700 mb-2">
+                                Urutan argumen terbalik! Ini kesalahan paling sering terjadi.
+                            </p>
+                            <ul className="list-disc list-inside text-xs text-red-700 space-y-1">
+                                <li><b>SUMIF:</b> Kolom Angka (Uang) ada di <span className="font-bold underline">BELAKANG</span>.</li>
+                                <li><b>SUMIFS:</b> Kolom Angka (Uang) ada di <span className="font-bold underline">DEPAN</span>.</li>
+                            </ul>
+                            <p className="text-xs text-red-600 mt-2 italic">
+                                Kenapa? Karena di SUMIFS syaratnya bisa banyak (tak terbatas), jadi Excel minta angka totalnya diamankan dulu di depan.
+                            </p>
+                        </div>
 
-                    {data.map((row, idx) => {
-                        const isMatch = row.region === regionFilter && row.product === categoryFilter;
-                        return (
-                            <React.Fragment key={idx}>
-                                <Cell value={idx + 2} isHeader />
-                                <Cell 
-                                    value={row.region} 
-                                    className={isMatch ? "bg-blue-50 font-bold text-blue-700" : "text-gray-500"} 
-                                />
-                                <Cell 
-                                    value={row.product} 
-                                    className={isMatch ? "bg-purple-50 font-bold text-purple-700" : "text-gray-500"} 
-                                />
-                                <Cell 
-                                    value={row.sales} 
-                                    align="right"
-                                    className={isMatch ? "bg-yellow-100 font-bold text-black border-l-4 border-l-excel-base" : "text-gray-400"} 
-                                />
-                            </React.Fragment>
-                        );
-                    })}
-                </div>
-
-                <div className="mt-4 bg-gray-800 text-white p-4 rounded-lg flex justify-between items-center shadow-lg">
-                    <div className="text-xs">
-                        Total Penjualan <br/>
-                        <span className="text-gray-300">Region: {regionFilter}, Produk: {categoryFilter}</span>
-                    </div>
-                    <div className="text-2xl font-bold font-mono text-green-400">
-                        {formatCurrency(result)}
+                         {/* Trainer Rec */}
+                         <div className="bg-green-50 p-5 rounded-xl border border-green-200 shadow-sm">
+                            <h4 className="font-bold text-green-800 flex items-center gap-2 mb-2">
+                                <CheckCircle2 size={18} />
+                                Rekomendasi Trainer
+                            </h4>
+                            <p className="text-sm text-green-800">
+                                <b>Pakai SUMIFS saja!</b> Meskipun syarat Anda cuma satu.
+                            </p>
+                            <p className="text-xs text-green-700 mt-2">
+                                Alasannya: Rumusnya lebih logis (Angka dulu), dan jika nanti Bos minta tambah filter (misal: per Kota), Anda tinggal tambah koma di belakang tanpa bongkar rumus dari awal.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </ExcelWindow>
+            ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+                    <div className="space-y-6">
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                            <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <Filter className="text-excel-base" />
+                                Demo SUMIFS
+                            </h3>
+                            <p className="text-sm text-gray-600 mb-4">
+                                Coba filter data di bawah ini. Perhatikan bagaimana rumus terbentuk secara otomatis.
+                            </p>
+
+                            <div className="grid grid-cols-2 gap-4 mt-6">
+                                <div>
+                                    <label className="text-xs font-bold text-gray-500 uppercase">Filter Wilayah</label>
+                                    <select 
+                                        value={regionFilter} 
+                                        onChange={(e) => setRegionFilter(e.target.value)}
+                                        className="w-full mt-1 p-2 border rounded bg-white shadow-sm"
+                                    >
+                                        <option value="Jakarta">Jakarta</option>
+                                        <option value="Bandung">Bandung</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-xs font-bold text-gray-500 uppercase">Filter Produk</label>
+                                    <select 
+                                        value={categoryFilter} 
+                                        onChange={(e) => setCategoryFilter(e.target.value)}
+                                        className="w-full mt-1 p-2 border rounded bg-white shadow-sm"
+                                    >
+                                        <option value="Laptop">Laptop</option>
+                                        <option value="Mouse">Mouse</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ExcelWindow title="Laporan Penjualan Cabang">
+                        <FormulaBar 
+                            value={`=SUMIFS(C2:C6, A2:A6, "${regionFilter}", B2:B6, "${categoryFilter}")`} 
+                            label="Total"
+                            wrapText={true} 
+                        />
+                        <div className="grid grid-cols-[30px_1fr_1fr_1fr] text-sm">
+                            <Cell value="" isHeader />
+                            <Cell value="A (Region)" isHeader />
+                            <Cell value="B (Produk)" isHeader />
+                            <Cell value="C (Omzet)" isHeader className="bg-yellow-50" />
+
+                            {data.map((row, idx) => {
+                                const isMatch = row.region === regionFilter && row.product === categoryFilter;
+                                return (
+                                    <React.Fragment key={idx}>
+                                        <Cell value={idx + 2} isHeader />
+                                        <Cell 
+                                            value={row.region} 
+                                            className={isMatch ? "bg-blue-50 font-bold text-blue-700" : "text-gray-500"} 
+                                        />
+                                        <Cell 
+                                            value={row.product} 
+                                            className={isMatch ? "bg-purple-50 font-bold text-purple-700" : "text-gray-500"} 
+                                        />
+                                        <Cell 
+                                            value={row.sales} 
+                                            align="right"
+                                            className={isMatch ? "bg-yellow-100 font-bold text-black border-l-4 border-l-excel-base" : "text-gray-400"} 
+                                        />
+                                    </React.Fragment>
+                                );
+                            })}
+                        </div>
+
+                        <div className="mt-4 bg-gray-800 text-white p-4 rounded-lg flex justify-between items-center shadow-lg">
+                            <div className="text-xs">
+                                Total Penjualan <br/>
+                                <span className="text-gray-300">Region: {regionFilter}, Produk: {categoryFilter}</span>
+                            </div>
+                            <div className="text-2xl font-bold font-mono text-green-400">
+                                {formatCurrency(result)}
+                            </div>
+                        </div>
+                    </ExcelWindow>
+                </div>
+            )}
         </div>
     );
 };
@@ -1334,57 +1407,111 @@ export const PivotPrepDemo: React.FC = () => {
 // --- SLIDE 13: PIVOT OPS ---
 export const PivotOpsDemo: React.FC = () => {
     const [op, setOp] = useState<'SUM' | 'COUNT' | 'AVERAGE'>('SUM');
-    const values = [10, 20, 15, 5];
-    
-    const result = 
-        op === 'SUM' ? values.reduce((a,b)=>a+b,0) :
-        op === 'COUNT' ? values.length :
-        values.reduce((a,b)=>a+b,0) / values.length;
+    const [rowField, setRowField] = useState<'product' | 'region'>('product');
+    const [valueField, setValueField] = useState<'sales'>('sales');
+
+    const sourceData = [
+        { product: 'Laptop', region: 'Jkt', sales: 10 },
+        { product: 'Mouse', region: 'Jkt', sales: 2 },
+        { product: 'Laptop', region: 'Bdg', sales: 8 },
+        { product: 'Mouse', region: 'Bdg', sales: 3 },
+    ];
+
+    // Calculate Pivot Result
+    const uniqueKeys = Array.from(new Set(sourceData.map(d => d[rowField])));
+    const pivotedData = uniqueKeys.map(key => {
+        const group = sourceData.filter(d => d[rowField] === key);
+        const values = group.map(d => d.sales);
+        let result = 0;
+        if (op === 'SUM') result = values.reduce((a,b) => a+b, 0);
+        else if (op === 'COUNT') result = values.length;
+        else if (op === 'AVERAGE') result = values.reduce((a,b) => a+b, 0) / values.length;
+        return { key, result };
+    });
+
+    // Grand Total
+    const allValues = sourceData.map(d => d.sales);
+    let grandTotal = 0;
+    if (op === 'SUM') grandTotal = allValues.reduce((a,b) => a+b, 0);
+    else if (op === 'COUNT') grandTotal = allValues.length;
+    else if (op === 'AVERAGE') grandTotal = allValues.reduce((a,b) => a+b, 0) / allValues.length;
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-            <div className="space-y-6">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <Table size={24} className="text-excel-base"/>
-                        Pivot Operations
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 h-full overflow-hidden">
+            {/* Left Panel: Settings & Source */}
+            <div className="space-y-4 flex flex-col h-full">
+                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm">
+                        <Settings size={16} /> Pivot Fields
                     </h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                        Hati-hati! Excel kadang otomatis memilih COUNT jika ada data kosong/teks, padahal Anda ingin SUM (Total).
-                    </p>
-                    
                     <div className="space-y-3">
-                        <button onClick={() => setOp('SUM')} className={`w-full p-3 text-left rounded border ${op === 'SUM' ? 'bg-green-50 border-green-400 ring-1 ring-green-400' : 'bg-white'}`}>
-                            <div className="font-bold text-sm">SUM (Penjumlahan)</div>
-                            <div className="text-xs text-gray-500">Total Omzet, Total Gaji</div>
-                        </button>
-                        <button onClick={() => setOp('COUNT')} className={`w-full p-3 text-left rounded border ${op === 'COUNT' ? 'bg-blue-50 border-blue-400 ring-1 ring-blue-400' : 'bg-white'}`}>
-                            <div className="font-bold text-sm">COUNT (Frekuensi)</div>
-                            <div className="text-xs text-gray-500">Berapa kali transaksi terjadi?</div>
-                        </button>
-                        <button onClick={() => setOp('AVERAGE')} className={`w-full p-3 text-left rounded border ${op === 'AVERAGE' ? 'bg-purple-50 border-purple-400 ring-1 ring-purple-400' : 'bg-white'}`}>
-                            <div className="font-bold text-sm">AVERAGE (Rata-rata)</div>
-                            <div className="text-xs text-gray-500">Rata-rata penjualan per hari</div>
-                        </button>
+                        <div>
+                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Rows (Baris)</label>
+                            <div className="flex gap-2">
+                                <button onClick={() => setRowField('product')} className={`flex-1 text-xs py-1.5 rounded border ${rowField === 'product' ? 'bg-blue-100 border-blue-400 text-blue-800 font-bold' : 'bg-gray-50'}`}>Product</button>
+                                <button onClick={() => setRowField('region')} className={`flex-1 text-xs py-1.5 rounded border ${rowField === 'region' ? 'bg-blue-100 border-blue-400 text-blue-800 font-bold' : 'bg-gray-50'}`}>Region</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Values (Nilai)</label>
+                            <div className="flex gap-2">
+                                <button disabled className="flex-1 text-xs py-1.5 rounded border bg-gray-100 text-gray-400 cursor-not-allowed">Sales (Angka)</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Summarize By</label>
+                            <div className="grid grid-cols-3 gap-1">
+                                <button onClick={() => setOp('SUM')} className={`text-xs py-1 rounded border ${op === 'SUM' ? 'bg-green-100 border-green-400 text-green-800 font-bold' : 'bg-gray-50'}`}>SUM</button>
+                                <button onClick={() => setOp('COUNT')} className={`text-xs py-1 rounded border ${op === 'COUNT' ? 'bg-blue-100 border-blue-400 text-blue-800 font-bold' : 'bg-gray-50'}`}>COUNT</button>
+                                <button onClick={() => setOp('AVERAGE')} className={`text-xs py-1 rounded border ${op === 'AVERAGE' ? 'bg-purple-100 border-purple-400 text-purple-800 font-bold' : 'bg-gray-50'}`}>AVG</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 flex-1 overflow-auto">
+                    <h3 className="font-bold text-gray-600 mb-2 text-xs uppercase">Source Data</h3>
+                    <div className="bg-white border text-xs">
+                        <div className="grid grid-cols-3 font-bold bg-gray-100 border-b p-1">
+                            <div>Prod</div><div>Reg</div><div className="text-right">Sale</div>
+                        </div>
+                        {sourceData.map((d, i) => (
+                            <div key={i} className="grid grid-cols-3 border-b p-1 last:border-0">
+                                <div>{d.product}</div><div>{d.region}</div><div className="text-right">{d.sales}</div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
 
-            <ExcelWindow title="Pivot Table Field Settings">
-                <div className="flex h-full">
-                    <div className="w-1/3 border-r bg-gray-50 p-2 text-xs">
-                        <div className="font-bold mb-2">Rows</div>
-                        <div className="bg-white border p-1 mb-1">Laptop</div>
-                        <div className="bg-white border p-1 mb-1">Mouse</div>
+            {/* Right Panel: Result */}
+            <ExcelWindow title="Pivot Table Result">
+                <div className="flex flex-col h-full justify-center">
+                    <div className="border border-gray-300 shadow-sm bg-white self-center w-full max-w-md">
+                        <div className="grid grid-cols-2">
+                            <div className="p-2 border-r border-b bg-gray-50 font-bold text-sm">Row Labels</div>
+                            <div className="p-2 border-b bg-gray-50 font-bold text-sm flex items-center justify-between">
+                                <span>{op} of Sales</span>
+                                <Filter size={12} className="text-gray-400" />
+                            </div>
+                        </div>
+                        
+                        {pivotedData.map((row, idx) => (
+                            <div key={idx} className="grid grid-cols-2 group hover:bg-blue-50">
+                                <div className="p-2 border-r border-b text-sm">{row.key}</div>
+                                <div className="p-2 border-b text-sm text-right font-mono">{Number.isInteger(row.result) ? row.result : row.result.toFixed(1)}</div>
+                            </div>
+                        ))}
+
+                         <div className="grid grid-cols-2 bg-gray-100 font-bold">
+                            <div className="p-2 border-r text-sm">Grand Total</div>
+                            <div className="p-2 text-sm text-right font-mono">{Number.isInteger(grandTotal) ? grandTotal : grandTotal.toFixed(1)}</div>
+                        </div>
                     </div>
-                    <div className="w-2/3 p-4 flex flex-col justify-center items-center">
-                        <div className="text-sm text-gray-500 mb-2">Values Area:</div>
-                        <div className="text-4xl font-bold text-excel-dark mb-2">
-                            {result}
-                        </div>
-                        <div className="text-xs bg-gray-200 px-2 py-1 rounded">
-                            Summarize Values By: <b>{op}</b>
-                        </div>
+                    
+                    <div className="mt-8 text-center text-gray-500 text-sm">
+                        {op === 'COUNT' && <p><AlertTriangle size={14} className="inline mr-1 text-orange-500"/>Hati-hati! Jika angka kecil (misal 2), mungkin tersetting Count.</p>}
+                        {op === 'SUM' && <p><CheckCircle2 size={14} className="inline mr-1 text-green-500"/>Setting Default untuk angka adalah SUM.</p>}
                     </div>
                 </div>
             </ExcelWindow>
