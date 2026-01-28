@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
 
 // --- SLIDE 1: GOLDEN RULE ---
@@ -260,6 +260,36 @@ export const AbsoluteReferenceDemo: React.FC = () => {
       );
   };
 
+  // Explanation for Row 3 specifically (The Second Item)
+  const getRow3Explanation = () => {
+      if (lockMode === 'relative') {
+          return {
+              title: "BAHAYA! (Mode Relatif)",
+              formula: "= B3 * E2",
+              desc: "Bahaya untuk referensi tetap! Rumus di C3 menjadi =B3*E2. E2 itu kosong, jadi hasilnya 0.",
+              result: "Hasil: 0",
+              color: "text-red-700 bg-red-50 border-red-200"
+          }
+      } else if (lockMode === 'absolute') {
+           return {
+              title: "AMAN (Mode Absolut)",
+              formula: "= B3 * $E$1",
+              desc: "Aman! Rumus di C3 menjadi =B3*$E$1. Referensi $E$1 terkunci total, tidak bergeser.",
+              result: "Hasil: 200 (2000 * 10%)",
+              color: "text-green-700 bg-green-50 border-green-200"
+          }
+      } else {
+           return {
+              title: "AMAN (Mode Kunci Baris)",
+              formula: "= B3 * E$1",
+              desc: "Aman! Rumus di C3 menjadi =B3*E$1. Baris 1 dikunci ($1), jadi referensi tidak turun.",
+              result: "Hasil: 200 (2000 * 10%)",
+              color: "text-blue-700 bg-blue-50 border-blue-200"
+          }
+      }
+  }
+  const row3Expl = getRow3Explanation();
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
       <div className="space-y-6">
@@ -301,7 +331,7 @@ export const AbsoluteReferenceDemo: React.FC = () => {
              </button>
           </div>
         </div>
-
+        
         <div className={`p-4 rounded-lg border text-sm transition-all duration-300 ${
             lockMode === 'relative' ? 'bg-red-50 border-red-200' :
             lockMode === 'absolute' ? 'bg-green-50 border-green-200' :
@@ -310,19 +340,19 @@ export const AbsoluteReferenceDemo: React.FC = () => {
             {lockMode === 'relative' && (
                 <div>
                     <h4 className="font-bold text-red-800 mb-1 flex items-center gap-2"><ArrowDown size={16}/> Mode Relatif (A1)</h4>
-                    <p className="text-red-700">Bahaya untuk referensi tetap! Rumus di C3 menjadi <b>=B3*E2</b>. E2 itu kosong, jadi hasilnya 0.</p>
+                    <p className="text-red-700">Bahaya untuk referensi tetap! Jika dicopy, posisi sel akan ikut bergeser.</p>
                 </div>
             )}
             {lockMode === 'absolute' && (
                 <div>
                     <h4 className="font-bold text-excel-dark mb-1 flex items-center gap-2"><Lock size={16}/> Mode Mutlak ($A$1)</h4>
-                    <p className="text-green-800">Paling aman! Rumus di C3 tetap mengacu ke <b>$E$1</b> meskipun dicopy ke bawah.</p>
+                    <p className="text-green-800">Paling aman! Kolom dan Baris dikunci. Tidak akan bergeser kemanapun.</p>
                 </div>
             )}
             {lockMode === 'row' && (
                 <div>
                     <h4 className="font-bold text-blue-800 mb-1 flex items-center gap-2"><Lock size={16}/> Mode Kunci Baris (A$1)</h4>
-                    <p className="text-blue-800">Rumus di C3 mengacu ke <b>E$1</b>. Karena baris 1 dikunci, ia tidak bergeser saat dicopy ke bawah.</p>
+                    <p className="text-blue-800">Hanya baris yang dikunci. Kolom masih bisa bergeser.</p>
                 </div>
             )}
         </div>
@@ -409,25 +439,22 @@ export const AbsoluteReferenceDemo: React.FC = () => {
                     <Cell value="" />
                     <Cell value="" />
                 </div>
-            </ExcelWindow>
 
-            {isCopied && (
-                <div className={`mt-4 p-3 rounded-lg text-sm border animate-fade-in ${
-                    lockMode === 'relative' ? 'bg-red-50 border-red-200 text-red-800' : 'bg-green-50 border-green-200 text-green-800'
-                }`}>
-                    {lockMode === 'relative' ? (
-                        <div className="flex items-start gap-2">
-                             <XCircle size={16} className="mt-0.5 shrink-0" />
-                             <span><b>Hasil Salah!</b> Lihat rumus di C3/C4 yang muncul. Pengalinya turun ke sel kosong (E2, E3).</span>
+                {isCopied && (
+                    <div className={`mt-4 p-3 rounded-lg text-sm border animate-fade-in shadow-sm ${row3Expl.color}`}>
+                        <div className="flex items-start gap-3">
+                            {lockMode === 'relative' ? <XCircle size={20} className="mt-0.5 shrink-0" /> : <CheckCircle2 size={20} className="mt-0.5 shrink-0" />}
+                            <div>
+                                <h4 className="font-bold text-sm uppercase mb-1">{row3Expl.title}</h4>
+                                <p className="text-xs font-semibold mb-1">{row3Expl.desc}</p>
+                                <div className="text-xs opacity-90 font-mono bg-white/50 p-1 rounded inline-block">
+                                    C3: {row3Expl.formula} &rarr; {row3Expl.result}
+                                </div>
+                            </div>
                         </div>
-                    ) : (
-                        <div className="flex items-start gap-2">
-                             <CheckCircle2 size={16} className="mt-0.5 shrink-0" />
-                             <span><b>Hasil Benar!</b> Referensi pajak tetap di $E$1 (atau E$1) untuk semua baris.</span>
-                        </div>
-                    )}
-                </div>
-            )}
+                    </div>
+                )}
+            </ExcelWindow>
          </div>
       </div>
     </div>
@@ -437,8 +464,8 @@ export const AbsoluteReferenceDemo: React.FC = () => {
 // --- SLIDE 5: LOGIC FUNCTIONS (IF & IFS) ---
 export const LogicFunctionsDemo: React.FC = () => {
     const [score, setScore] = useState(75);
-    const [activeTab, setActiveTab] = useState<'IF' | 'IFS'>('IF'); // Added state
-
+    const [activeTab, setActiveTab] = useState<'IF' | 'IFS'>('IF');
+    
     // IF Logic
     const ifResult = score >= 70 ? "Lulus" : "Gagal";
     const ifFormula = `=IF(B2>=70, "Lulus", "Gagal")`;
@@ -448,10 +475,9 @@ export const LogicFunctionsDemo: React.FC = () => {
         if (s >= 90) return "A";
         if (s >= 80) return "B";
         if (s >= 70) return "C";
-        return "D"; // Default catch-all
+        return "D";
     };
     const ifsResult = getIfsResult(score);
-    // User requested wrap text behavior for this long formula
     const ifsFormula = `=IFS(B2>=90,"A", B2>=80,"B", B2>=70,"C", TRUE,"D")`;
 
     return (
@@ -463,52 +489,52 @@ export const LogicFunctionsDemo: React.FC = () => {
                         Fungsi Logika (IF & IFS)
                     </h3>
 
-                    {/* TABS */}
-                    <div className="flex border-b border-gray-200 mb-4">
-                        <button
+                    {/* Tabs */}
+                    <div className="flex gap-2 mb-4 border-b">
+                        <button 
                             onClick={() => setActiveTab('IF')}
-                            className={`flex-1 py-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'IF' ? 'border-blue-500 text-blue-700' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                            className={`px-4 py-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'IF' ? 'border-blue-500 text-blue-700' : 'border-transparent text-gray-500'}`}
                         >
-                            IF (Tunggal)
+                            IF (Satu Syarat)
                         </button>
-                        <button
+                        <button 
                             onClick={() => setActiveTab('IFS')}
-                            className={`flex-1 py-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'IFS' ? 'border-purple-500 text-purple-700' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                            className={`px-4 py-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'IFS' ? 'border-purple-500 text-purple-700' : 'border-transparent text-gray-500'}`}
                         >
-                            IFS (Majemuk)
+                            IFS (Banyak Syarat)
                         </button>
                     </div>
-
+                    
                     <div className="space-y-4">
                         {activeTab === 'IF' && (
-                            <div className="bg-blue-50 p-3 rounded border border-blue-200 animate-fade-in">
-                                <h4 className="font-bold text-blue-800 text-sm">IF - Keputusan Biner</h4>
-                                <code className="text-xs bg-white px-1 py-0.5 rounded block my-1 border border-blue-100 text-blue-900 font-mono">
+                             <div className="bg-blue-50 p-4 rounded border border-blue-200 animate-fade-in">
+                                <h4 className="font-bold text-blue-800 text-sm mb-2">IF (Tunggal) - Keputusan Biner</h4>
+                                <code className="text-xs bg-white px-2 py-1 rounded block mb-2 border border-blue-100 text-blue-900 font-mono">
                                     =IF(Syarat, "Jika Benar", "Jika Salah")
                                 </code>
-                                <p className="text-xs text-blue-700 mt-2">
-                                    <b>Contoh:</b> Lulus vs Gagal. <br/>
-                                    Jika nilai di atas 70, maka "Lulus", selain itu "Gagal".
-                                </p>
+                                <p className="text-xs text-blue-700 mb-2">Digunakan untuk memilih 1 dari 2 kemungkinan.</p>
+                                <div className="bg-white p-2 rounded text-xs text-gray-600 border border-blue-100">
+                                    <b>Contoh:</b><br/>
+                                    Jika Nilai {'>='} 70 maka "Lulus".<br/>
+                                    Jika Tidak (kurang dari 70) maka "Gagal".
+                                </div>
                             </div>
                         )}
 
                         {activeTab === 'IFS' && (
-                            <div className="bg-purple-50 p-3 rounded border border-purple-200 animate-fade-in">
-                                <h4 className="font-bold text-purple-800 text-sm">IFS - Banyak Syarat</h4>
-                                <code className="text-xs bg-white px-1 py-0.5 rounded block my-1 border border-purple-100 text-purple-900 font-mono break-all whitespace-normal">
+                             <div className="bg-purple-50 p-4 rounded border border-purple-200 animate-fade-in">
+                                <h4 className="font-bold text-purple-800 text-sm mb-2">IFS (Majemuk) - Grading Nilai</h4>
+                                <code className="text-xs bg-white px-2 py-1 rounded block mb-2 border border-purple-100 text-purple-900 font-mono break-all whitespace-normal">
                                     =IFS(Syarat1, Hasil1, Syarat2, Hasil2, ...)
                                 </code>
-                                <p className="text-xs text-purple-700 mt-2 leading-relaxed">
-                                    Fitur baru (Excel 2019+). Lebih rapi daripada IF bertumpuk. Excel membaca dari kiri ke kanan dan berhenti saat syarat terpenuhi.
-                                </p>
-                                <div className="mt-2 text-xs text-purple-800 bg-white p-2 rounded border border-purple-100">
-                                    <b>Syarat Nilai (Grading):</b>
-                                    <ul className="list-disc list-inside mt-1 space-y-0.5">
-                                        <li>Nilai &ge; 90 : A</li>
-                                        <li>Nilai &ge; 80 : B</li>
-                                        <li>Nilai &ge; 70 : C</li>
-                                        <li>Sisa : D</li>
+                                <p className="text-xs text-purple-700 mb-2">Fitur baru (Excel 2019+). Lebih rapi daripada IF bertumpuk. Excel membaca dari kiri ke kanan dan berhenti saat syarat terpenuhi.</p>
+                                <div className="bg-white p-2 rounded text-xs text-gray-600 border border-purple-100">
+                                    <b>Syarat Nilai:</b>
+                                    <ul className="list-disc list-inside mt-1">
+                                        <li>{'>='} 90 = A</li>
+                                        <li>{'>='} 80 = B</li>
+                                        <li>{'>='} 70 = C</li>
+                                        <li>Sisa = D</li>
                                     </ul>
                                 </div>
                             </div>
@@ -516,7 +542,6 @@ export const LogicFunctionsDemo: React.FC = () => {
                     </div>
                  </div>
 
-                 {/* SLIDER INPUT */}
                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <label className="text-sm font-bold text-gray-700 block mb-2">Ubah Skor Siswa:</label>
                     <div className="flex items-center gap-4">
@@ -539,31 +564,32 @@ export const LogicFunctionsDemo: React.FC = () => {
                 <FormulaBar 
                     value={activeTab === 'IF' ? ifFormula : ifsFormula} 
                     label="D2" 
-                    wrapText={activeTab === 'IFS'} // Fix truncation
+                    wrapText={activeTab === 'IFS'} 
                 />
                 
                 <div className="grid grid-cols-[30px_1fr_60px_1fr] text-sm">
                     <Cell value="" isHeader />
                     <Cell value="A (Nama)" isHeader />
                     <Cell value="B (Skor)" isHeader />
-                    <Cell 
-                        value={activeTab === 'IF' ? "C (Status)" : "C (Grade)"} 
-                        isHeader 
-                        className={activeTab === 'IF' ? "bg-blue-50" : "bg-purple-50"} 
-                    />
+                    <Cell value={activeTab === 'IF' ? "C (Status)" : "D (Grade)"} isHeader className={activeTab === 'IF' ? "bg-blue-50" : "bg-purple-50"} />
 
                     <Cell value="1" isHeader />
                     <Cell value="Budi Santoso" />
                     <Cell value={score} isSelected={true} className="font-bold text-center" />
                     
-                    {/* Dynamic Result Cell */}
-                    <Cell 
-                        value={
-                            activeTab === 'IF' ? (
+                    {activeTab === 'IF' ? (
+                        <Cell 
+                            value={
                                 <div className="flex flex-col items-center">
                                     <span className={ifResult === 'Lulus' ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>{ifResult}</span>
+                                    <span className="text-[9px] text-gray-400 mt-0.5 hidden md:block text-center">=IF(B2&gt;70,...)</span>
                                 </div>
-                            ) : (
+                            } 
+                            className="bg-blue-50/50"
+                        />
+                    ) : (
+                         <Cell 
+                             value={
                                 <div className="flex flex-col items-center">
                                     <span className={`font-bold w-6 h-6 rounded-full flex items-center justify-center text-white text-xs ${
                                         ifsResult === 'A' ? 'bg-green-500' :
@@ -571,22 +597,21 @@ export const LogicFunctionsDemo: React.FC = () => {
                                         ifsResult === 'C' ? 'bg-yellow-500' : 'bg-red-500'
                                     }`}>{ifsResult}</span>
                                 </div>
-                            )
-                        }
-                        className={activeTab === 'IF' ? "bg-blue-50/50" : "bg-purple-50/50"}
-                    />
+                            } 
+                            className="bg-purple-50/50"
+                        />
+                    )}
                 </div>
                 
-                {/* Analysis Box */}
                 <div className="mt-4">
                     {activeTab === 'IF' ? (
-                        <div className="bg-blue-100 p-2 rounded text-xs text-blue-800 animate-fade-in">
+                         <div className="bg-blue-100 p-2 rounded text-xs text-blue-800 animate-fade-in">
                             <b>Analisa IF:</b><br/>
-                            Apakah {score} &ge; 70? <br/>
+                            Apakah {score} &gt;= 70? <br/>
                             {score >= 70 ? "YA -> Masuk ke 'Lulus'" : "TIDAK -> Masuk ke 'Gagal'"}
                         </div>
                     ) : (
-                        <div className="bg-purple-100 p-2 rounded text-xs text-purple-800 animate-fade-in">
+                         <div className="bg-purple-100 p-2 rounded text-xs text-purple-800 animate-fade-in">
                              <b>Analisa IFS:</b><br/>
                              {score >= 90 ? "Cek 1: >=90? YA -> A (Stop)" : 
                               score >= 80 ? "Cek 1: >=90? NO -> Cek 2: >=80? YA -> B" :
@@ -601,609 +626,202 @@ export const LogicFunctionsDemo: React.FC = () => {
 
 // --- SLIDE 6: SUMIFS ---
 export const SumifsDemo: React.FC = () => {
-    const [viewMode, setViewMode] = useState<'theory' | 'practice'>('theory');
-    const [regionFilter, setRegionFilter] = useState("Jakarta");
-    const [categoryFilter, setCategoryFilter] = useState("Laptop");
+  const [region, setRegion] = useState("All");
+  const data = [
+    { product: "Laptop", region: "West", sales: 1000 },
+    { product: "Mouse", region: "East", sales: 200 },
+    { product: "Laptop", region: "East", sales: 1200 },
+    { product: "Mouse", region: "West", sales: 150 },
+  ];
 
-    const data = [
-        { product: "Laptop", region: "Jakarta", sales: 15 },
-        { product: "Mouse", region: "Jakarta", sales: 5 },
-        { product: "Laptop", region: "Bandung", sales: 12 },
-        { product: "Mouse", region: "Bandung", sales: 3 },
-        { product: "Laptop", region: "Jakarta", sales: 10 },
-    ];
+  const filteredTotal = data
+    .filter(d => region === "All" || d.region === region)
+    .reduce((acc, curr) => acc + curr.sales, 0);
 
-    // Calc Sum
-    const result = data
-        .filter(d => d.region === regionFilter && d.product === categoryFilter)
-        .reduce((sum, item) => sum + item.sales, 0);
+  const formula = region === "All" 
+    ? `=SUM(C2:C5)` 
+    : `=SUMIF(B2:B5, "${region}", C2:C5)`;
 
-    const formatCurrency = (val: number) => `Rp ${val} Jt`;
-
-    return (
-        <div className="h-full flex flex-col">
-            {/* Top Toggle */}
-            <div className="flex justify-center mb-6">
-                <div className="bg-gray-200 p-1 rounded-lg inline-flex">
-                    <button 
-                        onClick={() => setViewMode('theory')}
-                        className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${viewMode === 'theory' ? 'bg-white text-excel-dark shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-                    >
-                        Konsep & Teori
-                    </button>
-                    <button 
-                         onClick={() => setViewMode('practice')}
-                         className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${viewMode === 'practice' ? 'bg-white text-excel-dark shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-                    >
-                        Simulasi Praktik
-                    </button>
-                </div>
-            </div>
-
-            {viewMode === 'theory' ? (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full overflow-auto">
-                    <div className="space-y-4">
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                <Filter className="text-excel-base" />
-                                SUMIF vs SUMIFS
-                            </h3>
-                            
-                            {/* SUMIF Card */}
-                            <div className="mb-4 bg-blue-50 p-4 rounded-lg border border-blue-100">
-                                <h4 className="font-bold text-blue-800 mb-1">1. SUMIF (Klasik / Satu Syarat)</h4>
-                                <p className="text-xs text-blue-700 mb-2">Analogi: Cari Barang, lalu Total Harganya.</p>
-                                <div className="bg-white p-2 rounded border border-blue-200 font-mono text-[10px] sm:text-xs text-gray-600 break-all whitespace-normal">
-                                    =SUMIF(<span className="text-blue-600">Range_Kriteria</span>, <span className="text-green-600">Syarat</span>, <span className="text-red-600 font-bold">Range_Duit_Di_Belakang</span>)
-                                </div>
-                            </div>
-
-                             {/* SUMIFS Card */}
-                             <div className="mb-4 bg-purple-50 p-4 rounded-lg border border-purple-100">
-                                <h4 className="font-bold text-purple-800 mb-1">2. SUMIFS (Modern / Banyak Syarat)</h4>
-                                <p className="text-xs text-purple-700 mb-2">Analogi: Amankan Duit dulu, baru filter filter filter.</p>
-                                <div className="bg-white p-2 rounded border border-purple-200 font-mono text-[10px] sm:text-xs text-gray-600 break-all whitespace-normal">
-                                    =SUMIFS(<span className="text-red-600 font-bold">Range_Duit_Di_Depan</span>, <span className="text-blue-600">Range1</span>, <span className="text-green-600">Syarat1</span>, ...)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        {/* The Trap */}
-                        <div className="bg-red-50 p-5 rounded-xl border-l-4 border-red-500 shadow-sm">
-                            <h4 className="font-bold text-red-800 flex items-center gap-2 mb-2">
-                                <AlertTriangle size={18} />
-                                PERHATIAN (The Trap)
-                            </h4>
-                            <p className="text-sm text-red-700 mb-2">
-                                Urutan argumen terbalik! Ini kesalahan paling sering terjadi.
-                            </p>
-                            <ul className="list-disc list-inside text-xs text-red-700 space-y-1">
-                                <li><b>SUMIF:</b> Kolom Angka (Uang) ada di <span className="font-bold underline">BELAKANG</span>.</li>
-                                <li><b>SUMIFS:</b> Kolom Angka (Uang) ada di <span className="font-bold underline">DEPAN</span>.</li>
-                            </ul>
-                            <p className="text-xs text-red-600 mt-2 italic">
-                                Kenapa? Karena di SUMIFS syaratnya bisa banyak (tak terbatas), jadi Excel minta angka totalnya diamankan dulu di depan.
-                            </p>
-                        </div>
-
-                         {/* Trainer Rec */}
-                         <div className="bg-green-50 p-5 rounded-xl border border-green-200 shadow-sm">
-                            <h4 className="font-bold text-green-800 flex items-center gap-2 mb-2">
-                                <CheckCircle2 size={18} />
-                                Rekomendasi Trainer
-                            </h4>
-                            <p className="text-sm text-green-800">
-                                <b>Pakai SUMIFS saja!</b> Meskipun syarat Anda cuma satu.
-                            </p>
-                            <p className="text-xs text-green-700 mt-2">
-                                Alasannya: Rumusnya lebih logis (Angka dulu), dan jika nanti Bos minta tambah filter (misal: per Kota), Anda tinggal tambah koma di belakang tanpa bongkar rumus dari awal.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-                    <div className="space-y-6">
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                            <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
-                                <Filter className="text-excel-base" />
-                                Demo SUMIFS
-                            </h3>
-                            <p className="text-sm text-gray-600 mb-4">
-                                Coba filter data di bawah ini. Perhatikan bagaimana rumus terbentuk secara otomatis.
-                            </p>
-
-                            <div className="grid grid-cols-2 gap-4 mt-6">
-                                <div>
-                                    <label className="text-xs font-bold text-gray-500 uppercase">Filter Wilayah</label>
-                                    <select 
-                                        value={regionFilter} 
-                                        onChange={(e) => setRegionFilter(e.target.value)}
-                                        className="w-full mt-1 p-2 border rounded bg-white shadow-sm"
-                                    >
-                                        <option value="Jakarta">Jakarta</option>
-                                        <option value="Bandung">Bandung</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="text-xs font-bold text-gray-500 uppercase">Filter Produk</label>
-                                    <select 
-                                        value={categoryFilter} 
-                                        onChange={(e) => setCategoryFilter(e.target.value)}
-                                        className="w-full mt-1 p-2 border rounded bg-white shadow-sm"
-                                    >
-                                        <option value="Laptop">Laptop</option>
-                                        <option value="Mouse">Mouse</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <ExcelWindow title="Laporan Penjualan Cabang">
-                        <FormulaBar 
-                            value={`=SUMIFS(C2:C6, A2:A6, "${regionFilter}", B2:B6, "${categoryFilter}")`} 
-                            label="Total"
-                            wrapText={true} 
-                        />
-                        <div className="grid grid-cols-[30px_1fr_1fr_1fr] text-sm">
-                            <Cell value="" isHeader />
-                            <Cell value="A (Region)" isHeader />
-                            <Cell value="B (Produk)" isHeader />
-                            <Cell value="C (Omzet)" isHeader className="bg-yellow-50" />
-
-                            {data.map((row, idx) => {
-                                const isMatch = row.region === regionFilter && row.product === categoryFilter;
-                                return (
-                                    <React.Fragment key={idx}>
-                                        <Cell value={idx + 2} isHeader />
-                                        <Cell 
-                                            value={row.region} 
-                                            className={isMatch ? "bg-blue-50 font-bold text-blue-700" : "text-gray-500"} 
-                                        />
-                                        <Cell 
-                                            value={row.product} 
-                                            className={isMatch ? "bg-purple-50 font-bold text-purple-700" : "text-gray-500"} 
-                                        />
-                                        <Cell 
-                                            value={row.sales} 
-                                            align="right"
-                                            className={isMatch ? "bg-yellow-100 font-bold text-black border-l-4 border-l-excel-base" : "text-gray-400"} 
-                                        />
-                                    </React.Fragment>
-                                );
-                            })}
-                        </div>
-
-                        <div className="mt-4 bg-gray-800 text-white p-4 rounded-lg flex justify-between items-center shadow-lg">
-                            <div className="text-xs">
-                                Total Penjualan <br/>
-                                <span className="text-gray-300">Region: {regionFilter}, Produk: {categoryFilter}</span>
-                            </div>
-                            <div className="text-2xl font-bold font-mono text-green-400">
-                                {formatCurrency(result)}
-                            </div>
-                        </div>
-                    </ExcelWindow>
-                </div>
-            )}
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+      <div className="space-y-6">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+           <h3 className="text-xl font-bold text-gray-800 mb-4">SUMIF (Penjumlahan Bersyarat)</h3>
+           <p className="text-sm text-gray-600 mb-4">Menjumlahkan nilai hanya jika memenuhi kriteria tertentu.</p>
+           <div className="flex gap-2">
+             <button onClick={() => setRegion("All")} className={`px-3 py-1 rounded border ${region === "All" ? "bg-excel-base text-white" : "bg-gray-50"}`}>All (SUM)</button>
+             <button onClick={() => setRegion("West")} className={`px-3 py-1 rounded border ${region === "West" ? "bg-blue-600 text-white" : "bg-gray-50"}`}>West Only</button>
+             <button onClick={() => setRegion("East")} className={`px-3 py-1 rounded border ${region === "East" ? "bg-blue-600 text-white" : "bg-gray-50"}`}>East Only</button>
+           </div>
         </div>
-    );
+      </div>
+      <ExcelWindow title="Sales Report">
+        <FormulaBar value={formula} label="Total" />
+        <div className="grid grid-cols-[30px_1fr_1fr_1fr] text-sm">
+           <Cell value="" isHeader />
+           <Cell value="A (Product)" isHeader />
+           <Cell value="B (Region)" isHeader />
+           <Cell value="C (Sales)" isHeader />
+           
+           {data.map((row, i) => (
+             <React.Fragment key={i}>
+                <Cell value={i+2} isHeader />
+                <Cell value={row.product} />
+                <Cell value={row.region} className={region === row.region ? "bg-yellow-100 font-bold" : ""} />
+                <Cell value={row.sales} className={region === row.region || region === "All" ? "bg-green-50 font-bold" : "text-gray-400"} />
+             </React.Fragment>
+           ))}
+           <Cell value="" isHeader />
+           <Cell value="TOTAL" className="font-bold bg-gray-100" />
+           <Cell value="" className="bg-gray-100" />
+           <Cell value={filteredTotal} className="font-bold text-excel-dark bg-gray-100" />
+        </div>
+      </ExcelWindow>
+    </div>
+  );
 };
 
-// --- SLIDE 7: BASIC STATS (MIN, MAX, AVERAGE) ---
+// --- SLIDE 7: BASIC STATS ---
 export const BasicStatsDemo: React.FC = () => {
-    // Context: Logistics/Supply Chain - Lead Time (Days)
-    const [data, setData] = useState<(number | string)[]>([5, 12, 3, 7]);
-    const [activeStat, setActiveStat] = useState<'MIN' | 'MAX' | 'AVERAGE' | null>(null);
-    
-    const numericData = data.filter(d => d !== "").map(d => Number(d));
-    const minVal = numericData.length ? Math.min(...numericData) : 0;
-    const maxVal = numericData.length ? Math.max(...numericData) : 0;
-    const sum = numericData.reduce((a, b) => a + b, 0);
-    const avgVal = numericData.length ? (sum / numericData.length).toFixed(1) : 0;
+  const scores = [85, 92, 78, 60, 95];
+  const min = Math.min(...scores);
+  const max = Math.max(...scores);
+  const avg = scores.reduce((a,b)=>a+b,0)/scores.length;
 
-    const handleChange = (index: number, val: string) => {
-        const newData = [...data];
-        if (val === "") {
-            newData[index] = "";
-        } else {
-            const num = parseFloat(val);
-            newData[index] = isNaN(num) ? 0 : num;
-        }
-        setData(newData);
-    };
-
-    const isHighlighted = (val: number | string) => {
-        if (val === "") return false;
-        const numVal = Number(val);
-        if (activeStat === 'MIN' && numVal === minVal) return true;
-        if (activeStat === 'MAX' && numVal === maxVal) return true;
-        if (activeStat === 'AVERAGE') return true; 
-        return false;
-    }
-
-    const getHighlightClass = (val: number | string) => {
-        if (!isHighlighted(val)) return '';
-        if (activeStat === 'MIN') return 'bg-blue-100 ring-2 ring-blue-500 font-bold text-blue-700 z-10 transition-all';
-        if (activeStat === 'MAX') return 'bg-red-100 ring-2 ring-red-500 font-bold text-red-700 z-10 transition-all';
-        if (activeStat === 'AVERAGE') return 'bg-purple-50 ring-2 ring-purple-300 z-10 transition-all';
-        return '';
-    }
-
-    const getFormulaDisplay = () => {
-        if (activeStat === 'MIN') return `=MIN(B2:B5) -> ${minVal}`;
-        if (activeStat === 'MAX') return `=MAX(B2:B5) -> ${maxVal}`;
-        if (activeStat === 'AVERAGE') return `=AVERAGE(B2:B5) -> ${avgVal}`;
-        return '';
-    }
-
-    return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-            <div className="space-y-6">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
-                        <Truck size={24} className="text-excel-base"/>
-                        Logistik: Analisa Lead Time
-                    </h3>
-                    <p className="text-sm text-gray-500 mb-6">Klik tombol di bawah untuk melihat fungsi statistik dalam supply chain.</p>
-                    
-                    <div className="space-y-3">
-                        <button 
-                            onClick={() => setActiveStat('MIN')}
-                            className={`w-full text-left p-3 rounded border transition-all ${activeStat === 'MIN' ? 'bg-blue-50 border-blue-400 ring-1 ring-blue-400 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
-                        >
-                            <h4 className={`font-bold text-sm ${activeStat === 'MIN' ? 'text-blue-800' : 'text-gray-800'}`}>
-                                =MIN(range)
-                            </h4>
-                            <p className="text-xs text-gray-600 mt-1">Cari Lead Time Tercepat (Best Case).</p>
-                        </button>
-
-                        <button 
-                            onClick={() => setActiveStat('MAX')}
-                            className={`w-full text-left p-3 rounded border transition-all ${activeStat === 'MAX' ? 'bg-red-50 border-red-400 ring-1 ring-red-400 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
-                        >
-                            <h4 className={`font-bold text-sm ${activeStat === 'MAX' ? 'text-red-800' : 'text-gray-800'}`}>
-                                =MAX(range)
-                            </h4>
-                            <p className="text-xs text-gray-600 mt-1">Cari Lead Time Terlama (Bottleneck/Risk).</p>
-                        </button>
-
-                        <button 
-                            onClick={() => setActiveStat('AVERAGE')}
-                            className={`w-full text-left p-3 rounded border transition-all ${activeStat === 'AVERAGE' ? 'bg-purple-50 border-purple-400 ring-1 ring-purple-400 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
-                        >
-                            <h4 className={`font-bold text-sm ${activeStat === 'AVERAGE' ? 'text-purple-800' : 'text-gray-800'}`}>
-                                =AVERAGE(range)
-                            </h4>
-                            <p className="text-xs text-gray-600 mt-1">Rata-rata Durasi Pengiriman (Planning).</p>
-                        </button>
-                    </div>
-                </div>
-
-                {activeStat && (
-                     <div className="bg-gray-800 text-white p-4 rounded-lg shadow-lg animate-fade-in flex items-center gap-3">
-                        <div className="font-mono text-lg font-bold flex-1">
-                            {getFormulaDisplay()}
-                        </div>
-                        <div className="text-xs text-gray-300 max-w-[150px] text-right">
-                            {activeStat === 'MIN' && "Menemukan nilai 3 hari."}
-                            {activeStat === 'MAX' && "Menemukan nilai 12 hari."}
-                            {activeStat === 'AVERAGE' && "Menghitung rata-rata semua sel."}
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            <ExcelWindow title="Lead Time Pengiriman (Hari)">
-                <FormulaBar value={getFormulaDisplay() || "Pilih fungsi di kiri..."} label="Result" />
-                <div className="grid grid-cols-[30px_1fr_1fr] text-sm">
-                    {/* Header */}
-                    <Cell value="" isHeader />
-                    <Cell value="A (Rute)" isHeader />
-                    <Cell value="B (Hari)" isHeader />
-
-                    {/* Data Rows */}
-                    <Cell value="1" isHeader />
-                    <Cell value="Vendor A -> WH1" className="text-xs" />
-                    <Cell value={data[0]} onChange={(v) => handleChange(0, v)} readOnly={false} className={getHighlightClass(data[0])} />
-
-                    <Cell value="2" isHeader />
-                    <Cell value="Vendor B -> WH1" className="text-xs" />
-                    <Cell value={data[1]} onChange={(v) => handleChange(1, v)} readOnly={false} className={getHighlightClass(data[1])} />
-
-                    <Cell value="3" isHeader />
-                    <Cell value="Vendor C -> WH1" className="text-xs" />
-                    <Cell value={data[2]} onChange={(v) => handleChange(2, v)} readOnly={false} className={getHighlightClass(data[2])} />
-                    
-                    <Cell value="4" isHeader />
-                    <Cell value="Vendor D -> WH1" className="text-xs" />
-                    <Cell value={data[3]} onChange={(v) => handleChange(3, v)} readOnly={false} className={getHighlightClass(data[3])} />
-
-                    {/* Results Display in Grid */}
-                    <Cell value="" isHeader className="bg-gray-100 border-t-2 border-gray-300" />
-                    <Cell value="RESULT" className="font-bold text-gray-500 bg-gray-50 border-t-2 border-gray-300 text-right pr-2" />
-                    <Cell 
-                        value={
-                            activeStat === 'MIN' ? minVal : 
-                            activeStat === 'MAX' ? maxVal : 
-                            activeStat === 'AVERAGE' ? avgVal : "-"
-                        } 
-                        className={`font-bold border-t-2 border-gray-300 transition-colors ${
-                            activeStat === 'MIN' ? 'text-blue-700 bg-blue-50' : 
-                            activeStat === 'MAX' ? 'text-red-700 bg-red-50' : 
-                            activeStat === 'AVERAGE' ? 'text-purple-700 bg-purple-50' : 'text-gray-400'
-                        }`} 
-                    />
-                </div>
-                <div className="mt-4 text-xs text-gray-400 text-center flex items-center justify-center gap-1">
-                    <Clock size={12} />
-                    <span>Data dalam satuan Hari (Days)</span>
-                </div>
-            </ExcelWindow>
-        </div>
-    );
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+       <div className="space-y-4">
+          <div className="bg-white p-4 rounded shadow">
+             <h3 className="font-bold mb-2">Statistik Dasar</h3>
+             <ul className="text-sm space-y-2">
+               <li><b>MIN:</b> Nilai terendah</li>
+               <li><b>MAX:</b> Nilai tertinggi</li>
+               <li><b>AVERAGE:</b> Rata-rata</li>
+             </ul>
+          </div>
+       </div>
+       <ExcelWindow title="Class Scores">
+          <div className="grid grid-cols-[30px_1fr] text-sm">
+             <Cell value="" isHeader />
+             <Cell value="A (Score)" isHeader />
+             {scores.map((s, i) => (
+                <React.Fragment key={i}>
+                  <Cell value={i+1} isHeader />
+                  <Cell value={s} />
+                </React.Fragment>
+             ))}
+             <Cell value="6" isHeader />
+             <Cell value="" className="bg-gray-100" />
+             
+             <Cell value="7" isHeader />
+             <Cell value={`MIN: ${min}`} className="font-bold text-red-600" />
+             <Cell value="8" isHeader />
+             <Cell value={`MAX: ${max}`} className="font-bold text-green-600" />
+             <Cell value="9" isHeader />
+             <Cell value={`AVG: ${avg}`} className="font-bold text-blue-600" />
+          </div>
+       </ExcelWindow>
+    </div>
+  );
 };
 
 // --- SLIDE 8: COUNT FAMILY ---
 export const CountFamilyDemo: React.FC = () => {
-    const [selectedFunc, setSelectedFunc] = useState<'COUNT' | 'COUNTA' | 'COUNTBLANK'>('COUNTA');
-    
-    const gridData = [
-        { id: 1, A: "Ban Truck", B: 50, C: "OK" },       // Numeric
-        { id: 2, A: "Oli Mesin", B: "", C: "Cek Fisik" }, // Blank (Belum dihitung)
-        { id: 3, A: "Filter Udara", B: 0, C: "Habis" },   // Numeric (0)
-        { id: 4, A: "Aki Basah", B: "N/A", C: "Retur" },  // Text (Error/Not Number)
-    ];
-
-    const getHighlightClass = (colVal: string | number, func: string) => {
-        const isNumber = typeof colVal === 'number';
-        const isEmpty = colVal === "";
-        const isContent = colVal !== "";
-
-        if (func === 'COUNT' && isNumber) return 'bg-blue-100 ring-2 ring-blue-500 z-10';
-        if (func === 'COUNTA' && isContent) return 'bg-green-100 ring-2 ring-green-500 z-10';
-        if (func === 'COUNTBLANK' && isEmpty) return 'bg-red-100 ring-2 ring-red-500 z-10';
-        return '';
-    };
-
-    const calculateResult = () => {
-        let count = 0;
-        gridData.forEach(row => {
-            [row.A, row.B, row.C].forEach(val => {
-                const isNumber = typeof val === 'number';
-                const isEmpty = val === "";
-                const isContent = val !== "";
-
-                if (selectedFunc === 'COUNT' && isNumber) count++;
-                if (selectedFunc === 'COUNTA' && isContent) count++;
-                if (selectedFunc === 'COUNTBLANK' && isEmpty) count++;
-            });
-        });
-        return count;
-    };
-
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-            <div className="space-y-6">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <Package size={24} className="text-excel-base"/>
-                        Warehouse: Keluarga COUNT
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-6">Studi Kasus: <b>Audit Stok Gudang (Stock Opname)</b></p>
-
-                    <div className="space-y-3">
-                         <button 
-                            onClick={() => setSelectedFunc('COUNT')}
-                            className={`w-full text-left p-4 rounded-lg border transition-all ${selectedFunc === 'COUNT' ? 'bg-blue-50 border-blue-400 ring-1 ring-blue-400' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
-                         >
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="font-bold font-mono text-lg text-blue-800">=COUNT(...)</span>
-                                <span className="text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">Hanya Angka</span>
-                            </div>
-                            <p className="text-xs text-gray-600">Menghitung stok yang valid (Angka). Mengabaikan teks 'N/A' atau Kosong.</p>
-                         </button>
-
-                         <button 
-                            onClick={() => setSelectedFunc('COUNTA')}
-                            className={`w-full text-left p-4 rounded-lg border transition-all ${selectedFunc === 'COUNTA' ? 'bg-green-50 border-green-400 ring-1 ring-green-400' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
-                         >
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="font-bold font-mono text-lg text-green-800">=COUNTA(...)</span>
-                                <span className="text-xs bg-green-200 text-green-800 px-2 py-0.5 rounded-full">Tidak Kosong</span>
-                            </div>
-                            <p className="text-xs text-gray-600">Menghitung sel terisi. Berguna untuk cek total baris data item.</p>
-                         </button>
-
-                         <button 
-                            onClick={() => setSelectedFunc('COUNTBLANK')}
-                            className={`w-full text-left p-4 rounded-lg border transition-all ${selectedFunc === 'COUNTBLANK' ? 'bg-red-50 border-red-400 ring-1 ring-red-400' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
-                         >
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="font-bold font-mono text-lg text-red-800">=COUNTBLANK(...)</span>
-                                <span className="text-xs bg-red-200 text-red-800 px-2 py-0.5 rounded-full">Kosong</span>
-                            </div>
-                            <p className="text-xs text-gray-600">Audit: Menemukan item yang <b>belum dihitung</b> (Blank).</p>
-                         </button>
-                    </div>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+            <div className="bg-white p-6 rounded-xl border">
+                <h3 className="font-bold text-lg mb-4">Keluarga COUNT</h3>
+                <ul className="space-y-3 text-sm">
+                    <li className="p-2 bg-blue-50 rounded">
+                        <span className="font-mono font-bold text-blue-700">COUNT</span>: Hitung sel berisi ANGKA saja.
+                    </li>
+                    <li className="p-2 bg-green-50 rounded">
+                        <span className="font-mono font-bold text-green-700">COUNTA</span>: Hitung sel yang TIDAK KOSONG (Angka/Teks).
+                    </li>
+                    <li className="p-2 bg-gray-50 rounded">
+                        <span className="font-mono font-bold text-gray-700">COUNTBLANK</span>: Hitung sel KOSONG.
+                    </li>
+                </ul>
             </div>
-
-            <ExcelWindow title="Formulir Stock Opname">
-                <FormulaBar value={`=${selectedFunc}(A2:C5)`} label="Hasil" />
-                <div className="grid grid-cols-[30px_1fr_1fr_1fr] text-sm">
-                    <Cell value="" isHeader />
-                    <Cell value="A (Item)" isHeader />
-                    <Cell value="B (Qty)" isHeader />
-                    <Cell value="C (Status)" isHeader />
-
-                    {gridData.map((row, idx) => (
-                        <React.Fragment key={row.id}>
-                            <Cell value={idx + 2} isHeader />
-                            <Cell value={row.A} className={`transition-colors duration-300 ${getHighlightClass(row.A, selectedFunc)}`} />
-                            <Cell value={row.B} className={`transition-colors duration-300 ${getHighlightClass(row.B, selectedFunc)}`} />
-                            <Cell value={row.C} className={`transition-colors duration-300 ${getHighlightClass(row.C, selectedFunc)}`} />
-                        </React.Fragment>
-                    ))}
-                </div>
-                
-                <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded text-center">
-                    <span className="text-gray-500 text-sm">Hasil Rumus: </span>
-                    <span className="text-2xl font-bold ml-2 text-excel-dark">
-                        {calculateResult()}
-                    </span>
-                    <div className="text-xs text-gray-400 mt-1">
-                        (Menghitung dari seluruh range A2:C5)
-                    </div>
-                </div>
-            </ExcelWindow>
-        </div>
-    );
-};
-
-// --- SLIDE 9: MEDIAN & MODE ---
-export const MedianModeDemo: React.FC = () => {
-    const [salaries, setSalaries] = useState([5, 5, 5, 6, 5]); // in Millions
-    const [hasCEO, setHasCEO] = useState(false);
-    const [selectedStat, setSelectedStat] = useState<'MEDIAN' | 'MODE'>('MEDIAN');
-
-    const toggleCEO = () => {
-        if (hasCEO) {
-            setSalaries([5, 5, 5, 6, 5]);
-            setHasCEO(false);
-        } else {
-            setSalaries([5, 5, 5, 6, 5, 100]); // Add 100M outlier
-            setHasCEO(true);
-        }
-    };
-
-    const sum = salaries.reduce((a, b) => a + b, 0);
-    const avg = (sum / salaries.length).toFixed(1);
-    
-    // Median calc
-    const sorted = [...salaries].sort((a, b) => a - b);
-    const mid = Math.floor(sorted.length / 2);
-    const median = sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-
-    const mode = 5; 
-
-    const getModeHighlight = (val: number) => {
-        if (selectedStat === 'MODE' && val === mode) {
-            return 'bg-orange-100 text-orange-800 font-bold ring-2 ring-orange-400 z-10';
-        }
-        return '';
-    }
-
-    return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-            <div className="space-y-6">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <TrendingUp size={24} className="text-purple-600"/>
-                        Nilai Tengah & Modus
-                    </h3>
-                    
-                    <div className="space-y-4">
-                        <button 
-                             onClick={() => setSelectedStat('MEDIAN')}
-                             className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${selectedStat === 'MEDIAN' ? 'bg-purple-50 border-purple-400 ring-1 ring-purple-400 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
-                        >
-                             <h4 className={`font-bold text-lg mb-1 ${selectedStat === 'MEDIAN' ? 'text-purple-800' : 'text-gray-800'}`}>
-                                =MEDIAN(...)
-                             </h4>
-                             <p className="text-sm text-gray-600">Nilai tengah. <span className="font-semibold text-purple-700">Anti bias</span> terhadap data ekstrem (Outlier) seperti gaji CEO.</p>
-                        </button>
-
-                        <button 
-                             onClick={() => setSelectedStat('MODE')}
-                             className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${selectedStat === 'MODE' ? 'bg-orange-50 border-orange-400 ring-1 ring-orange-400 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
-                        >
-                             <h4 className={`font-bold text-lg mb-1 ${selectedStat === 'MODE' ? 'text-orange-800' : 'text-gray-800'}`}>
-                                =MODE.SNGL(...)
-                             </h4>
-                             <p className="text-sm text-gray-600">Modus. Mencari nilai yang <span className="font-semibold text-orange-700">paling sering muncul</span> (Mayoritas).</p>
-                        </button>
-                    </div>
-                    
-                    <div className="mt-6 border-t pt-4">
-                        <div className="flex items-center justify-between mb-2">
-                             <p className="text-sm font-semibold text-gray-700">Simulasi Data Ekstrem:</p>
-                             <div className={`text-xs px-2 py-1 rounded font-bold ${hasCEO ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
-                                {hasCEO ? 'CEO AKTIF' : 'NORMAL'}
-                             </div>
-                        </div>
-                        <button 
-                            onClick={toggleCEO}
-                            className={`w-full py-2 px-4 rounded-lg font-bold transition-all flex items-center justify-center gap-2 ${hasCEO ? 'bg-red-50 text-red-700 border border-red-300 hover:bg-red-100' : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'}`}
-                        >
-                            <Users size={16} />
-                            {hasCEO ? "Hapus Gaji CEO" : "+ Tambah CEO (100 Juta)"}
-                        </button>
-                        <p className="text-xs text-gray-500 mt-2 text-center italic">
-                            {hasCEO ? "Perhatikan bagaimana Rata-rata (Average) naik drastis, tapi Median tetap stabil." : "Data gaji normal, rata-rata dan median hampir sama."}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <ExcelWindow title={selectedStat === 'MEDIAN' ? "Analisa Gaji (Median)" : "Analisa Gaji (Modus)"}>
-                <FormulaBar 
-                    value={selectedStat === 'MEDIAN' ? `=MEDIAN(C2:C${salaries.length+1})` : `=MODE.SNGL(C2:C${salaries.length+1})`} 
-                    label="Hasil" 
-                />
-                
+            <ExcelWindow title="Absensi Data">
                 <div className="grid grid-cols-[30px_1fr_1fr] text-sm">
                     <Cell value="" isHeader />
-                    <Cell value="Staff" isHeader />
-                    <Cell value="Gaji (Jt)" isHeader />
+                    <Cell value="A" isHeader />
+                    <Cell value="Ket" isHeader />
 
-                    {salaries.map((sal, idx) => (
-                        <React.Fragment key={idx}>
-                            <Cell value={idx + 1} isHeader />
-                            <Cell value={sal === 100 ? "CEO" : `Staff ${idx + 1}`} className={sal === 100 ? "font-bold text-red-600" : ""} />
-                            <Cell value={sal} className={`${sal === 100 ? "font-bold text-red-600 bg-red-50" : "transition-colors duration-300"} ${getModeHighlight(sal)}`} />
-                        </React.Fragment>
-                    ))}
-                </div>
+                    <Cell value="1" isHeader />
+                    <Cell value={100} align="right" />
+                    <Cell value="Angka" className="text-gray-400 italic"/>
 
-                <div className="mt-6 space-y-3">
-                    {selectedStat === 'MEDIAN' && (
-                        <div className="grid grid-cols-2 gap-4 animate-fade-in">
-                             <div className={`p-3 rounded border ${hasCEO ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'}`}>
-                                <div className="text-xs text-gray-500 uppercase font-bold">Average (Rata2)</div>
-                                <div className={`text-2xl font-bold ${hasCEO ? 'text-red-600' : 'text-gray-800'}`}>{avg} Jt</div>
-                                {hasCEO && <div className="text-[10px] text-red-500 mt-1 leading-tight">Terpengaruh CEO! Tidak representatif.</div>}
-                             </div>
-                             <div className="p-3 rounded border bg-purple-50 border-purple-200 ring-2 ring-purple-400">
-                                <div className="text-xs text-purple-600 uppercase font-bold">Median (Tengah)</div>
-                                <div className="text-2xl font-bold text-purple-800">{median} Jt</div>
-                                <div className="text-[10px] text-purple-600 mt-1 leading-tight">Stabil. Mewakili mayoritas staff.</div>
-                             </div>
-                        </div>
-                    )}
+                    <Cell value="2" isHeader />
+                    <Cell value="Hadir" />
+                    <Cell value="Teks" className="text-gray-400 italic"/>
 
-                    {selectedStat === 'MODE' && (
-                        <div className="animate-fade-in">
-                             <div className="p-4 rounded border bg-orange-50 border-orange-200 ring-2 ring-orange-400 flex justify-between items-center">
-                                <div>
-                                    <div className="text-xs text-orange-600 uppercase font-bold">Mode (Modus)</div>
-                                    <div className="text-[10px] text-orange-600 mt-1">Angka yang paling sering muncul</div>
-                                </div>
-                                <div className="text-3xl font-bold text-orange-800">{mode} Jt</div>
-                             </div>
-                             <div className="mt-2 text-xs text-center text-gray-500">
-                                Lihat sel yang di-highlight oranye di atas.
-                             </div>
-                        </div>
-                    )}
+                    <Cell value="3" isHeader />
+                    <Cell value="" />
+                    <Cell value="Kosong" className="text-gray-400 italic"/>
+
+                    <Cell value="4" isHeader />
+                    <Cell value={50} align="right" />
+                    <Cell value="Angka" className="text-gray-400 italic"/>
+
+                    <div className="col-span-3 h-4 bg-gray-100 border-b"></div>
+
+                    <Cell value="6" isHeader />
+                    <Cell value="COUNT:" className="font-bold" />
+                    <Cell value="2" className="font-bold text-blue-600" />
+
+                    <Cell value="7" isHeader />
+                    <Cell value="COUNTA:" className="font-bold" />
+                    <Cell value="3" className="font-bold text-green-600" />
+                    
+                    <Cell value="8" isHeader />
+                    <Cell value="COUNTBLANK:" className="font-bold" />
+                    <Cell value="1" className="font-bold text-gray-600" />
                 </div>
             </ExcelWindow>
         </div>
     );
-};
+}
+
+// --- SLIDE 9: MEDIAN vs MODE ---
+export const MedianModeDemo: React.FC = () => {
+    const salaries = [5, 5, 5, 10, 100]; // 100 is outlier
+    const avg = salaries.reduce((a,b)=>a+b,0)/salaries.length; // 25
+    const median = 5; // Middle value
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+            <div className="space-y-4">
+                <div className="bg-red-50 p-4 rounded border border-red-200">
+                    <h4 className="font-bold text-red-800">Masalah Rata-Rata (Average)</h4>
+                    <p className="text-xs text-red-700">Rata-rata sangat sensitif terhadap nilai ekstrem (Outlier). Gaji Boss (100jt) membuat rata-rata gaji karyawan terlihat besar (25jt), padahal mayoritas hanya 5jt.</p>
+                </div>
+                <div className="bg-green-50 p-4 rounded border border-green-200">
+                    <h4 className="font-bold text-green-800">Solusi: Median</h4>
+                    <p className="text-xs text-green-700">Nilai tengah data yang sudah diurutkan. Lebih merepresentasikan "Mayoritas" jika data timpang.</p>
+                </div>
+            </div>
+             <ExcelWindow title="Gaji Karyawan (Juta)">
+                <div className="grid grid-cols-[30px_1fr] text-sm">
+                    <Cell value="" isHeader />
+                    <Cell value="A (Gaji)" isHeader />
+                    {salaries.map((s,i) => (
+                        <React.Fragment key={i}>
+                            <Cell value={i+1} isHeader />
+                            <Cell value={s} className={s === 100 ? "bg-red-100 font-bold" : ""} />
+                        </React.Fragment>
+                    ))}
+                     <div className="col-span-2 h-2 bg-gray-100 border-b"></div>
+                     <Cell value="6" isHeader />
+                     <Cell value={`AVG: ${avg}`} className="font-bold text-red-600" />
+                     <Cell value="7" isHeader />
+                     <Cell value={`MEDIAN: ${median}`} className="font-bold text-green-600" />
+                </div>
+            </ExcelWindow>
+        </div>
+    )
+}
 
 // --- SLIDE 10: LOOKUPS (VLOOKUP & HLOOKUP) ---
 export const LookupsDemo: React.FC = () => {
@@ -1247,7 +865,7 @@ export const LookupsDemo: React.FC = () => {
                     {/* Added Explanations */}
                     {lookupType === 'VLOOKUP' ? (
                         <div className="bg-green-50 p-3 rounded border border-green-200 text-xs text-green-900 mb-4 animate-fade-in">
-                            <h4 className="font-bold mb-1">VLOOKUP (Tegak Lurus/Vertikal)</h4>
+                            <h4 className="font-bold mb-1">VLOOKUP (Tegak Lurus)</h4>
                             <p className="mb-2">Digunakan saat data referensi tersusun ke bawah (Vertikal).</p>
                             <ul className="list-disc list-inside space-y-1">
                                 <li>Mencari kunci (ID) di <b>Kolom Paling Kiri</b>.</li>
@@ -1256,7 +874,7 @@ export const LookupsDemo: React.FC = () => {
                         </div>
                     ) : (
                         <div className="bg-blue-50 p-3 rounded border border-blue-200 text-xs text-blue-900 mb-4 animate-fade-in">
-                             <h4 className="font-bold mb-1">HLOOKUP (Mendatar/Horizontal)</h4>
+                             <h4 className="font-bold mb-1">HLOOKUP (Mendatar)</h4>
                              <p className="mb-2">Digunakan saat data referensi tersusun ke samping (Horizontal).</p>
                              <ul className="list-disc list-inside space-y-1">
                                  <li>Mencari kunci (ID) di <b>Baris Paling Atas</b>.</li>
@@ -1477,7 +1095,7 @@ export const PivotPrepDemo: React.FC = () => {
 export const PivotOpsDemo: React.FC = () => {
     const [op, setOp] = useState<'SUM' | 'COUNT' | 'AVERAGE'>('SUM');
     const [rowField, setRowField] = useState<'product' | 'region'>('product');
-    const [valueField, setValueField] = useState<'sales'>('sales');
+    const [colField, setColField] = useState<'region' | 'product' | 'none'>('region');
 
     const sourceData = [
         { product: 'Laptop', region: 'Jkt', sales: 10 },
@@ -1486,24 +1104,23 @@ export const PivotOpsDemo: React.FC = () => {
         { product: 'Mouse', region: 'Bdg', sales: 3 },
     ];
 
-    // Calculate Pivot Result
-    const uniqueKeys = Array.from(new Set(sourceData.map(d => d[rowField])));
-    const pivotedData = uniqueKeys.map(key => {
-        const group = sourceData.filter(d => d[rowField] === key);
-        const values = group.map(d => d.sales);
-        let result = 0;
-        if (op === 'SUM') result = values.reduce((a,b) => a+b, 0);
-        else if (op === 'COUNT') result = values.length;
-        else if (op === 'AVERAGE') result = values.reduce((a,b) => a+b, 0) / values.length;
-        return { key, result };
-    });
+    // Helper to calc aggregate
+    const aggregate = (values: number[]) => {
+        if (values.length === 0) return 0;
+        if (op === 'SUM') return values.reduce((a,b) => a+b, 0);
+        if (op === 'COUNT') return values.length;
+        if (op === 'AVERAGE') return values.reduce((a,b) => a+b, 0) / values.length;
+        return 0;
+    }
 
-    // Grand Total
-    const allValues = sourceData.map(d => d.sales);
-    let grandTotal = 0;
-    if (op === 'SUM') grandTotal = allValues.reduce((a,b) => a+b, 0);
-    else if (op === 'COUNT') grandTotal = allValues.length;
-    else if (op === 'AVERAGE') grandTotal = allValues.reduce((a,b) => a+b, 0) / allValues.length;
+    // --- PIVOT LOGIC (MATRIX) ---
+    // 1. Get unique Row Keys
+    const rowKeys = Array.from(new Set(sourceData.map(d => d[rowField]))).sort();
+    
+    // 2. Get unique Col Keys (if applicable)
+    const colKeys = colField !== 'none' && colField !== rowField
+        ? Array.from(new Set(sourceData.map(d => d[colField]))).sort()
+        : [];
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 h-full overflow-hidden">
@@ -1514,19 +1131,25 @@ export const PivotOpsDemo: React.FC = () => {
                         <Settings size={16} /> Pivot Fields
                     </h3>
                     <div className="space-y-3">
+                        {/* ROWS */}
                         <div>
-                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Rows (Baris)</label>
+                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1 flex items-center gap-1"><Rows size={12}/> Rows (Baris)</label>
                             <div className="flex gap-2">
                                 <button onClick={() => setRowField('product')} className={`flex-1 text-xs py-1.5 rounded border ${rowField === 'product' ? 'bg-blue-100 border-blue-400 text-blue-800 font-bold' : 'bg-gray-50'}`}>Product</button>
                                 <button onClick={() => setRowField('region')} className={`flex-1 text-xs py-1.5 rounded border ${rowField === 'region' ? 'bg-blue-100 border-blue-400 text-blue-800 font-bold' : 'bg-gray-50'}`}>Region</button>
                             </div>
                         </div>
-                        <div>
-                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Values (Nilai)</label>
+
+                         {/* COLUMNS - NEW FEATURE */}
+                         <div>
+                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1 flex items-center gap-1"><Columns size={12}/> Columns (Kolom)</label>
                             <div className="flex gap-2">
-                                <button disabled className="flex-1 text-xs py-1.5 rounded border bg-gray-100 text-gray-400 cursor-not-allowed">Sales (Angka)</button>
+                                <button onClick={() => setColField('region')} disabled={rowField === 'region'} className={`flex-1 text-xs py-1.5 rounded border ${colField === 'region' ? 'bg-orange-100 border-orange-400 text-orange-800 font-bold' : 'bg-gray-50'} disabled:opacity-50`}>Region</button>
+                                <button onClick={() => setColField('product')} disabled={rowField === 'product'} className={`flex-1 text-xs py-1.5 rounded border ${colField === 'product' ? 'bg-orange-100 border-orange-400 text-orange-800 font-bold' : 'bg-gray-50'} disabled:opacity-50`}>Product</button>
+                                <button onClick={() => setColField('none')} className={`flex-1 text-xs py-1.5 rounded border ${colField === 'none' ? 'bg-gray-600 text-white font-bold' : 'bg-gray-50'}`}>None</button>
                             </div>
                         </div>
+
                         <div>
                             <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Summarize By</label>
                             <div className="grid grid-cols-3 gap-1">
@@ -1556,31 +1179,113 @@ export const PivotOpsDemo: React.FC = () => {
             {/* Right Panel: Result */}
             <ExcelWindow title="Pivot Table Result">
                 <div className="flex flex-col h-full justify-center">
-                    <div className="border border-gray-300 shadow-sm bg-white self-center w-full max-w-md">
-                        <div className="grid grid-cols-2">
-                            <div className="p-2 border-r border-b bg-gray-50 font-bold text-sm">Row Labels</div>
-                            <div className="p-2 border-b bg-gray-50 font-bold text-sm flex items-center justify-between">
-                                <span>{op} of Sales</span>
-                                <Filter size={12} className="text-gray-400" />
-                            </div>
+                    <div className="border border-gray-300 shadow-sm bg-white self-center w-full max-w-full overflow-auto">
+                        
+                        {/* Header Row */}
+                        <div className="flex bg-gray-100 border-b border-gray-300">
+                             {/* Top Left Cell */}
+                             <div className="p-2 border-r border-gray-300 font-bold text-sm w-32 shrink-0">
+                                {rowField} \ {colField !== 'none' ? colField : 'Values'}
+                             </div>
+                             
+                             {/* Column Headers */}
+                             {colKeys.length > 0 ? (
+                                 colKeys.map(cKey => (
+                                     <div key={cKey} className="p-2 border-r border-gray-300 font-bold text-sm w-24 text-center bg-orange-50">
+                                         {cKey}
+                                     </div>
+                                 ))
+                             ) : (
+                                 <div className="p-2 border-r border-gray-300 font-bold text-sm w-24 text-right">
+                                     {op}
+                                 </div>
+                             )}
+
+                             {/* Grand Total Header */}
+                             {colKeys.length > 0 && (
+                                 <div className="p-2 font-bold text-sm w-24 text-right bg-gray-200">
+                                     Gr. Total
+                                 </div>
+                             )}
                         </div>
                         
-                        {pivotedData.map((row, idx) => (
-                            <div key={idx} className="grid grid-cols-2 group hover:bg-blue-50">
-                                <div className="p-2 border-r border-b text-sm">{row.key}</div>
-                                <div className="p-2 border-b text-sm text-right font-mono">{Number.isInteger(row.result) ? row.result : row.result.toFixed(1)}</div>
-                            </div>
-                        ))}
+                        {/* Data Rows */}
+                        {rowKeys.map((rKey, rIdx) => {
+                             // Get data for this row
+                             const rowData = sourceData.filter(d => d[rowField] === rKey);
+                             const rowTotal = aggregate(rowData.map(d => d.sales));
 
-                         <div className="grid grid-cols-2 bg-gray-100 font-bold">
-                            <div className="p-2 border-r text-sm">Grand Total</div>
-                            <div className="p-2 text-sm text-right font-mono">{Number.isInteger(grandTotal) ? grandTotal : grandTotal.toFixed(1)}</div>
-                        </div>
-                    </div>
-                    
-                    <div className="mt-8 text-center text-gray-500 text-sm">
-                        {op === 'COUNT' && <p><AlertTriangle size={14} className="inline mr-1 text-orange-500"/>Hati-hati! Jika angka kecil (misal 2), mungkin tersetting Count.</p>}
-                        {op === 'SUM' && <p><CheckCircle2 size={14} className="inline mr-1 text-green-500"/>Setting Default untuk angka adalah SUM.</p>}
+                             return (
+                                <div key={rKey} className="flex border-b border-gray-200 hover:bg-blue-50">
+                                    {/* Row Label */}
+                                    <div className="p-2 border-r border-gray-300 text-sm font-semibold w-32 shrink-0">
+                                        {rKey}
+                                    </div>
+
+                                    {/* Matrix Cells */}
+                                    {colKeys.length > 0 ? (
+                                        colKeys.map(cKey => {
+                                            const cellData = rowData.filter(d => d[colField] === cKey);
+                                            const cellVal = aggregate(cellData.map(d => d.sales));
+                                            return (
+                                                <div key={cKey} className="p-2 border-r border-gray-300 text-sm w-24 text-center font-mono">
+                                                    {cellData.length > 0 ? (Number.isInteger(cellVal) ? cellVal : cellVal.toFixed(1)) : "-"}
+                                                </div>
+                                            )
+                                        })
+                                    ) : (
+                                         <div className="p-2 border-r border-gray-300 text-sm w-24 text-right font-mono">
+                                            {Number.isInteger(rowTotal) ? rowTotal : rowTotal.toFixed(1)}
+                                        </div>
+                                    )}
+                                    
+                                    {/* Row Total */}
+                                    {colKeys.length > 0 && (
+                                         <div className="p-2 text-sm w-24 text-right font-mono font-bold bg-gray-100">
+                                             {Number.isInteger(rowTotal) ? rowTotal : rowTotal.toFixed(1)}
+                                         </div>
+                                    )}
+                                </div>
+                             )
+                        })}
+
+                         {/* Grand Total Row */}
+                         <div className="flex bg-gray-200 border-t border-gray-300 font-bold">
+                            <div className="p-2 border-r border-gray-300 text-sm w-32 shrink-0">
+                                Grand Total
+                            </div>
+                            
+                            {colKeys.length > 0 ? (
+                                colKeys.map(cKey => {
+                                    const colData = sourceData.filter(d => d[colField] === cKey);
+                                    const colVal = aggregate(colData.map(d => d.sales));
+                                    return (
+                                        <div key={cKey} className="p-2 border-r border-gray-300 text-sm w-24 text-center font-mono">
+                                             {Number.isInteger(colVal) ? colVal : colVal.toFixed(1)}
+                                        </div>
+                                    )
+                                })
+                            ) : (
+                                <div className="p-2 border-r border-gray-300 text-sm w-24 text-right font-mono">
+                                    {/* Simple Grand Total */}
+                                     {(() => {
+                                         const val = aggregate(sourceData.map(d => d.sales));
+                                         return Number.isInteger(val) ? val : val.toFixed(1);
+                                     })()}
+                                </div>
+                            )}
+
+                             {/* Final Grand Total */}
+                             {colKeys.length > 0 && (
+                                 <div className="p-2 text-sm w-24 text-right font-mono text-excel-dark">
+                                      {(() => {
+                                         const val = aggregate(sourceData.map(d => d.sales));
+                                         return Number.isInteger(val) ? val : val.toFixed(1);
+                                     })()}
+                                 </div>
+                             )}
+                         </div>
+
                     </div>
                 </div>
             </ExcelWindow>
@@ -1603,23 +1308,34 @@ export const PivotChartDemo: React.FC = () => {
 
     return (
          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 h-full">
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col">
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col relative overflow-hidden">
                 <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <Filter size={18} /> Slicer
+                    <Filter size={18} /> Slicer (Filter)
                 </h3>
-                <div className="space-y-2">
+                
+                {/* Visual Slicer Mockup */}
+                <div className="space-y-2 mb-4">
+                    <div className="text-xs text-gray-500 font-bold mb-1 uppercase">Region</div>
                     {['All', 'Jakarta', 'Bandung'].map(city => (
                         <button 
                             key={city}
                             onClick={() => setFilter(city)}
-                            className={`w-full p-2 text-left rounded text-sm transition-colors ${filter === city ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-800 hover:bg-blue-100'}`}
+                            className={`w-full p-2 text-left rounded text-sm transition-colors border ${filter === city ? 'bg-blue-600 text-white border-blue-700' : 'bg-white text-gray-800 hover:bg-blue-50 border-gray-300'}`}
                         >
                             {city}
                         </button>
                     ))}
                 </div>
-                <div className="mt-auto text-xs text-gray-400 pt-4">
-                    Slicer membuat presentasi terlihat seperti Dashboard Aplikasi!
+
+                <div className="mt-auto border-t pt-4">
+                     <h4 className="font-bold text-gray-700 text-xs mb-2 flex items-center gap-1">
+                        <HelpCircle size={12}/> Cara Insert Slicer:
+                     </h4>
+                     <ol className="list-decimal list-inside text-xs text-gray-600 space-y-1">
+                        <li>Klik pada Pivot Chart / Table.</li>
+                        <li>Menu <b>PivotChart Analyze</b> &gt; <b>Insert Slicer</b>.</li>
+                        <li>Pilih kolom (misal: Region).</li>
+                     </ol>
                 </div>
             </div>
 
