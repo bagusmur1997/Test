@@ -98,7 +98,7 @@ const App: React.FC = () => {
                                 <button onClick={() => goToStep(SlideStep.REFERENCES)} className="hover:text-excel-base hover:underline text-left">• Cell References</button>
                                 <button onClick={() => goToStep(SlideStep.ABSOLUTE_REFS)} className="hover:text-excel-base hover:underline text-left">• Penguncian ($)</button>
                                 <button onClick={() => goToStep(SlideStep.LOGIC_FUNCTIONS)} className="hover:text-excel-base hover:underline text-left">• Logika IF/IFS</button>
-                                <button onClick={() => goToStep(SlideStep.SUMIFS)} className="hover:text-excel-base hover:underline text-left">• SUMIFS</button>
+                                <button onClick={() => goToStep(SlideStep.SUMIFS)} className="hover:text-excel-base hover:underline text-left">• SUMIF/SUMIFS</button>
                                 <button onClick={() => goToStep(SlideStep.BASIC_STATS)} className="hover:text-excel-base hover:underline text-left">• Statistik Dasar</button>
                                 <button onClick={() => goToStep(SlideStep.COUNT_FAMILY)} className="hover:text-excel-base hover:underline text-left">• Count Family</button>
                             </div>
@@ -189,7 +189,7 @@ const App: React.FC = () => {
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
                         <span className="text-excel-base font-bold text-sm tracking-widest uppercase">Modul 1 - Bagian 6</span>
-                        <h2 className="text-3xl font-bold text-gray-900">Penjumlahan Bersyarat (SUMIFS)</h2>
+                        <h2 className="text-3xl font-bold text-gray-900">Penjumlahan Bersyarat (SUMIF/SUMIFS)</h2>
                     </div>
                     <div className="flex-1">
                         <SumifsDemo />
