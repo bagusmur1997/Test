@@ -437,7 +437,8 @@ export const AbsoluteReferenceDemo: React.FC = () => {
 // --- SLIDE 5: LOGIC FUNCTIONS (IF & IFS) ---
 export const LogicFunctionsDemo: React.FC = () => {
     const [score, setScore] = useState(75);
-    
+    const [activeTab, setActiveTab] = useState<'IF' | 'IFS'>('IF'); // Added state
+
     // IF Logic
     const ifResult = score >= 70 ? "Lulus" : "Gagal";
     const ifFormula = `=IF(B2>=70, "Lulus", "Gagal")`;
@@ -447,9 +448,10 @@ export const LogicFunctionsDemo: React.FC = () => {
         if (s >= 90) return "A";
         if (s >= 80) return "B";
         if (s >= 70) return "C";
-        return "D";
+        return "D"; // Default catch-all
     };
     const ifsResult = getIfsResult(score);
+    // User requested wrap text behavior for this long formula
     const ifsFormula = `=IFS(B2>=90,"A", B2>=80,"B", B2>=70,"C", TRUE,"D")`;
 
     return (
@@ -460,26 +462,61 @@ export const LogicFunctionsDemo: React.FC = () => {
                         <Split className="text-yellow-600" />
                         Fungsi Logika (IF & IFS)
                     </h3>
-                    
-                    <div className="space-y-4">
-                        <div className="bg-blue-50 p-3 rounded border border-blue-200">
-                            <h4 className="font-bold text-blue-800 text-sm">IF (Tunggal) - Keputusan Biner</h4>
-                            <code className="text-xs bg-white px-1 py-0.5 rounded block my-1 border border-blue-100 text-blue-900">
-                                =IF(Syarat, "Jika Benar", "Jika Salah")
-                            </code>
-                            <p className="text-xs text-blue-700">Contoh: Lulus vs Gagal</p>
-                        </div>
 
-                        <div className="bg-purple-50 p-3 rounded border border-purple-200">
-                            <h4 className="font-bold text-purple-800 text-sm">IFS (Majemuk) - Banyak Syarat</h4>
-                            <code className="text-xs bg-white px-1 py-0.5 rounded block my-1 border border-purple-100 text-purple-900">
-                                =IFS(Syarat1, Hasil1, Syarat2, Hasil2, ...)
-                            </code>
-                            <p className="text-xs text-purple-700">Fitur baru (Excel 2019+). Lebih rapi daripada IF bertumpuk. Excel membaca dari kiri ke kanan dan berhenti saat syarat terpenuhi.</p>
-                        </div>
+                    {/* TABS */}
+                    <div className="flex border-b border-gray-200 mb-4">
+                        <button
+                            onClick={() => setActiveTab('IF')}
+                            className={`flex-1 py-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'IF' ? 'border-blue-500 text-blue-700' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                        >
+                            IF (Tunggal)
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('IFS')}
+                            className={`flex-1 py-2 text-sm font-bold border-b-2 transition-colors ${activeTab === 'IFS' ? 'border-purple-500 text-purple-700' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                        >
+                            IFS (Majemuk)
+                        </button>
+                    </div>
+
+                    <div className="space-y-4">
+                        {activeTab === 'IF' && (
+                            <div className="bg-blue-50 p-3 rounded border border-blue-200 animate-fade-in">
+                                <h4 className="font-bold text-blue-800 text-sm">IF - Keputusan Biner</h4>
+                                <code className="text-xs bg-white px-1 py-0.5 rounded block my-1 border border-blue-100 text-blue-900 font-mono">
+                                    =IF(Syarat, "Jika Benar", "Jika Salah")
+                                </code>
+                                <p className="text-xs text-blue-700 mt-2">
+                                    <b>Contoh:</b> Lulus vs Gagal. <br/>
+                                    Jika nilai di atas 70, maka "Lulus", selain itu "Gagal".
+                                </p>
+                            </div>
+                        )}
+
+                        {activeTab === 'IFS' && (
+                            <div className="bg-purple-50 p-3 rounded border border-purple-200 animate-fade-in">
+                                <h4 className="font-bold text-purple-800 text-sm">IFS - Banyak Syarat</h4>
+                                <code className="text-xs bg-white px-1 py-0.5 rounded block my-1 border border-purple-100 text-purple-900 font-mono break-all whitespace-normal">
+                                    =IFS(Syarat1, Hasil1, Syarat2, Hasil2, ...)
+                                </code>
+                                <p className="text-xs text-purple-700 mt-2 leading-relaxed">
+                                    Fitur baru (Excel 2019+). Lebih rapi daripada IF bertumpuk. Excel membaca dari kiri ke kanan dan berhenti saat syarat terpenuhi.
+                                </p>
+                                <div className="mt-2 text-xs text-purple-800 bg-white p-2 rounded border border-purple-100">
+                                    <b>Syarat Nilai (Grading):</b>
+                                    <ul className="list-disc list-inside mt-1 space-y-0.5">
+                                        <li>Nilai &ge; 90 : A</li>
+                                        <li>Nilai &ge; 80 : B</li>
+                                        <li>Nilai &ge; 70 : C</li>
+                                        <li>Sisa : D</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
                     </div>
                  </div>
 
+                 {/* SLIDER INPUT */}
                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <label className="text-sm font-bold text-gray-700 block mb-2">Ubah Skor Siswa:</label>
                     <div className="flex items-center gap-4">
@@ -498,53 +535,64 @@ export const LogicFunctionsDemo: React.FC = () => {
                  </div>
             </div>
 
-            <ExcelWindow title="Raport Siswa">
-                <FormulaBar value={ifsFormula} label="D2" />
-                <div className="grid grid-cols-[30px_1fr_60px_1fr_1fr] text-sm">
+            <ExcelWindow title={activeTab === 'IF' ? "Status Kelulusan (IF)" : "Grading Nilai (IFS)"}>
+                <FormulaBar 
+                    value={activeTab === 'IF' ? ifFormula : ifsFormula} 
+                    label="D2" 
+                    wrapText={activeTab === 'IFS'} // Fix truncation
+                />
+                
+                <div className="grid grid-cols-[30px_1fr_60px_1fr] text-sm">
                     <Cell value="" isHeader />
                     <Cell value="A (Nama)" isHeader />
                     <Cell value="B (Skor)" isHeader />
-                    <Cell value="C (IF)" isHeader className="bg-blue-50" />
-                    <Cell value="D (IFS)" isHeader className="bg-purple-50" />
+                    <Cell 
+                        value={activeTab === 'IF' ? "C (Status)" : "C (Grade)"} 
+                        isHeader 
+                        className={activeTab === 'IF' ? "bg-blue-50" : "bg-purple-50"} 
+                    />
 
                     <Cell value="1" isHeader />
                     <Cell value="Budi Santoso" />
                     <Cell value={score} isSelected={true} className="font-bold text-center" />
+                    
+                    {/* Dynamic Result Cell */}
                     <Cell 
                         value={
-                            <div className="flex flex-col items-center">
-                                <span className={ifResult === 'Lulus' ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>{ifResult}</span>
-                                <span className="text-[9px] text-gray-400 mt-0.5 hidden md:block text-center">=IF(B2&gt;70,...)</span>
-                            </div>
-                        } 
-                        className="bg-blue-50/50"
-                    />
-                    <Cell 
-                         value={
-                            <div className="flex flex-col items-center">
-                                <span className={`font-bold w-6 h-6 rounded-full flex items-center justify-center text-white text-xs ${
-                                    ifsResult === 'A' ? 'bg-green-500' :
-                                    ifsResult === 'B' ? 'bg-blue-500' :
-                                    ifsResult === 'C' ? 'bg-yellow-500' : 'bg-red-500'
-                                }`}>{ifsResult}</span>
-                            </div>
-                        } 
-                        className="bg-purple-50/50"
+                            activeTab === 'IF' ? (
+                                <div className="flex flex-col items-center">
+                                    <span className={ifResult === 'Lulus' ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>{ifResult}</span>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center">
+                                    <span className={`font-bold w-6 h-6 rounded-full flex items-center justify-center text-white text-xs ${
+                                        ifsResult === 'A' ? 'bg-green-500' :
+                                        ifsResult === 'B' ? 'bg-blue-500' :
+                                        ifsResult === 'C' ? 'bg-yellow-500' : 'bg-red-500'
+                                    }`}>{ifsResult}</span>
+                                </div>
+                            )
+                        }
+                        className={activeTab === 'IF' ? "bg-blue-50/50" : "bg-purple-50/50"}
                     />
                 </div>
                 
-                <div className="mt-4 grid grid-cols-2 gap-4">
-                    <div className="bg-blue-100 p-2 rounded text-xs text-blue-800">
-                        <b>Analisa IF:</b><br/>
-                        Apakah {score} &gt; 70? <br/>
-                        {score >= 70 ? "YA -> Masuk ke 'Lulus'" : "TIDAK -> Masuk ke 'Gagal'"}
-                    </div>
-                    <div className="bg-purple-100 p-2 rounded text-xs text-purple-800">
-                         <b>Analisa IFS:</b><br/>
-                         {score >= 90 ? "Cek 1: >90? YA -> A (Stop)" : 
-                          score >= 80 ? "Cek 1: >90? NO -> Cek 2: >80? YA -> B" :
-                          score >= 70 ? "Cek 1,2 NO -> Cek 3: >70? YA -> C" : "Semua syarat gagal -> D"}
-                    </div>
+                {/* Analysis Box */}
+                <div className="mt-4">
+                    {activeTab === 'IF' ? (
+                        <div className="bg-blue-100 p-2 rounded text-xs text-blue-800 animate-fade-in">
+                            <b>Analisa IF:</b><br/>
+                            Apakah {score} &ge; 70? <br/>
+                            {score >= 70 ? "YA -> Masuk ke 'Lulus'" : "TIDAK -> Masuk ke 'Gagal'"}
+                        </div>
+                    ) : (
+                        <div className="bg-purple-100 p-2 rounded text-xs text-purple-800 animate-fade-in">
+                             <b>Analisa IFS:</b><br/>
+                             {score >= 90 ? "Cek 1: >=90? YA -> A (Stop)" : 
+                              score >= 80 ? "Cek 1: >=90? NO -> Cek 2: >=80? YA -> B" :
+                              score >= 70 ? "Cek 1,2 NO -> Cek 3: >=70? YA -> C" : "Semua syarat gagal -> D"}
+                        </div>
+                    )}
                 </div>
             </ExcelWindow>
         </div>
@@ -1195,6 +1243,27 @@ export const LookupsDemo: React.FC = () => {
                             HLOOKUP (Horizontal)
                         </button>
                     </div>
+
+                    {/* Added Explanations */}
+                    {lookupType === 'VLOOKUP' ? (
+                        <div className="bg-green-50 p-3 rounded border border-green-200 text-xs text-green-900 mb-4 animate-fade-in">
+                            <h4 className="font-bold mb-1">VLOOKUP (Tegak Lurus/Vertikal)</h4>
+                            <p className="mb-2">Digunakan saat data referensi tersusun ke bawah (Vertikal).</p>
+                            <ul className="list-disc list-inside space-y-1">
+                                <li>Mencari kunci (ID) di <b>Kolom Paling Kiri</b>.</li>
+                                <li>Jika ketemu, bergerak ke <b>Kanan</b> untuk mengambil data (sesuai nomor kolom).</li>
+                            </ul>
+                        </div>
+                    ) : (
+                        <div className="bg-blue-50 p-3 rounded border border-blue-200 text-xs text-blue-900 mb-4 animate-fade-in">
+                             <h4 className="font-bold mb-1">HLOOKUP (Mendatar/Horizontal)</h4>
+                             <p className="mb-2">Digunakan saat data referensi tersusun ke samping (Horizontal).</p>
+                             <ul className="list-disc list-inside space-y-1">
+                                 <li>Mencari kunci (ID) di <b>Baris Paling Atas</b>.</li>
+                                 <li>Jika ketemu, bergerak ke <b>Bawah</b> untuk mengambil data (sesuai nomor baris).</li>
+                             </ul>
+                        </div>
+                    )}
 
                     <div className="bg-yellow-50 p-3 rounded border border-yellow-200 text-sm mb-4">
                         <div className="font-mono text-xs mb-1 font-bold text-yellow-800">
