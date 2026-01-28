@@ -1053,7 +1053,9 @@ export const PivotOpsDemo: React.FC = () => {
     const [rowField, setRowField] = useState<'product' | 'region'>('product');
     const [colField, setColField] = useState<'region' | 'product' | 'none'>('region');
 
-    const sourceData = [
+    // Define Type
+    type DataItem = { product: string; region: string; sales: number; };
+    const sourceData: DataItem[] = [
         { product: 'Laptop', region: 'Jkt', sales: 10 },
         { product: 'Mouse', region: 'Jkt', sales: 2 },
         { product: 'Laptop', region: 'Bdg', sales: 8 },
@@ -1075,7 +1077,7 @@ export const PivotOpsDemo: React.FC = () => {
     
     // 2. Get unique Col Keys (if applicable)
     const colKeys = colField !== 'none' && colField !== rowField
-        ? Array.from(new Set(sourceData.map(d => d[colField]))).sort()
+        ? Array.from(new Set(sourceData.map(d => d[colField as keyof DataItem] as string))).sort()
         : [];
 
     return (
@@ -1181,7 +1183,7 @@ export const PivotOpsDemo: React.FC = () => {
                                     {/* Matrix Cells */}
                                     {colKeys.length > 0 ? (
                                         colKeys.map(cKey => {
-                                            const cellData = rowData.filter(d => d[colField] === cKey);
+                                            const cellData = rowData.filter(d => d[colField as keyof DataItem] === cKey);
                                             const cellVal = aggregate(cellData.map(d => d.sales));
                                             return (
                                                 <div key={cKey} className="p-2 border-r border-gray-300 text-sm w-24 text-center font-mono">
@@ -1213,7 +1215,7 @@ export const PivotOpsDemo: React.FC = () => {
                             
                             {colKeys.length > 0 ? (
                                 colKeys.map(cKey => {
-                                    const colData = sourceData.filter(d => d[colField] === cKey);
+                                    const colData = sourceData.filter(d => d[colField as keyof DataItem] === cKey);
                                     const colVal = aggregate(colData.map(d => d.sales));
                                     return (
                                         <div key={cKey} className="p-2 border-r border-gray-300 text-sm w-24 text-center font-mono">
