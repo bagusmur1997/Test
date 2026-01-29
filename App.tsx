@@ -33,7 +33,7 @@ const App: React.FC = () => {
                 <FileSpreadsheet className="text-white" size={24} />
             </div>
             <div>
-                <h1 className="text-xl font-bold text-gray-800 tracking-tight">Anatomi Formula Excel</h1>
+                <h1 className="text-xl font-bold text-gray-800 tracking-tight">Excel Training: Formulas & Data</h1>
                 <p className="text-xs text-gray-500 uppercase tracking-widest font-semibold">
                     {currentStep <= 9 ? 'Modul 1: Dasar & Logika' : 'Modul 2: Data & Laporan'}
                 </p>
