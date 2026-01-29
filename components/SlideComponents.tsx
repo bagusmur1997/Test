@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
 
 // --- SLIDE 1: GOLDEN RULE ---
@@ -1411,31 +1411,50 @@ export const XLookupDemo: React.FC = () => {
 
             <ExcelWindow title="XLOOKUP Demo">
                 <FormulaBar value='=XLOOKUP("102", A:A, B:B, "Tidak Ada")' />
-                <div className="relative">
-                    <div className="absolute top-8 left-12 w-32 h-20 border-2 border-yellow-400 rounded bg-yellow-400/10 flex items-center justify-center text-yellow-700 font-bold text-xs">
-                        1. Cari di sini
-                    </div>
-                    <div className="absolute top-8 left-48 w-32 h-20 border-2 border-green-500 rounded bg-green-500/10 flex items-center justify-center text-green-700 font-bold text-xs">
-                        2. Ambil dari sini
-                    </div>
-                    <ArrowRight className="absolute top-16 left-40 text-gray-400" />
-                </div>
-                <div className="grid grid-cols-[30px_1fr_1fr] text-sm mt-4">
+                
+                {/* Excel Grid */}
+                <div className="grid grid-cols-[40px_1fr_1fr] text-sm border-t border-l border-gray-300 bg-white shadow-sm mb-4">
+                    {/* Headers Row */}
                     <Cell value="" isHeader />
-                    <Cell value="A (ID)" isHeader className="bg-yellow-50"/>
-                    <Cell value="B (Nama)" isHeader className="bg-green-50" />
+                    <Cell value="A" isHeader className="bg-yellow-50 text-yellow-800 font-bold border-b-2 border-yellow-300"/>
+                    <Cell value="B" isHeader className="bg-green-50 text-green-800 font-bold border-b-2 border-green-300"/>
 
+                    {/* Row 1 */}
                     <Cell value="1" isHeader />
+                    <Cell value="ID" className="font-bold bg-gray-50"/>
+                    <Cell value="Nama" className="font-bold bg-gray-50"/>
+
+                    {/* Row 2 */}
+                    <Cell value="2" isHeader />
                     <Cell value="101" />
                     <Cell value="Andi" />
 
-                    <Cell value="2" isHeader />
-                    <Cell value="102" className="bg-yellow-100 font-bold" />
-                    <Cell value="Budi" className="bg-green-100 font-bold" />
-
+                    {/* Row 3 - Highlighted */}
                     <Cell value="3" isHeader />
+                    <Cell value="102" className="bg-yellow-100 ring-2 ring-yellow-400 z-10 font-bold" />
+                    <Cell value="Budi" className="bg-green-100 ring-2 ring-green-500 z-10 font-bold" />
+
+                    {/* Row 4 */}
+                    <Cell value="4" isHeader />
                     <Cell value="103" />
                     <Cell value="Cici" />
+                </div>
+
+                {/* Visual Indicators (Below Data) */}
+                <div className="grid grid-cols-[40px_1fr_1fr] gap-2 text-xs">
+                    <div></div> {/* Spacer for Row Header column */}
+                    
+                    <div className="flex flex-col items-center p-2 bg-yellow-50 border border-yellow-300 rounded-lg text-yellow-800 animate-fade-in">
+                        <ArrowUp size={16} className="mb-1 text-yellow-600 animate-bounce" />
+                        <span className="font-bold">1. Cari di sini</span>
+                        <span className="opacity-75 text-[10px]">(Kolom A)</span>
+                    </div>
+
+                    <div className="flex flex-col items-center p-2 bg-green-50 border border-green-300 rounded-lg text-green-800 animate-fade-in">
+                        <ArrowUp size={16} className="mb-1 text-green-600 animate-bounce" />
+                        <span className="font-bold">2. Ambil ini</span>
+                         <span className="opacity-75 text-[10px]">(Kolom B)</span>
+                    </div>
                 </div>
             </ExcelWindow>
         </div>
@@ -1504,7 +1523,7 @@ export const PivotPrepDemo: React.FC = () => {
 export const PivotOpsDemo: React.FC = () => {
     const [op, setOp] = useState<'SUM' | 'COUNT' | 'AVERAGE'>('SUM');
     const [rowField, setRowField] = useState<'product' | 'region'>('product');
-    const [valueField, setValueField] = useState<'sales'>('sales');
+    const [colField, setColField] = useState<'region' | 'product' | 'none'>('region');
 
     const sourceData = [
         { product: 'Laptop', region: 'Jkt', sales: 10 },
@@ -1513,24 +1532,24 @@ export const PivotOpsDemo: React.FC = () => {
         { product: 'Mouse', region: 'Bdg', sales: 3 },
     ];
 
-    // Calculate Pivot Result
-    const uniqueKeys = Array.from(new Set(sourceData.map(d => d[rowField])));
-    const pivotedData = uniqueKeys.map(key => {
-        const group = sourceData.filter(d => d[rowField] === key);
-        const values = group.map(d => d.sales);
-        let result = 0;
-        if (op === 'SUM') result = values.reduce((a,b) => a+b, 0);
-        else if (op === 'COUNT') result = values.length;
-        else if (op === 'AVERAGE') result = values.reduce((a,b) => a+b, 0) / values.length;
-        return { key, result };
-    });
+    // Helper to calc aggregate
+    const aggregate = (values: number[]) => {
+        if (values.length === 0) return 0;
+        if (op === 'SUM') return values.reduce((a,b) => a+b, 0);
+        if (op === 'COUNT') return values.length;
+        if (op === 'AVERAGE') return values.reduce((a,b) => a+b, 0) / values.length;
+        return 0;
+    }
 
-    // Grand Total
-    const allValues = sourceData.map(d => d.sales);
-    let grandTotal = 0;
-    if (op === 'SUM') grandTotal = allValues.reduce((a,b) => a+b, 0);
-    else if (op === 'COUNT') grandTotal = allValues.length;
-    else if (op === 'AVERAGE') grandTotal = allValues.reduce((a,b) => a+b, 0) / allValues.length;
+    // --- PIVOT LOGIC (MATRIX) ---
+    // 1. Get unique Row Keys
+    const rowKeys = Array.from(new Set(sourceData.map(d => d[rowField]))).sort();
+    
+    // 2. Get unique Col Keys (if applicable)
+    // Fix: cast colField to avoid TS error about 'none' index
+    const colKeys = colField !== 'none' && colField !== rowField
+        ? Array.from(new Set(sourceData.map(d => d[colField as keyof typeof d]))).sort()
+        : [];
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 h-full overflow-hidden">
@@ -1541,19 +1560,25 @@ export const PivotOpsDemo: React.FC = () => {
                         <Settings size={16} /> Pivot Fields
                     </h3>
                     <div className="space-y-3">
+                        {/* ROWS */}
                         <div>
-                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Rows (Baris)</label>
+                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1 flex items-center gap-1"><Rows size={12}/> Rows (Baris)</label>
                             <div className="flex gap-2">
                                 <button onClick={() => setRowField('product')} className={`flex-1 text-xs py-1.5 rounded border ${rowField === 'product' ? 'bg-blue-100 border-blue-400 text-blue-800 font-bold' : 'bg-gray-50'}`}>Product</button>
                                 <button onClick={() => setRowField('region')} className={`flex-1 text-xs py-1.5 rounded border ${rowField === 'region' ? 'bg-blue-100 border-blue-400 text-blue-800 font-bold' : 'bg-gray-50'}`}>Region</button>
                             </div>
                         </div>
-                        <div>
-                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Values (Nilai)</label>
+
+                         {/* COLUMNS - NEW FEATURE */}
+                         <div>
+                            <label className="text-xs font-bold text-gray-500 uppercase block mb-1 flex items-center gap-1"><Columns size={12}/> Columns (Kolom)</label>
                             <div className="flex gap-2">
-                                <button disabled className="flex-1 text-xs py-1.5 rounded border bg-gray-100 text-gray-400 cursor-not-allowed">Sales (Angka)</button>
+                                <button onClick={() => setColField('region')} disabled={rowField === 'region'} className={`flex-1 text-xs py-1.5 rounded border ${colField === 'region' ? 'bg-orange-100 border-orange-400 text-orange-800 font-bold' : 'bg-gray-50'} disabled:opacity-50`}>Region</button>
+                                <button onClick={() => setColField('product')} disabled={rowField === 'product'} className={`flex-1 text-xs py-1.5 rounded border ${colField === 'product' ? 'bg-orange-100 border-orange-400 text-orange-800 font-bold' : 'bg-gray-50'} disabled:opacity-50`}>Product</button>
+                                <button onClick={() => setColField('none')} className={`flex-1 text-xs py-1.5 rounded border ${colField === 'none' ? 'bg-gray-600 text-white font-bold' : 'bg-gray-50'}`}>None</button>
                             </div>
                         </div>
+
                         <div>
                             <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Summarize By</label>
                             <div className="grid grid-cols-3 gap-1">
@@ -1583,31 +1608,113 @@ export const PivotOpsDemo: React.FC = () => {
             {/* Right Panel: Result */}
             <ExcelWindow title="Pivot Table Result">
                 <div className="flex flex-col h-full justify-center">
-                    <div className="border border-gray-300 shadow-sm bg-white self-center w-full max-w-md">
-                        <div className="grid grid-cols-2">
-                            <div className="p-2 border-r border-b bg-gray-50 font-bold text-sm">Row Labels</div>
-                            <div className="p-2 border-b bg-gray-50 font-bold text-sm flex items-center justify-between">
-                                <span>{op} of Sales</span>
-                                <Filter size={12} className="text-gray-400" />
-                            </div>
+                    <div className="border border-gray-300 shadow-sm bg-white self-center w-full max-w-full overflow-auto">
+                        
+                        {/* Header Row */}
+                        <div className="flex bg-gray-100 border-b border-gray-300">
+                             {/* Top Left Cell */}
+                             <div className="p-2 border-r border-gray-300 font-bold text-sm w-32 shrink-0">
+                                {rowField} \ {colField !== 'none' ? colField : 'Values'}
+                             </div>
+                             
+                             {/* Column Headers */}
+                             {colKeys.length > 0 ? (
+                                 colKeys.map(cKey => (
+                                     <div key={cKey} className="p-2 border-r border-gray-300 font-bold text-sm w-24 text-center bg-orange-50">
+                                         {cKey}
+                                     </div>
+                                 ))
+                             ) : (
+                                 <div className="p-2 border-r border-gray-300 font-bold text-sm w-24 text-right">
+                                     {op}
+                                 </div>
+                             )}
+
+                             {/* Grand Total Header */}
+                             {colKeys.length > 0 && (
+                                 <div className="p-2 font-bold text-sm w-24 text-right bg-gray-200">
+                                     Gr. Total
+                                 </div>
+                             )}
                         </div>
                         
-                        {pivotedData.map((row, idx) => (
-                            <div key={idx} className="grid grid-cols-2 group hover:bg-blue-50">
-                                <div className="p-2 border-r border-b text-sm">{row.key}</div>
-                                <div className="p-2 border-b text-sm text-right font-mono">{Number.isInteger(row.result) ? row.result : row.result.toFixed(1)}</div>
-                            </div>
-                        ))}
+                        {/* Data Rows */}
+                        {rowKeys.map((rKey, rIdx) => {
+                             // Get data for this row
+                             const rowData = sourceData.filter(d => d[rowField] === rKey);
+                             const rowTotal = aggregate(rowData.map(d => d.sales));
 
-                         <div className="grid grid-cols-2 bg-gray-100 font-bold">
-                            <div className="p-2 border-r text-sm">Grand Total</div>
-                            <div className="p-2 text-sm text-right font-mono">{Number.isInteger(grandTotal) ? grandTotal : grandTotal.toFixed(1)}</div>
-                        </div>
-                    </div>
-                    
-                    <div className="mt-8 text-center text-gray-500 text-sm">
-                        {op === 'COUNT' && <p><AlertTriangle size={14} className="inline mr-1 text-orange-500"/>Hati-hati! Jika angka kecil (misal 2), mungkin tersetting Count.</p>}
-                        {op === 'SUM' && <p><CheckCircle2 size={14} className="inline mr-1 text-green-500"/>Setting Default untuk angka adalah SUM.</p>}
+                             return (
+                                <div key={rKey} className="flex border-b border-gray-200 hover:bg-blue-50">
+                                    {/* Row Label */}
+                                    <div className="p-2 border-r border-gray-300 text-sm font-semibold w-32 shrink-0">
+                                        {rKey}
+                                    </div>
+
+                                    {/* Matrix Cells */}
+                                    {colKeys.length > 0 ? (
+                                        colKeys.map(cKey => {
+                                            const cellData = rowData.filter(d => d[colField as keyof typeof d] === cKey);
+                                            const cellVal = aggregate(cellData.map(d => d.sales));
+                                            return (
+                                                <div key={cKey} className="p-2 border-r border-gray-300 text-sm w-24 text-center font-mono">
+                                                    {cellData.length > 0 ? (Number.isInteger(cellVal) ? cellVal : cellVal.toFixed(1)) : "-"}
+                                                </div>
+                                            )
+                                        })
+                                    ) : (
+                                         <div className="p-2 border-r border-gray-300 text-sm w-24 text-right font-mono">
+                                            {Number.isInteger(rowTotal) ? rowTotal : rowTotal.toFixed(1)}
+                                        </div>
+                                    )}
+                                    
+                                    {/* Row Total */}
+                                    {colKeys.length > 0 && (
+                                         <div className="p-2 text-sm w-24 text-right font-mono font-bold bg-gray-100">
+                                             {Number.isInteger(rowTotal) ? rowTotal : rowTotal.toFixed(1)}
+                                         </div>
+                                    )}
+                                </div>
+                             )
+                        })}
+
+                         {/* Grand Total Row */}
+                         <div className="flex bg-gray-200 border-t border-gray-300 font-bold">
+                            <div className="p-2 border-r border-gray-300 text-sm w-32 shrink-0">
+                                Grand Total
+                            </div>
+                            
+                            {colKeys.length > 0 ? (
+                                colKeys.map(cKey => {
+                                    const colData = sourceData.filter(d => d[colField as keyof typeof d] === cKey);
+                                    const colVal = aggregate(colData.map(d => d.sales));
+                                    return (
+                                        <div key={cKey} className="p-2 border-r border-gray-300 text-sm w-24 text-center font-mono">
+                                             {Number.isInteger(colVal) ? colVal : colVal.toFixed(1)}
+                                        </div>
+                                    )
+                                })
+                            ) : (
+                                <div className="p-2 border-r border-gray-300 text-sm w-24 text-right font-mono">
+                                    {/* Simple Grand Total */}
+                                     {(() => {
+                                         const val = aggregate(sourceData.map(d => d.sales));
+                                         return Number.isInteger(val) ? val : val.toFixed(1);
+                                     })()}
+                                </div>
+                            )}
+
+                             {/* Final Grand Total */}
+                             {colKeys.length > 0 && (
+                                 <div className="p-2 text-sm w-24 text-right font-mono text-excel-dark">
+                                      {(() => {
+                                         const val = aggregate(sourceData.map(d => d.sales));
+                                         return Number.isInteger(val) ? val : val.toFixed(1);
+                                     })()}
+                                 </div>
+                             )}
+                         </div>
+
                     </div>
                 </div>
             </ExcelWindow>
