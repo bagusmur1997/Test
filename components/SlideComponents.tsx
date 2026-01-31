@@ -1,6 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
+
+// --- SLIDE 1 (NEW): EXCEL INTRO ---
+export const ExcelIntroDemo: React.FC = () => {
+  return (
+    <div className="h-full flex flex-col justify-center gap-8 animate-fade-in">
+        <div className="text-center max-w-4xl mx-auto space-y-6">
+            <div className="inline-flex items-center justify-center p-5 bg-green-100 rounded-full ring-8 ring-green-50 shadow-sm">
+                <FileSpreadsheet size={56} className="text-excel-base" />
+            </div>
+            <div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
+                    Microsoft Excel: Bahasa Universal Dunia Kerja
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                    Aplikasi spreadsheet (lembar kerja elektronik) yang digunakan untuk <span className="font-bold text-gray-800">menginput, mengolah, menganalisis,</span> dan <span className="font-bold text-gray-800">memvisualisasikan</span> data.
+                </p>
+            </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full px-4">
+            {/* Card 1: Kalkulasi */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4 text-blue-600 group-hover:scale-110 transition-transform">
+                    <Calculator size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-3">1. Kalkulasi</h3>
+                <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                    Melakukan perhitungan matematis otomatis.
+                </p>
+                <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
+                    <p className="text-xs text-blue-800 font-medium">
+                        Contoh: Menghitung Safety Stock, Kubikasi muatan (CBM), hingga estimasi biaya Freight.
+                    </p>
+                </div>
+            </div>
+
+            {/* Card 2: Analisis */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4 text-purple-600 group-hover:scale-110 transition-transform">
+                    <TrendingUp size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-3">2. Analisis</h3>
+                <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                    Mengubah data mentah menjadi informasi berguna.
+                </p>
+                <div className="bg-purple-50 p-3 rounded-lg border border-purple-100">
+                    <p className="text-xs text-purple-800 font-medium">
+                        Contoh: Mengukur KPI seperti On-Time Delivery (OTD), Leadtime, dll.
+                    </p>
+                </div>
+            </div>
+
+            {/* Card 3: Visualisasi */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div className="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center mb-4 text-orange-600 group-hover:scale-110 transition-transform">
+                    <BarChart3 size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-3">3. Visualisasi</h3>
+                <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                    Menyajikan data dalam bentuk grafik agar mudah dibaca.
+                </p>
+                <div className="bg-orange-50 p-3 rounded-lg border border-orange-100">
+                    <p className="text-xs text-orange-800 font-medium">
+                        Contoh: Dashboard Monitoring Stock Gudang, Status Pengiriman, & Grafik Fluktuasi Permintaan.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+  );
+};
 
 // --- SLIDE 1: GOLDEN RULE ---
 export const GoldenRuleDemo: React.FC = () => {

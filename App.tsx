@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, FileSpreadsheet, LayoutGrid, Terminal, Share2, Lock, BarChart3, Users, TrendingUp, Split, Filter, Home, Search, Table, Grid } from 'lucide-react';
 import { SlideStep } from './types';
-import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo } from './components/SlideComponents';
+import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo, ExcelIntroDemo } from './components/SlideComponents';
 
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<SlideStep>(SlideStep.INTRO);
@@ -21,7 +21,7 @@ const App: React.FC = () => {
   const goToStep = (step: SlideStep) => setCurrentStep(step);
 
   // Total steps for progress bar
-  const TOTAL_STEPS = 18; 
+  const TOTAL_STEPS = 19; 
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 md:p-8 font-sans text-gray-900">
@@ -35,7 +35,7 @@ const App: React.FC = () => {
             <div>
                 <h1 className="text-xl font-bold text-gray-800 tracking-tight">Excel Training: Formulas & Data</h1>
                 <p className="text-xs text-gray-500 uppercase tracking-widest font-semibold">
-                    {currentStep <= 9 ? 'Modul 1: Dasar & Logika' : 'Modul 2: Data & Laporan'}
+                    {currentStep <= 10 ? 'Modul 1: Dasar & Logika' : 'Modul 2: Data & Laporan'}
                 </p>
             </div>
         </div>
@@ -93,6 +93,7 @@ const App: React.FC = () => {
                                 Modul 1: Fundamental & Logika
                             </h3>
                             <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                                <button onClick={() => goToStep(SlideStep.EXCEL_INTRO)} className="hover:text-excel-base hover:underline text-left font-semibold">• Introduction</button>
                                 <button onClick={() => goToStep(SlideStep.GOLDEN_RULE)} className="hover:text-excel-base hover:underline text-left">• Golden Rule</button>
                                 <button onClick={() => goToStep(SlideStep.OPERATORS)} className="hover:text-excel-base hover:underline text-left">• Operator Math</button>
                                 <button onClick={() => goToStep(SlideStep.REFERENCES)} className="hover:text-excel-base hover:underline text-left">• Cell References</button>
@@ -101,6 +102,7 @@ const App: React.FC = () => {
                                 <button onClick={() => goToStep(SlideStep.SUMIFS)} className="hover:text-excel-base hover:underline text-left">• SUMIF/SUMIFS</button>
                                 <button onClick={() => goToStep(SlideStep.BASIC_STATS)} className="hover:text-excel-base hover:underline text-left">• Statistik Dasar</button>
                                 <button onClick={() => goToStep(SlideStep.COUNT_FAMILY)} className="hover:text-excel-base hover:underline text-left">• Count Family</button>
+                                <button onClick={() => goToStep(SlideStep.MEDIAN_MODE)} className="hover:text-excel-base hover:underline text-left">• Median & Mode</button>
                             </div>
                         </div>
 
@@ -126,6 +128,18 @@ const App: React.FC = () => {
             )}
 
             {/* --- MODUL 1 SLIDES --- */}
+
+            {currentStep === SlideStep.EXCEL_INTRO && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-excel-base font-bold text-sm tracking-widest uppercase">Modul 1 - Introduction</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Why Excel?</h2>
+                    </div>
+                    <div className="flex-1">
+                        <ExcelIntroDemo />
+                    </div>
+                </div>
+            )}
 
             {currentStep === SlideStep.GOLDEN_RULE && (
                 <div className="h-full flex flex-col">
@@ -358,7 +372,7 @@ const App: React.FC = () => {
                         onClick={() => goToStep(step)}
                         className={`w-2 h-2 rounded-full transition-all duration-300 shrink-0 outline-none hover:scale-150 focus:scale-150 ${
                             currentStep === step 
-                            ? (step > 9 ? 'bg-blue-600 scale-125' : 'bg-excel-base scale-125') 
+                            ? (step > 10 ? 'bg-blue-600 scale-125' : 'bg-excel-base scale-125') 
                             : 'bg-gray-300 hover:bg-gray-400'
                         }`}
                         title={`Go to Slide ${step}`}
