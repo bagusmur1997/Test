@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet, Snowflake, ListFilter, Check } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet, Snowflake, ListFilter, Check, FilePlus, Trash2 } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
 
 // --- SLIDE 1 (NEW): EXCEL INTRO ---
@@ -2280,6 +2280,141 @@ export const PivotOpsDemo: React.FC = () => {
 
                     </div>
                 </div>
+            </ExcelWindow>
+        </div>
+    );
+};
+
+// --- SLIDE 18: PIVOT DRILL DOWN (NEW) ---
+export const PivotDrillDownDemo: React.FC = () => {
+    const [view, setView] = useState<'pivot' | 'sheet'>('pivot');
+
+    const drillDownData = [
+        { id: 'INV-001', date: '01/01/2024', item: 'Biaya Kirim Reguler', cost: 5000000 },
+        { id: 'INV-005', date: '05/01/2024', item: 'Biaya Kirim Reguler', cost: 5000000 },
+        { id: 'INV-009', date: '15/01/2024', item: 'Denda Keterlambatan (Penalty)', cost: 40000000, highlight: true },
+    ];
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+            <div className="space-y-6 flex flex-col justify-center">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <Search size={24} className="text-excel-base"/>
+                        Audit Cepat: Drill Down
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                        Fitur rahasia untuk melihat rincian data mentah dari total angka Pivot Table.
+                    </p>
+                    
+                    <div className="space-y-4">
+                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <h4 className="font-bold text-blue-800 text-sm mb-2 flex items-center gap-2">
+                                <MousePointerClick size={16}/> Cara Pakai:
+                            </h4>
+                            <p className="text-sm text-gray-700">
+                                <b>Double Click (Klik 2x)</b> pada angka total yang mencurigakan di Pivot Table.
+                            </p>
+                        </div>
+
+                        <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                            <h4 className="font-bold text-green-800 text-sm mb-2 flex items-center gap-2">
+                                <FilePlus size={16}/> Hasilnya:
+                            </h4>
+                            <p className="text-sm text-gray-700">
+                                Excel otomatis membuat <b>Sheet Baru</b> berisi daftar transaksi detail penyusun angka tersebut.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="p-4 rounded-lg bg-gray-100 text-gray-600 text-xs italic border border-gray-300">
+                    "Tips: Hapus sheet baru tersebut jika sudah selesai dianalisis agar file tidak penuh."
+                </div>
+            </div>
+
+            <ExcelWindow title={view === 'pivot' ? "Laporan Biaya Pengiriman" : "Sheet 2 (Detail Surabaya)"}>
+                {view === 'pivot' ? (
+                    <div className="h-full flex flex-col justify-center items-center animate-fade-in">
+                        <div className="mb-4 text-center">
+                            <p className="text-sm font-bold text-red-600 mb-2">Kasus: Kenapa Surabaya 50 Juta? (Biasanya 10 Juta)</p>
+                            <p className="text-xs text-gray-500">Coba Double Click angka 50 Jt di bawah ini.</p>
+                        </div>
+                        <div className="bg-white border border-gray-300 shadow-md">
+                            <div className="flex bg-gray-100 border-b border-gray-300 font-bold text-sm">
+                                <div className="p-3 w-32 border-r border-gray-300">Cabang</div>
+                                <div className="p-3 w-32 text-right">Total Biaya</div>
+                            </div>
+                            <div className="flex border-b border-gray-200">
+                                <div className="p-3 w-32 border-r border-gray-300 text-sm">Jakarta</div>
+                                <div className="p-3 w-32 text-right text-sm">15.000.000</div>
+                            </div>
+                            <div className="flex border-b border-gray-200">
+                                <div className="p-3 w-32 border-r border-gray-300 text-sm">Bandung</div>
+                                <div className="p-3 w-32 text-right text-sm">12.000.000</div>
+                            </div>
+                            <div 
+                                className="flex border-b border-gray-200 bg-red-50 cursor-pointer hover:bg-red-100 transition-colors group relative"
+                                onDoubleClick={() => setView('sheet')}
+                            >
+                                <div className="p-3 w-32 border-r border-gray-300 text-sm font-bold text-red-800">Surabaya</div>
+                                <div className="p-3 w-32 text-right text-sm font-bold text-red-800">50.000.000</div>
+                                
+                                {/* Tooltip hint */}
+                                <div className="absolute top-1/2 left-full ml-2 -translate-y-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                    Double Click Me!
+                                </div>
+                            </div>
+                            <div className="flex bg-gray-50 font-bold">
+                                <div className="p-3 w-32 border-r border-gray-300 text-sm">Grand Total</div>
+                                <div className="p-3 w-32 text-right text-sm">77.000.000</div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="h-full flex flex-col animate-fade-in">
+                        <div className="flex justify-between items-center mb-4 bg-yellow-50 p-2 border border-yellow-200 rounded">
+                            <div className="text-xs text-yellow-800">
+                                <b>Terbongkar!</b> Ada biaya denda 40 Juta yang masuk ke laporan.
+                            </div>
+                            <button 
+                                onClick={() => setView('pivot')}
+                                className="flex items-center gap-1 text-xs bg-white border border-gray-300 px-2 py-1 rounded hover:bg-red-50 text-red-600 font-bold transition-colors"
+                            >
+                                <Trash2 size={12}/> Hapus Sheet & Kembali
+                            </button>
+                        </div>
+
+                        <div className="overflow-auto bg-white border border-gray-300 shadow-inner">
+                            <table className="w-full text-sm text-left border-collapse">
+                                <thead>
+                                    <tr className="bg-gray-100 text-gray-600">
+                                        <th className="border p-2">ID</th>
+                                        <th className="border p-2">Date</th>
+                                        <th className="border p-2">Description</th>
+                                        <th className="border p-2 text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {drillDownData.map((row, idx) => (
+                                        <tr key={idx} className={row.highlight ? "bg-red-50" : ""}>
+                                            <td className="border p-2">{row.id}</td>
+                                            <td className="border p-2">{row.date}</td>
+                                            <td className={`border p-2 ${row.highlight ? "font-bold text-red-700" : ""}`}>{row.item}</td>
+                                            <td className={`border p-2 text-right font-mono ${row.highlight ? "font-bold text-red-700" : ""}`}>
+                                                {row.cost.toLocaleString('id-ID')}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    <tr className="bg-gray-50 font-bold">
+                                        <td colSpan={3} className="border p-2 text-right">Total</td>
+                                        <td className="border p-2 text-right font-mono">50.000.000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
             </ExcelWindow>
         </div>
     );

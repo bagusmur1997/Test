@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, FileSpreadsheet, LayoutGrid, Terminal, Share2, Lock, BarChart3, Users, TrendingUp, Split, Filter, Home, Search, Table, Grid } from 'lucide-react';
 import { SlideStep } from './types';
-import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo, ExcelIntroDemo, FilterFreezeDemo } from './components/SlideComponents';
+import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo, ExcelIntroDemo, FilterFreezeDemo, PivotDrillDownDemo } from './components/SlideComponents';
 
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<SlideStep>(SlideStep.INTRO);
@@ -21,7 +21,7 @@ const App: React.FC = () => {
   const goToStep = (step: SlideStep) => setCurrentStep(step);
 
   // Total steps for progress bar
-  const TOTAL_STEPS = 20; 
+  const TOTAL_STEPS = 21; 
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 md:p-8 font-sans text-gray-900">
@@ -120,6 +120,7 @@ const App: React.FC = () => {
                                 <button onClick={() => goToStep(SlideStep.PIVOT_CREATE)} className="hover:text-blue-600 hover:underline text-left">• Pivot Steps</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_ANATOMY)} className="hover:text-blue-600 hover:underline text-left">• Pivot Anatomy</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_OPS)} className="hover:text-blue-600 hover:underline text-left">• Pivot Operations</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_DRILLDOWN)} className="hover:text-blue-600 hover:underline text-left">• Drill Down (Detail)</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_CHART)} className="hover:text-blue-600 hover:underline text-left">• Pivot Charts</button>
                                 <button onClick={() => goToStep(SlideStep.TIPS_TRICKS)} className="hover:text-blue-600 hover:underline text-left">• Clean Copy-Paste</button>
                             </div>
@@ -336,10 +337,22 @@ const App: React.FC = () => {
                 </div>
             )}
 
-             {currentStep === SlideStep.PIVOT_CHART && (
+            {currentStep === SlideStep.PIVOT_DRILLDOWN && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
                         <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 8</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Pivot Drill Down (Detailing)</h2>
+                    </div>
+                    <div className="flex-1">
+                        <PivotDrillDownDemo />
+                    </div>
+                </div>
+            )}
+
+             {currentStep === SlideStep.PIVOT_CHART && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 9</span>
                         <h2 className="text-3xl font-bold text-gray-900">Pivot Chart & Slicer</h2>
                     </div>
                     <div className="flex-1">

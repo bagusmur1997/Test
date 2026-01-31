@@ -17,9 +17,10 @@ export enum SlideStep {
   PIVOT_CREATE = 15,
   PIVOT_ANATOMY = 16,
   PIVOT_OPS = 17,
-  PIVOT_CHART = 18,
-  TIPS_TRICKS = 19,
-  SUMMARY = 20
+  PIVOT_DRILLDOWN = 18,
+  PIVOT_CHART = 19,
+  TIPS_TRICKS = 20,
+  SUMMARY = 21
 }
 
 export interface SlideProps {
