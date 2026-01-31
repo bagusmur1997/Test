@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
 
 // --- SLIDE 1: GOLDEN RULE ---
@@ -260,7 +260,6 @@ export const AbsoluteReferenceDemo: React.FC = () => {
       );
   };
 
-  // Explanation for Row 3 specifically (The Second Item, C3)
   const getRow3Explanation = () => {
       if (lockMode === 'relative') {
           return {
@@ -492,21 +491,18 @@ export const AbsoluteReferenceDemo: React.FC = () => {
 // --- SLIDE 5: LOGIC FUNCTIONS (IF & IFS) ---
 export const LogicFunctionsDemo: React.FC = () => {
     const [score, setScore] = useState(75);
-    const [activeTab, setActiveTab] = useState<'IF' | 'IFS'>('IF'); // Added state
+    const [activeTab, setActiveTab] = useState<'IF' | 'IFS'>('IF');
 
-    // IF Logic
     const ifResult = score >= 70 ? "Lulus" : "Gagal";
     const ifFormula = `=IF(B2>=70, "Lulus", "Gagal")`;
 
-    // IFS Logic
     const getIfsResult = (s: number) => {
         if (s >= 90) return "A";
         if (s >= 80) return "B";
         if (s >= 70) return "C";
-        return "D"; // Default catch-all
+        return "D"; 
     };
     const ifsResult = getIfsResult(score);
-    // User requested wrap text behavior for this long formula
     const ifsFormula = `=IFS(B2>=90,"A", B2>=80,"B", B2>=70,"C", TRUE,"D")`;
 
     return (
@@ -518,7 +514,6 @@ export const LogicFunctionsDemo: React.FC = () => {
                         Fungsi Logika (IF & IFS)
                     </h3>
 
-                    {/* TABS */}
                     <div className="flex border-b border-gray-200 mb-4">
                         <button
                             onClick={() => setActiveTab('IF')}
@@ -571,7 +566,6 @@ export const LogicFunctionsDemo: React.FC = () => {
                     </div>
                  </div>
 
-                 {/* SLIDER INPUT */}
                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <label className="text-sm font-bold text-gray-700 block mb-2">Ubah Skor Siswa:</label>
                     <div className="flex items-center gap-4">
@@ -594,7 +588,7 @@ export const LogicFunctionsDemo: React.FC = () => {
                 <FormulaBar 
                     value={activeTab === 'IF' ? ifFormula : ifsFormula} 
                     label="D2" 
-                    wrapText={activeTab === 'IFS'} // Fix truncation
+                    wrapText={activeTab === 'IFS'} 
                 />
                 
                 <div className="grid grid-cols-[30px_1fr_60px_1fr] text-sm">
@@ -611,7 +605,6 @@ export const LogicFunctionsDemo: React.FC = () => {
                     <Cell value="Budi Santoso" />
                     <Cell value={score} isSelected={true} className="font-bold text-center" />
                     
-                    {/* Dynamic Result Cell */}
                     <Cell 
                         value={
                             activeTab === 'IF' ? (
@@ -632,7 +625,6 @@ export const LogicFunctionsDemo: React.FC = () => {
                     />
                 </div>
                 
-                {/* Analysis Box */}
                 <div className="mt-4">
                     {activeTab === 'IF' ? (
                         <div className="bg-blue-100 p-2 rounded text-xs text-blue-800 animate-fade-in">
@@ -668,7 +660,6 @@ export const SumifsDemo: React.FC = () => {
         { product: "Laptop", region: "Jakarta", sales: 10 },
     ];
 
-    // Calc Sum
     const result = data
         .filter(d => d.region === regionFilter && d.product === categoryFilter)
         .reduce((sum, item) => sum + item.sales, 0);
@@ -677,7 +668,6 @@ export const SumifsDemo: React.FC = () => {
 
     return (
         <div className="h-full flex flex-col">
-            {/* Top Toggle */}
             <div className="flex justify-center mb-6">
                 <div className="bg-gray-200 p-1 rounded-lg inline-flex">
                     <button 
@@ -704,28 +694,25 @@ export const SumifsDemo: React.FC = () => {
                                 SUMIF vs SUMIFS
                             </h3>
                             
-                            {/* SUMIF Card */}
                             <div className="mb-4 bg-blue-50 p-4 rounded-lg border border-blue-100">
-                                <h4 className="font-bold text-blue-800 mb-1">1. SUMIF (Klasik / Satu Syarat)</h4>
-                                <p className="text-xs text-blue-700 mb-2">Analogi: Cari Barang, lalu Total Harganya.</p>
+                                <h4 className="font-bold text-blue-800 mb-1">1. SUMIF (Untuk Satu Kriteria Saja)</h4>
+                                <p className="text-xs text-blue-700 mb-2">Urutan Rumus: Kriteria dulu di depan, Angkanya di BELAKANG.</p>
                                 <div className="bg-white p-2 rounded border border-blue-200 font-mono text-[10px] sm:text-xs text-gray-600 break-all whitespace-normal">
-                                    =SUMIF(<span className="text-blue-600">Range_Kriteria</span>, <span className="text-green-600">Syarat</span>, <span className="text-red-600 font-bold">Range_Harga</span>)
+                                    Rumus: =SUMIF(<span className="text-blue-600">Kolom_Kriteria</span>, <span className="text-green-600">"Syarat"</span>, <span className="text-red-600 font-bold">Kolom_Angka</span>)
                                 </div>
                             </div>
 
-                             {/* SUMIFS Card */}
                              <div className="mb-4 bg-purple-50 p-4 rounded-lg border border-purple-100">
-                                <h4 className="font-bold text-purple-800 mb-1">2. SUMIFS (Modern / Banyak Syarat)</h4>
-                                <p className="text-xs text-purple-700 mb-2">Analogi: Range Anga (Harga) dulu, baru filter filter filter.</p>
+                                <h4 className="font-bold text-purple-800 mb-1">2. SUMIFS (Untuk Banyak Kriteria)</h4>
+                                <p className="text-xs text-purple-700 mb-2">Urutan Rumus: Angkanya dikunci di DEPAN, kriteria-kriterianya menyusul di belakang.</p>
                                 <div className="bg-white p-2 rounded border border-purple-200 font-mono text-[10px] sm:text-xs text-gray-600 break-all whitespace-normal">
-                                    =SUMIFS(<span className="text-red-600 font-bold">Range_Harga</span>, <span className="text-blue-600">Range1</span>, <span className="text-green-600">Syarat1</span>, ...)
+                                    Rumus: =SUMIFS(<span className="text-red-600 font-bold">Kolom_Angka</span>, <span className="text-blue-600">Kolom_Kriteria1</span>, <span className="text-green-600">"Syarat1"</span>, <span className="text-blue-600">Kolom_Kriteria2</span>, <span className="text-green-600">"Syarat2"</span>, ...)
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div className="space-y-4">
-                        {/* The Trap */}
                         <div className="bg-red-50 p-5 rounded-xl border-l-4 border-red-500 shadow-sm">
                             <h4 className="font-bold text-red-800 flex items-center gap-2 mb-2">
                                 <AlertTriangle size={18} />
@@ -743,7 +730,6 @@ export const SumifsDemo: React.FC = () => {
                             </p>
                         </div>
 
-                         {/* Trainer Rec */}
                          <div className="bg-green-50 p-5 rounded-xl border border-green-200 shadow-sm">
                             <h4 className="font-bold text-green-800 flex items-center gap-2 mb-2">
                                 <CheckCircle2 size={18} />
@@ -850,7 +836,6 @@ export const SumifsDemo: React.FC = () => {
 
 // --- SLIDE 7: BASIC STATS (MIN, MAX, AVERAGE) ---
 export const BasicStatsDemo: React.FC = () => {
-    // Context: Logistics/Supply Chain - Lead Time (Days)
     const [data, setData] = useState<(number | string)[]>([5, 12, 3, 7]);
     const [activeStat, setActiveStat] = useState<'MIN' | 'MAX' | 'AVERAGE' | null>(null);
     
@@ -955,12 +940,10 @@ export const BasicStatsDemo: React.FC = () => {
             <ExcelWindow title="Lead Time Pengiriman (Hari)">
                 <FormulaBar value={getFormulaDisplay() || "Pilih fungsi di kiri..."} label="Result" />
                 <div className="grid grid-cols-[30px_1fr_1fr] text-sm">
-                    {/* Header */}
                     <Cell value="" isHeader />
                     <Cell value="A (Rute)" isHeader />
                     <Cell value="B (Hari)" isHeader />
 
-                    {/* Data Rows */}
                     <Cell value="1" isHeader />
                     <Cell value="Vendor A -> WH1" className="text-xs" />
                     <Cell value={data[0]} onChange={(v) => handleChange(0, v)} readOnly={false} className={getHighlightClass(data[0])} />
@@ -977,7 +960,6 @@ export const BasicStatsDemo: React.FC = () => {
                     <Cell value="Vendor D -> WH1" className="text-xs" />
                     <Cell value={data[3]} onChange={(v) => handleChange(3, v)} readOnly={false} className={getHighlightClass(data[3])} />
 
-                    {/* Results Display in Grid */}
                     <Cell value="" isHeader className="bg-gray-100 border-t-2 border-gray-300" />
                     <Cell value="RESULT" className="font-bold text-gray-500 bg-gray-50 border-t-2 border-gray-300 text-right pr-2" />
                     <Cell 
@@ -1007,10 +989,10 @@ export const CountFamilyDemo: React.FC = () => {
     const [selectedFunc, setSelectedFunc] = useState<'COUNT' | 'COUNTA' | 'COUNTBLANK'>('COUNTA');
     
     const gridData = [
-        { id: 1, A: "Ban Truck", B: 50, C: "OK" },       // Numeric
-        { id: 2, A: "Oli Mesin", B: "", C: "Cek Fisik" }, // Blank (Belum dihitung)
-        { id: 3, A: "Filter Udara", B: 0, C: "Habis" },   // Numeric (0)
-        { id: 4, A: "Aki Basah", B: "N/A", C: "Retur" },  // Text (Error/Not Number)
+        { id: 1, A: "Ban Truck", B: 50, C: "OK" },       
+        { id: 2, A: "Oli Mesin", B: "", C: "Cek Fisik" }, 
+        { id: 3, A: "Filter Udara", B: 0, C: "Habis" },   
+        { id: 4, A: "Aki Basah", B: "N/A", C: "Retur" },  
     ];
 
     const getHighlightClass = (colVal: string | number, func: string) => {
@@ -1121,7 +1103,7 @@ export const CountFamilyDemo: React.FC = () => {
 
 // --- SLIDE 9: MEDIAN & MODE ---
 export const MedianModeDemo: React.FC = () => {
-    const [salaries, setSalaries] = useState([5, 5, 5, 6, 5]); // in Millions
+    const [salaries, setSalaries] = useState([5, 5, 5, 6, 5]); 
     const [hasCEO, setHasCEO] = useState(false);
     const [selectedStat, setSelectedStat] = useState<'MEDIAN' | 'MODE'>('MEDIAN');
 
@@ -1130,7 +1112,7 @@ export const MedianModeDemo: React.FC = () => {
             setSalaries([5, 5, 5, 6, 5]);
             setHasCEO(false);
         } else {
-            setSalaries([5, 5, 5, 6, 5, 100]); // Add 100M outlier
+            setSalaries([5, 5, 5, 6, 5, 100]); 
             setHasCEO(true);
         }
     };
@@ -1138,7 +1120,6 @@ export const MedianModeDemo: React.FC = () => {
     const sum = salaries.reduce((a, b) => a + b, 0);
     const avg = (sum / salaries.length).toFixed(1);
     
-    // Median calc
     const sorted = [...salaries].sort((a, b) => a - b);
     const mid = Math.floor(sorted.length / 2);
     const median = sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
@@ -1299,7 +1280,6 @@ export const LookupsDemo: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* Added Explanations */}
                     {lookupType === 'VLOOKUP' ? (
                         <div className="bg-green-50 p-3 rounded border border-green-200 text-xs text-green-900 mb-4 animate-fade-in">
                             <h4 className="font-bold mb-1">VLOOKUP (Tegak Lurus)</h4>
@@ -1356,7 +1336,6 @@ export const LookupsDemo: React.FC = () => {
                 />
 
                 {lookupType === 'VLOOKUP' ? (
-                    // VLOOKUP VISUALIZATION
                     <div className="grid grid-cols-[30px_1fr_1fr_1fr] text-sm">
                         <Cell value="" isHeader />
                         <Cell value="A (ID)" isHeader />
@@ -1373,7 +1352,6 @@ export const LookupsDemo: React.FC = () => {
                         ))}
                     </div>
                 ) : (
-                    // HLOOKUP VISUALIZATION
                     <div className="grid grid-cols-[80px_1fr_1fr_1fr] text-sm">
                          <Cell value="" isHeader />
                          <Cell value="B" isHeader />
@@ -1440,37 +1418,30 @@ export const XLookupDemo: React.FC = () => {
             <ExcelWindow title="XLOOKUP Demo">
                 <FormulaBar value='=XLOOKUP("102", A:A, B:B, "Tidak Ada")' />
                 
-                {/* Excel Grid */}
                 <div className="grid grid-cols-[40px_1fr_1fr] text-sm border-t border-l border-gray-300 bg-white shadow-sm mb-4">
-                    {/* Headers Row */}
                     <Cell value="" isHeader />
                     <Cell value="A" isHeader className="bg-yellow-50 text-yellow-800 font-bold border-b-2 border-yellow-300"/>
                     <Cell value="B" isHeader className="bg-green-50 text-green-800 font-bold border-b-2 border-green-300"/>
 
-                    {/* Row 1 */}
                     <Cell value="1" isHeader />
                     <Cell value="ID" className="font-bold bg-gray-50"/>
                     <Cell value="Nama" className="font-bold bg-gray-50"/>
 
-                    {/* Row 2 */}
                     <Cell value="2" isHeader />
                     <Cell value="101" />
                     <Cell value="Andi" />
 
-                    {/* Row 3 - Highlighted */}
                     <Cell value="3" isHeader />
                     <Cell value="102" className="bg-yellow-100 ring-2 ring-yellow-400 z-10 font-bold" />
                     <Cell value="Budi" className="bg-green-100 ring-2 ring-green-500 z-10 font-bold" />
 
-                    {/* Row 4 */}
                     <Cell value="4" isHeader />
                     <Cell value="103" />
                     <Cell value="Cici" />
                 </div>
 
-                {/* Visual Indicators (Below Data) */}
                 <div className="grid grid-cols-[40px_1fr_1fr] gap-2 text-xs">
-                    <div></div> {/* Spacer for Row Header column */}
+                    <div></div>
                     
                     <div className="flex flex-col items-center p-2 bg-yellow-50 border border-yellow-300 rounded-lg text-yellow-800 animate-fade-in">
                         <ArrowUp size={16} className="mb-1 text-yellow-600 animate-bounce" />
@@ -1499,7 +1470,6 @@ export const PivotPrepDemo: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Bad Data */}
                 <div className="border border-red-200 bg-red-50 rounded-xl p-4">
                     <h4 className="font-bold text-red-700 mb-3 flex items-center gap-2"><XCircle/> Data Berantakan (Pivot Gagal)</h4>
                     <div className="bg-white rounded border overflow-hidden opacity-70">
@@ -1520,7 +1490,6 @@ export const PivotPrepDemo: React.FC = () => {
                     </ul>
                 </div>
 
-                {/* Good Data */}
                 <div className="border border-green-200 bg-green-50 rounded-xl p-4">
                     <h4 className="font-bold text-green-700 mb-3 flex items-center gap-2"><CheckCircle2/> Data Bersih (Pivot Ready)</h4>
                     <div className="bg-white rounded border overflow-hidden">
@@ -1547,7 +1516,335 @@ export const PivotPrepDemo: React.FC = () => {
     );
 };
 
-// --- SLIDE 13: PIVOT OPS ---
+// --- SLIDE 13: PIVOT CREATE (NEW) ---
+export const PivotCreateDemo: React.FC = () => {
+    const [step, setStep] = useState(0);
+
+    const steps = [
+        { title: "Mulai", desc: "Data sudah siap." },
+        { title: "1. Select Data", desc: "Klik sembarang sel -> Ctrl+A" },
+        { title: "2. Menu Insert", desc: "Klik tab Insert" },
+        { title: "3. Create", desc: "Pilih New Worksheet -> OK" }
+    ];
+
+    const nextStep = () => {
+        if (step < 3) setStep(step + 1);
+        else setStep(0);
+    }
+
+    // High fidelity data from Attachment 1
+    const gridData = [
+        { date: "1/29/2026", name: "TELEFLEX", source: "1998", branch: "1910 Jakarta 1", grp: "3", code: "100380-000025", pName: "TRACHEAL TUBE WITHOUT CUFF 2.5", sj: "8994113183", sjDate: "1/29/2026", qty: 20 },
+        { date: "1/29/2026", name: "TELEFLEX", source: "1998", branch: "1922 Bandung", grp: "3", code: "100380-000030", pName: "TRACHEAL TUBE WITHOUT CUFF 3.0", sj: "8994100109", sjDate: "1/22/2026", qty: 10 },
+        { date: "1/29/2026", name: "TELEFLEX", source: "1998", branch: "1910 Jakarta 1", grp: "3", code: "100380-000030", pName: "TRACHEAL TUBE WITHOUT CUFF 3.0", sj: "8994113183", sjDate: "1/29/2026", qty: 30 },
+        { date: "1/29/2026", name: "TELEFLEX", source: "1998", branch: "1961 Makassar", grp: "3", code: "100380-000030", pName: "TRACHEAL TUBE WITHOUT CUFF 3.0", sj: "8994116104", sjDate: "1/29/2026", qty: 20 },
+        { date: "1/29/2026", name: "TELEFLEX", source: "1998", branch: "1910 Jakarta 1", grp: "3", code: "100380-000035", pName: "TRACHEAL TUBE WITHOUT CUFF 3.5", sj: "8994113184", sjDate: "1/29/2026", qty: 30 },
+        { date: "1/29/2026", name: "PT BEURER HEAL...", source: "1998", branch: "1954 BATAM", grp: "3", code: "10385", pName: "IH 51 - NEBULIZER 51", sj: "8994090649", sjDate: "1/15/2026", qty: 4 },
+        { date: "1/29/2026", name: "PT BEURER HEAL...", source: "1998", branch: "1960 Manado", grp: "3", code: "10385", pName: "IH 51 - NEBULIZER 51", sj: "8994090650", sjDate: "1/15/2026", qty: 4 },
+    ];
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full items-center">
+            <div className="space-y-6">
+                <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-excel-base">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <Table className="text-excel-base" />
+                        Langkah Pembuatan Pivot Table
+                    </h3>
+                    
+                    <div className="space-y-4 relative">
+                        {/* Connecting Line */}
+                        <div className="absolute left-[15px] top-6 bottom-6 w-0.5 bg-gray-200 -z-10"></div>
+
+                        {steps.slice(1).map((s, idx) => {
+                            const currentIdx = idx + 1;
+                            const isActive = step >= currentIdx;
+                            const isCurrent = step === currentIdx;
+                            return (
+                                <div key={idx} className={`flex items-start gap-3 transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-40'}`}>
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 shrink-0 ${isActive ? 'bg-excel-base text-white border-excel-base' : 'bg-white border-gray-300 text-gray-400'}`}>
+                                        {currentIdx}
+                                    </div>
+                                    <div className={`p-3 rounded-lg border w-full ${isCurrent ? 'bg-green-50 border-green-200 ring-2 ring-green-400' : 'bg-white border-gray-200'}`}>
+                                        <h4 className="font-bold text-sm text-gray-800">{s.title.substring(3)}</h4>
+                                        <p className="text-xs text-gray-600">{s.desc}</p>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+
+                    <div className="mt-6 p-4 bg-blue-50 text-blue-800 text-xs rounded-lg border border-blue-200">
+                        <span className="font-bold block mb-1">💡 Pro Tip:</span>
+                        Jangan blok manual pakai mouse dari atas sampai bawah. Cukup klik satu sel di tengah data, lalu tekan <b>Ctrl + A</b>.
+                    </div>
+                </div>
+
+                <button 
+                    onClick={nextStep}
+                    className="w-full py-3 bg-excel-dark text-white rounded-lg font-bold hover:bg-excel-base transition-colors shadow-lg flex items-center justify-center gap-2"
+                >
+                    {step === 3 ? "Ulangi Langkah" : "Lanjut Langkah Berikutnya"} <ArrowRight size={16} />
+                </button>
+            </div>
+
+            <ExcelWindow title="Latihan Pivot Table">
+                <div className="relative h-full flex flex-col">
+                    {/* --- STEP 2: INSERT MENU OVERLAY (Attachment 2) --- */}
+                    {step === 2 && (
+                        <div className="absolute top-0 left-0 right-0 z-40 bg-gray-100 border-b shadow-lg animate-fade-in">
+                            <div className="flex bg-excel-base text-white px-2 py-1 text-xs gap-4">
+                                <span>File</span><span>Home</span><span className="font-bold underline">Insert</span><span>Page Layout</span>
+                            </div>
+                            <div className="p-2 flex gap-4 bg-gray-50 border-b border-gray-300">
+                                {/* PivotTable Button Group */}
+                                <div className="flex flex-col items-center px-2 bg-gray-200 rounded border border-gray-300 relative group">
+                                    <div className="p-1"><Table className="text-excel-base" size={24}/></div>
+                                    <div className="text-[10px] font-bold flex items-center">PivotTable <ChevronDown size={10}/></div>
+                                    
+                                    {/* Dropdown Menu */}
+                                    <div className="absolute top-full left-0 mt-1 w-48 bg-white shadow-xl border border-gray-300 rounded z-50">
+                                        <div className="p-2 hover:bg-gray-100 flex items-center gap-2 text-xs font-bold border-l-4 border-excel-base bg-gray-50">
+                                            <Table size={14}/> From Table/Range
+                                        </div>
+                                        <div className="p-2 hover:bg-gray-100 flex items-center gap-2 text-xs text-gray-500">
+                                            From External Data Source
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex flex-col items-center opacity-50">
+                                    <div className="p-1"><Table className="text-gray-500" size={24}/></div>
+                                    <div className="text-[10px]">Recommended PivotTables</div>
+                                </div>
+                                <div className="flex flex-col items-center opacity-50">
+                                    <div className="p-1"><Table className="text-gray-500" size={24}/></div>
+                                    <div className="text-[10px]">Table</div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* --- DATA GRID (Attachment 1) --- */}
+                    <div className="overflow-auto relative bg-white">
+                        <div className="grid grid-cols-[30px_80px_150px_60px_100px_40px_100px_150px_80px_80px_60px] text-[10px] whitespace-nowrap">
+                            {/* Header Row */}
+                            <Cell value="" isHeader />
+                            <Cell value="A" isHeader />
+                            <Cell value="B" isHeader />
+                            <Cell value="C" isHeader />
+                            <Cell value="D" isHeader />
+                            <Cell value="E" isHeader />
+                            <Cell value="F" isHeader />
+                            <Cell value="G" isHeader />
+                            <Cell value="H" isHeader />
+                            <Cell value="I" isHeader />
+                            <Cell value="J" isHeader />
+
+                            {/* Column Headers - Green Style */}
+                            <Cell value="1" isHeader />
+                            <Cell value="ReportDate" className="bg-[#66BB6A] text-white font-bold border-r border-white"/>
+                            <Cell value="PrincipalName" className="bg-[#66BB6A] text-white font-bold border-r border-white"/>
+                            <Cell value="SOURCE" className="bg-[#66BB6A] text-white font-bold border-r border-white"/>
+                            <Cell value="Destination Branch" className="bg-[#66BB6A] text-white font-bold border-r border-white"/>
+                            <Cell value="TRGRP" className="bg-[#66BB6A] text-white font-bold border-r border-white"/>
+                            <Cell value="PRODUCT_CODE" className="bg-[#66BB6A] text-white font-bold border-r border-white"/>
+                            <Cell value="PRODUCT_NAME" className="bg-[#66BB6A] text-white font-bold border-r border-white"/>
+                            <Cell value="SJ" className="bg-[#66BB6A] text-white font-bold border-r border-white"/>
+                            <Cell value="SJ_DATE" className="bg-[#66BB6A] text-white font-bold border-r border-white"/>
+                            <Cell value="SJ_QTY" className="bg-[#66BB6A] text-white font-bold"/>
+
+                            {/* Data Rows */}
+                            {gridData.map((row, idx) => (
+                                <React.Fragment key={idx}>
+                                    <Cell value={idx + 2} isHeader />
+                                    <Cell value={row.date} className="font-bold text-right pr-2"/>
+                                    <Cell value={row.name} className="font-bold"/>
+                                    <Cell value={row.source} className="text-right pr-2"/>
+                                    <Cell value={row.branch} />
+                                    <Cell value={row.grp} className="text-right pr-2"/>
+                                    <Cell value={row.code} />
+                                    <Cell value={row.pName} />
+                                    <Cell value={row.sj} />
+                                    <Cell value={row.sjDate} className="text-right pr-2"/>
+                                    <Cell value={row.qty} className="text-right pr-2"/>
+                                </React.Fragment>
+                            ))}
+                        </div>
+
+                        {/* Step 1: Selection Overlay (Green Border like Attachment 1) */}
+                        {step >= 1 && step !== 3 && (
+                            <div className="absolute top-[28px] left-[30px] right-0 h-[200px] border-2 border-excel-base bg-excel-base/10 pointer-events-none z-10"></div>
+                        )}
+                    </div>
+
+                    {/* --- STEP 3: CREATE DIALOG (Attachment 3) --- */}
+                    {step === 3 && (
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-50 backdrop-blur-[1px] animate-fade-in">
+                            <div className="bg-white p-1 rounded shadow-2xl w-80 border border-gray-400 font-sans text-xs">
+                                <div className="flex justify-between items-center px-2 py-1 mb-2 bg-white">
+                                    <span className="font-bold text-gray-800">PivotTable from table or range</span>
+                                    <XCircle size={14} className="text-gray-400"/>
+                                </div>
+                                
+                                <div className="px-3 pb-3 space-y-3">
+                                    <div>
+                                        <div className="mb-1 font-bold text-gray-700">Select a table or range</div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-gray-600">Table/Range:</span>
+                                            <div className="border border-gray-300 px-2 py-1 bg-white flex-1 shadow-inner">Table2</div>
+                                            <div className="border border-gray-300 bg-gray-100 px-1 py-0.5"><ArrowUp size={12}/></div>
+                                        </div>
+                                    </div>
+
+                                    <div className="border-t border-gray-200 pt-2">
+                                        <div className="mb-1 font-bold text-gray-700">Choose where you want the PivotTable to be placed</div>
+                                        <div className="space-y-1 ml-1">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-3 h-3 rounded-full border-4 border-blue-600"></div>
+                                                <span className="font-bold">New Worksheet</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 opacity-60">
+                                                <div className="w-3 h-3 rounded-full border border-gray-400"></div>
+                                                <span>Existing Worksheet</span>
+                                            </div>
+                                            <div className="ml-5 mt-1 border border-gray-300 bg-gray-100 h-5 w-32 opacity-50"></div>
+                                        </div>
+                                    </div>
+
+                                    <div className="border-t border-gray-200 pt-2 opacity-60">
+                                        <div className="mb-1 font-bold text-gray-700">Choose whether you want to analyze multiple tables</div>
+                                        <div className="flex items-center gap-2 ml-1">
+                                            <div className="w-3 h-3 border border-gray-400 bg-white"></div>
+                                            <span>Add this data to the Data Model</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end gap-2 mt-4">
+                                        <button className="px-4 py-1 border border-gray-300 rounded shadow-sm bg-white hover:bg-gray-50">OK</button>
+                                        <button className="px-4 py-1 border border-gray-300 rounded shadow-sm bg-white hover:bg-gray-50">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </ExcelWindow>
+        </div>
+    );
+}
+
+// --- SLIDE 14: PIVOT ANATOMY (NEW) ---
+export const PivotAnatomyDemo: React.FC = () => {
+    const [activeQuad, setActiveQuad] = useState<'ROWS' | 'COLS' | 'VALS' | 'FILT' | null>(null);
+
+    const info = {
+        ROWS: {
+            title: "ROWS (Baris)",
+            desc: "Menampilkan data secara vertikal (turun ke bawah). Cocok untuk data utama yang itemnya banyak seperti Nama Sales, Tanggal, atau Nama Produk.",
+            color: "bg-blue-50 border-blue-500 text-blue-800"
+        },
+        COLS: {
+            title: "COLUMNS (Kolom)",
+            desc: "Menampilkan data secara horizontal (menyamping). Cocok untuk pembanding seperti Tahun, Bulan, atau Wilayah. Hati-hati jangan taruh data yang terlalu panjang di sini.",
+            color: "bg-orange-50 border-orange-500 text-orange-800"
+        },
+        VALS: {
+            title: "VALUES (Nilai)",
+            desc: "Area untuk BERHITUNG (Sum, Count, Average). Hanya masukkan kolom yang berisi ANGKA (Harga, Qty, Total) di sini.",
+            color: "bg-green-50 border-green-500 text-green-800"
+        },
+        FILT: {
+            title: "FILTERS (Saringan)",
+            desc: "Saringan global. Menyaring seluruh tabel berdasarkan kriteria tertentu. Contoh: Lihat laporan penjualan (Rows), tapi difilter hanya 'Cabang Jakarta'.",
+            color: "bg-purple-50 border-purple-500 text-purple-800"
+        }
+    }
+
+    const currentInfo = activeQuad ? info[activeQuad] : null;
+
+    return (
+        <div className="h-full flex flex-col">
+            <div className="mb-4 text-center">
+                 <h3 className="text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
+                    <LayoutDashboard className="text-excel-base" />
+                    Anatomi Pivot Table (4 Kuadran)
+                </h3>
+                <p className="text-sm text-gray-500">Klik salah satu kotak di bawah untuk mempelajari fungsinya.</p>
+            </div>
+
+            <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8">
+                {/* Visual Representation */}
+                <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 relative">
+                     <div className="absolute top-2 left-2 text-xs font-bold text-gray-400">PivotTable Fields</div>
+                     
+                     <div className="mt-6 grid grid-cols-2 gap-4 h-64">
+                        {/* FILTERS */}
+                        <button 
+                            onClick={() => setActiveQuad('FILT')}
+                            className={`rounded-lg border-2 p-2 flex flex-col items-center justify-center text-center transition-all hover:scale-105 ${activeQuad === 'FILT' ? 'bg-purple-100 border-purple-500 ring-2 ring-purple-300' : 'bg-gray-50 border-dashed border-gray-300'}`}
+                        >
+                            <Filter className={activeQuad === 'FILT' ? "text-purple-600" : "text-gray-400"} />
+                            <span className="text-xs font-bold mt-1 text-gray-600">FILTERS</span>
+                        </button>
+
+                         {/* COLUMNS */}
+                         <button 
+                            onClick={() => setActiveQuad('COLS')}
+                            className={`rounded-lg border-2 p-2 flex flex-col items-center justify-center text-center transition-all hover:scale-105 ${activeQuad === 'COLS' ? 'bg-orange-100 border-orange-500 ring-2 ring-orange-300' : 'bg-gray-50 border-dashed border-gray-300'}`}
+                        >
+                            <Columns className={activeQuad === 'COLS' ? "text-orange-600" : "text-gray-400"} />
+                            <span className="text-xs font-bold mt-1 text-gray-600">COLUMNS</span>
+                        </button>
+
+                         {/* ROWS */}
+                         <button 
+                            onClick={() => setActiveQuad('ROWS')}
+                            className={`rounded-lg border-2 p-2 flex flex-col items-center justify-center text-center transition-all hover:scale-105 ${activeQuad === 'ROWS' ? 'bg-blue-100 border-blue-500 ring-2 ring-blue-300' : 'bg-gray-50 border-dashed border-gray-300'}`}
+                        >
+                            <Rows className={activeQuad === 'ROWS' ? "text-blue-600" : "text-gray-400"} />
+                            <span className="text-xs font-bold mt-1 text-gray-600">ROWS</span>
+                        </button>
+
+                         {/* VALUES */}
+                         <button 
+                            onClick={() => setActiveQuad('VALS')}
+                            className={`rounded-lg border-2 p-2 flex flex-col items-center justify-center text-center transition-all hover:scale-105 ${activeQuad === 'VALS' ? 'bg-green-100 border-green-500 ring-2 ring-green-300' : 'bg-gray-50 border-dashed border-gray-300'}`}
+                        >
+                            <Sigma className={activeQuad === 'VALS' ? "text-green-600" : "text-gray-400"} />
+                            <span className="text-xs font-bold mt-1 text-gray-600">VALUES</span>
+                        </button>
+                     </div>
+                     <div className="mt-4 text-center text-xs text-gray-400 italic">
+                        Drag & Drop fields ke kotak-kotak ini
+                     </div>
+                </div>
+
+                {/* Explanation Area */}
+                <div className="flex flex-col justify-center">
+                    {currentInfo ? (
+                        <div className={`p-8 rounded-xl border-l-8 shadow-sm transition-all animate-fade-in ${currentInfo.color}`}>
+                            <h2 className="text-2xl font-bold mb-4">{currentInfo.title}</h2>
+                            <p className="text-lg leading-relaxed">{currentInfo.desc}</p>
+                            
+                            {activeQuad === 'ROWS' && <div className="mt-4 text-sm font-bold opacity-75">Contoh: Daftar Nama Karyawan</div>}
+                            {activeQuad === 'COLS' && <div className="mt-4 text-sm font-bold opacity-75">Contoh: Tahun (2023, 2024), Bulan</div>}
+                            {activeQuad === 'VALS' && <div className="mt-4 text-sm font-bold opacity-75">Contoh: Sum of Sales, Count of Transaksi</div>}
+                            {activeQuad === 'FILT' && <div className="mt-4 text-sm font-bold opacity-75">Contoh: Filter hanya Wilayah 'Bali'</div>}
+                        </div>
+                    ) : (
+                         <div className="h-full flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">
+                            <MousePointer2 size={48} className="mb-2 opacity-50" />
+                            <p>Pilih area di sebelah kiri untuk melihat detailnya</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+// --- SLIDE 15: PIVOT OPS ---
 export const PivotOpsDemo: React.FC = () => {
     const [op, setOp] = useState<'SUM' | 'COUNT' | 'AVERAGE'>('SUM');
     const [rowField, setRowField] = useState<'product' | 'region'>('product');
@@ -1750,7 +2047,7 @@ export const PivotOpsDemo: React.FC = () => {
     );
 };
 
-// --- SLIDE 14: PIVOT CHART ---
+// --- SLIDE 16: PIVOT CHART ---
 export const PivotChartDemo: React.FC = () => {
     const [filter, setFilter] = useState('All');
     
@@ -1816,7 +2113,7 @@ export const PivotChartDemo: React.FC = () => {
     );
 };
 
-// --- SLIDE 15: TIPS & TRICK ---
+// --- SLIDE 17: TIPS & TRICK ---
 export const TipsTrickDemo: React.FC = () => {
     const [showGrid, setShowGrid] = useState(true);
 
