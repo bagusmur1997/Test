@@ -2290,9 +2290,9 @@ export const PivotDrillDownDemo: React.FC = () => {
     const [view, setView] = useState<'pivot' | 'sheet'>('pivot');
 
     const drillDownData = [
-        { id: 'INV-001', date: '01/01/2024', item: 'Biaya Kirim Reguler', cost: 5000000 },
-        { id: 'INV-005', date: '05/01/2024', item: 'Biaya Kirim Reguler', cost: 5000000 },
-        { id: 'INV-009', date: '15/01/2024', item: 'Denda Keterlambatan (Penalty)', cost: 40000000, highlight: true },
+        { id: 'BIN-A01', date: '25/01/2026', item: 'Filter Oli Fleet', cost: 15000000 },
+        { id: 'BIN-A05', date: '26/01/2026', item: 'Brake Pad Set', cost: 35000000 },
+        { id: 'BIN-X99', date: '28/01/2026', item: 'UNIT FORKLIFT 5 TON (Salah Input Location)', cost: 450000000, highlight: true },
     ];
 
     return (
@@ -2301,10 +2301,10 @@ export const PivotDrillDownDemo: React.FC = () => {
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                     <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <Search size={24} className="text-excel-base"/>
-                        Audit Cepat: Drill Down
+                        Audit Stok: Fitur Drill Down
                     </h3>
                     <p className="text-sm text-gray-600 mb-4">
-                        Fitur rahasia untuk melihat rincian data mentah dari total angka Pivot Table.
+                        Fitur rahasia untuk menelusuri anomali stok/biaya dari Pivot Table secara instan.
                     </p>
                     
                     <div className="space-y-4">
@@ -2322,43 +2322,43 @@ export const PivotDrillDownDemo: React.FC = () => {
                                 <FilePlus size={16}/> Hasilnya:
                             </h4>
                             <p className="text-sm text-gray-700">
-                                Excel otomatis membuat <b>Sheet Baru</b> berisi daftar transaksi detail penyusun angka tersebut.
+                                Excel otomatis membuat <b>Sheet Baru</b> berisi rincian item yang membentuk angka tersebut.
                             </p>
                         </div>
                     </div>
                 </div>
                 
                 <div className="p-4 rounded-lg bg-gray-100 text-gray-600 text-xs italic border border-gray-300">
-                    "Tips: Hapus sheet baru tersebut jika sudah selesai dianalisis agar file tidak penuh."
+                    "Tips: Hapus sheet baru tersebut jika sudah selesai audit agar file tidak penuh."
                 </div>
             </div>
 
-            <ExcelWindow title={view === 'pivot' ? "Laporan Biaya Pengiriman" : "Sheet 2 (Detail Surabaya)"}>
+            <ExcelWindow title={view === 'pivot' ? "Laporan Nilai Persediaan (Inventory Value)" : "Sheet 2 (Detail Sparepart)"}>
                 {view === 'pivot' ? (
                     <div className="h-full flex flex-col justify-center items-center animate-fade-in">
                         <div className="mb-4 text-center">
-                            <p className="text-sm font-bold text-red-600 mb-2">Kasus: Kenapa Surabaya 50 Juta? (Biasanya 10 Juta)</p>
-                            <p className="text-xs text-gray-500">Coba Double Click angka 50 Jt di bawah ini.</p>
+                            <p className="text-sm font-bold text-red-600 mb-2">Kasus: Kategori 'Sparepart' Tembus 500 Juta? (Biasanya 50 Jt)</p>
+                            <p className="text-xs text-gray-500">Coba Double Click angka 500 Jt di bawah ini.</p>
                         </div>
                         <div className="bg-white border border-gray-300 shadow-md">
                             <div className="flex bg-gray-100 border-b border-gray-300 font-bold text-sm">
-                                <div className="p-3 w-32 border-r border-gray-300">Cabang</div>
-                                <div className="p-3 w-32 text-right">Total Biaya</div>
+                                <div className="p-3 w-40 border-r border-gray-300">Category</div>
+                                <div className="p-3 w-32 text-right">Total Value (Rp)</div>
                             </div>
                             <div className="flex border-b border-gray-200">
-                                <div className="p-3 w-32 border-r border-gray-300 text-sm">Jakarta</div>
-                                <div className="p-3 w-32 text-right text-sm">15.000.000</div>
+                                <div className="p-3 w-40 border-r border-gray-300 text-sm">Consumables (Oli/Grease)</div>
+                                <div className="p-3 w-32 text-right text-sm">45.000.000</div>
                             </div>
                             <div className="flex border-b border-gray-200">
-                                <div className="p-3 w-32 border-r border-gray-300 text-sm">Bandung</div>
-                                <div className="p-3 w-32 text-right text-sm">12.000.000</div>
+                                <div className="p-3 w-40 border-r border-gray-300 text-sm">Tyres (Ban)</div>
+                                <div className="p-3 w-32 text-right text-sm">80.000.000</div>
                             </div>
                             <div 
                                 className="flex border-b border-gray-200 bg-red-50 cursor-pointer hover:bg-red-100 transition-colors group relative"
                                 onDoubleClick={() => setView('sheet')}
                             >
-                                <div className="p-3 w-32 border-r border-gray-300 text-sm font-bold text-red-800">Surabaya</div>
-                                <div className="p-3 w-32 text-right text-sm font-bold text-red-800">50.000.000</div>
+                                <div className="p-3 w-40 border-r border-gray-300 text-sm font-bold text-red-800">Spareparts</div>
+                                <div className="p-3 w-32 text-right text-sm font-bold text-red-800">500.000.000</div>
                                 
                                 {/* Tooltip hint */}
                                 <div className="absolute top-1/2 left-full ml-2 -translate-y-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
@@ -2366,8 +2366,8 @@ export const PivotDrillDownDemo: React.FC = () => {
                                 </div>
                             </div>
                             <div className="flex bg-gray-50 font-bold">
-                                <div className="p-3 w-32 border-r border-gray-300 text-sm">Grand Total</div>
-                                <div className="p-3 w-32 text-right text-sm">77.000.000</div>
+                                <div className="p-3 w-40 border-r border-gray-300 text-sm">Grand Total</div>
+                                <div className="p-3 w-32 text-right text-sm">625.000.000</div>
                             </div>
                         </div>
                     </div>
@@ -2375,7 +2375,7 @@ export const PivotDrillDownDemo: React.FC = () => {
                     <div className="h-full flex flex-col animate-fade-in">
                         <div className="flex justify-between items-center mb-4 bg-yellow-50 p-2 border border-yellow-200 rounded">
                             <div className="text-xs text-yellow-800">
-                                <b>Terbongkar!</b> Ada biaya denda 40 Juta yang masuk ke laporan.
+                                <b>Terbongkar!</b> Ada Unit Forklift (Asset) senilai 450 Jt salah input ke stok sparepart.
                             </div>
                             <button 
                                 onClick={() => setView('pivot')}
@@ -2389,10 +2389,10 @@ export const PivotDrillDownDemo: React.FC = () => {
                             <table className="w-full text-sm text-left border-collapse">
                                 <thead>
                                     <tr className="bg-gray-100 text-gray-600">
-                                        <th className="border p-2">ID</th>
+                                        <th className="border p-2">Bin Loc</th>
                                         <th className="border p-2">Date</th>
-                                        <th className="border p-2">Description</th>
-                                        <th className="border p-2 text-right">Amount</th>
+                                        <th className="border p-2">Item Description</th>
+                                        <th className="border p-2 text-right">Value (Rp)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -2408,7 +2408,7 @@ export const PivotDrillDownDemo: React.FC = () => {
                                     ))}
                                     <tr className="bg-gray-50 font-bold">
                                         <td colSpan={3} className="border p-2 text-right">Total</td>
-                                        <td className="border p-2 text-right font-mono">50.000.000</td>
+                                        <td className="border p-2 text-right font-mono">500.000.000</td>
                                     </tr>
                                 </tbody>
                             </table>
