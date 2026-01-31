@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, FileSpreadsheet, LayoutGrid, Terminal, Share2, Lock, BarChart3, Users, TrendingUp, Split, Filter, Home, Search, Table, Grid } from 'lucide-react';
 import { SlideStep } from './types';
-import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo, ExcelIntroDemo } from './components/SlideComponents';
+import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo, ExcelIntroDemo, FilterFreezeDemo } from './components/SlideComponents';
 
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<SlideStep>(SlideStep.INTRO);
@@ -21,7 +21,7 @@ const App: React.FC = () => {
   const goToStep = (step: SlideStep) => setCurrentStep(step);
 
   // Total steps for progress bar
-  const TOTAL_STEPS = 19; 
+  const TOTAL_STEPS = 20; 
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 md:p-8 font-sans text-gray-900">
@@ -93,7 +93,7 @@ const App: React.FC = () => {
                                 Modul 1: Fundamental & Logika
                             </h3>
                             <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-                                <button onClick={() => goToStep(SlideStep.EXCEL_INTRO)} className="hover:text-excel-base hover:underline text-left font-semibold">• Introduction</button>
+                                <button onClick={() => goToStep(SlideStep.EXCEL_INTRO)} className="hover:text-excel-base hover:underline text-left">• Introduction</button>
                                 <button onClick={() => goToStep(SlideStep.GOLDEN_RULE)} className="hover:text-excel-base hover:underline text-left">• Golden Rule</button>
                                 <button onClick={() => goToStep(SlideStep.OPERATORS)} className="hover:text-excel-base hover:underline text-left">• Operator Math</button>
                                 <button onClick={() => goToStep(SlideStep.REFERENCES)} className="hover:text-excel-base hover:underline text-left">• Cell References</button>
@@ -115,9 +115,10 @@ const App: React.FC = () => {
                             <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
                                 <button onClick={() => goToStep(SlideStep.LOOKUPS)} className="hover:text-blue-600 hover:underline text-left">• VLOOKUP & HLOOKUP</button>
                                 <button onClick={() => goToStep(SlideStep.XLOOKUP)} className="hover:text-blue-600 hover:underline text-left">• XLOOKUP (Modern)</button>
+                                <button onClick={() => goToStep(SlideStep.FILTER_FREEZE)} className="hover:text-blue-600 hover:underline text-left">• Filter & Freeze</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_PREP)} className="hover:text-blue-600 hover:underline text-left">• Pivot Preparation</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_CREATE)} className="hover:text-blue-600 hover:underline text-left font-semibold">• Pivot Steps</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_ANATOMY)} className="hover:text-blue-600 hover:underline text-left font-semibold">• Pivot Anatomy</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_CREATE)} className="hover:text-blue-600 hover:underline text-left">• Pivot Steps</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_ANATOMY)} className="hover:text-blue-600 hover:underline text-left">• Pivot Anatomy</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_OPS)} className="hover:text-blue-600 hover:underline text-left">• Pivot Operations</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_CHART)} className="hover:text-blue-600 hover:underline text-left">• Pivot Charts</button>
                                 <button onClick={() => goToStep(SlideStep.TIPS_TRICKS)} className="hover:text-blue-600 hover:underline text-left">• Clean Copy-Paste</button>
@@ -275,10 +276,22 @@ const App: React.FC = () => {
                 </div>
             )}
 
-            {currentStep === SlideStep.PIVOT_PREP && (
+            {currentStep === SlideStep.FILTER_FREEZE && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
                         <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 3</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Manajemen Tampilan Data</h2>
+                    </div>
+                    <div className="flex-1">
+                        <FilterFreezeDemo />
+                    </div>
+                </div>
+            )}
+
+            {currentStep === SlideStep.PIVOT_PREP && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 4</span>
                         <h2 className="text-3xl font-bold text-gray-900">Pivot Table (Preparation & Rules)</h2>
                     </div>
                     <div className="flex-1">
@@ -290,7 +303,7 @@ const App: React.FC = () => {
             {currentStep === SlideStep.PIVOT_CREATE && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
-                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 4</span>
+                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 5</span>
                         <h2 className="text-3xl font-bold text-gray-900">Langkah Pembuatan Pivot Table</h2>
                     </div>
                     <div className="flex-1">
@@ -302,7 +315,7 @@ const App: React.FC = () => {
             {currentStep === SlideStep.PIVOT_ANATOMY && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
-                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 5</span>
+                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 6</span>
                         <h2 className="text-3xl font-bold text-gray-900">Anatomi Pivot Table (Pivot Fields)</h2>
                     </div>
                     <div className="flex-1">
@@ -314,7 +327,7 @@ const App: React.FC = () => {
             {currentStep === SlideStep.PIVOT_OPS && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
-                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 6</span>
+                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 7</span>
                         <h2 className="text-3xl font-bold text-gray-900">Pivot Operations (Sum vs Count)</h2>
                     </div>
                     <div className="flex-1">
@@ -326,7 +339,7 @@ const App: React.FC = () => {
              {currentStep === SlideStep.PIVOT_CHART && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
-                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 7</span>
+                        <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 8</span>
                         <h2 className="text-3xl font-bold text-gray-900">Pivot Chart & Slicer</h2>
                     </div>
                     <div className="flex-1">

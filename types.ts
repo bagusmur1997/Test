@@ -12,13 +12,14 @@ export enum SlideStep {
   MEDIAN_MODE = 10,
   LOOKUPS = 11,
   XLOOKUP = 12,
-  PIVOT_PREP = 13,
-  PIVOT_CREATE = 14,
-  PIVOT_ANATOMY = 15,
-  PIVOT_OPS = 16,
-  PIVOT_CHART = 17,
-  TIPS_TRICKS = 18,
-  SUMMARY = 19
+  FILTER_FREEZE = 13,
+  PIVOT_PREP = 14,
+  PIVOT_CREATE = 15,
+  PIVOT_ANATOMY = 16,
+  PIVOT_OPS = 17,
+  PIVOT_CHART = 18,
+  TIPS_TRICKS = 19,
+  SUMMARY = 20
 }
 
 export interface SlideProps {

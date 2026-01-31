@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet, Snowflake, ListFilter, Check } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
 
 // --- SLIDE 1 (NEW): EXCEL INTRO ---
@@ -71,6 +71,173 @@ export const ExcelIntroDemo: React.FC = () => {
         </div>
     </div>
   );
+};
+
+// --- SLIDE: FILTER & FREEZE PANES ---
+export const FilterFreezeDemo: React.FC = () => {
+    const [isFrozen, setIsFrozen] = useState(false);
+    const [isFilterOn, setIsFilterOn] = useState(false);
+    const [filterStatus, setFilterStatus] = useState<'All' | 'Pending' | 'Delivered'>('All');
+    const [showFilterMenu, setShowFilterMenu] = useState(false);
+
+    // Mock data generator for scrolling simulation
+    const generateData = () => {
+        const rows = [];
+        const areas = ['Cikarang', 'Jakarta', 'Surabaya', 'Bandung'];
+        const statuses = ['Delivered', 'Pending', 'Delivered', 'Pending'];
+        for (let i = 1; i <= 20; i++) {
+            rows.push({
+                id: 1000 + i,
+                date: `2024-01-${i < 10 ? '0' + i : i}`,
+                area: areas[i % 4],
+                status: statuses[i % 4],
+                qty: (i * 10) + 5
+            });
+        }
+        return rows;
+    };
+
+    const allData = generateData();
+    const visibleData = allData.filter(d => filterStatus === 'All' || d.status === filterStatus);
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+            <div className="space-y-6 flex flex-col justify-center">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4">Mengelola Data Besar</h3>
+                    
+                    {/* Freeze Panes Section */}
+                    <div className="mb-6">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Snowflake className="text-blue-500" size={20} />
+                            <h4 className="font-bold text-blue-700">1. Freeze Panes (Bekukan Layar)</h4>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-2">Masalah "Amnesia Kolom": Scroll ke bawah, judul hilang.</p>
+                        <button 
+                            onClick={() => setIsFrozen(!isFrozen)}
+                            className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all w-full flex items-center justify-center gap-2 ${isFrozen ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
+                        >
+                            {isFrozen ? "Header Frozen (Aktif)" : "Aktifkan Freeze Top Row"}
+                        </button>
+                    </div>
+
+                    {/* Filter Section */}
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ListFilter className="text-green-600" size={20} />
+                            <h4 className="font-bold text-green-700">2. Filter (Ctrl + Shift + L)</h4>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-2">Menyembunyikan data yang tidak perlu.</p>
+                        <div className="flex gap-2">
+                            <button 
+                                onClick={() => {
+                                    setIsFilterOn(!isFilterOn);
+                                    if(isFilterOn) { setFilterStatus('All'); setShowFilterMenu(false); }
+                                }}
+                                className={`flex-1 px-3 py-2 rounded-lg text-sm font-bold border transition-all ${isFilterOn ? 'bg-green-100 text-green-800 border-green-300' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
+                            >
+                                {isFilterOn ? "Filter ON" : "Filter OFF"}
+                            </button>
+                            
+                            <select 
+                                disabled={!isFilterOn}
+                                value={filterStatus} 
+                                onChange={(e) => setFilterStatus(e.target.value as any)}
+                                className="flex-1 px-3 py-2 rounded-lg text-sm border border-gray-300 bg-white disabled:opacity-50 disabled:bg-gray-100"
+                            >
+                                <option value="All">Show All</option>
+                                <option value="Pending">Only Pending</option>
+                                <option value="Delivered">Only Delivered</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 text-sm text-yellow-800 italic">
+                    "Jadi mau scroll sampai baris ke sejuta pun, judulnya tetap nempel di atas jika di-Freeze."
+                </div>
+            </div>
+
+            <ExcelWindow title="Data Pengiriman (20 Baris)">
+                <div className="h-full flex flex-col relative overflow-hidden bg-white border rounded">
+                    {/* Simulated Table Area */}
+                    <div className="overflow-auto h-[400px] w-full relative">
+                        <table className="w-full text-sm border-collapse text-left">
+                            <thead className={`${isFrozen ? 'sticky top-0 z-20 shadow-md' : ''}`}>
+                                <tr className="bg-gray-200 text-gray-700">
+                                    <th className="border p-2 w-10 text-center bg-gray-200">No</th>
+                                    <th className="border p-2 bg-gray-200">
+                                        <div className="flex justify-between items-center">
+                                            Date {isFilterOn && <ChevronDown size={14} className="bg-white border rounded p-0.5 cursor-pointer"/>}
+                                        </div>
+                                    </th>
+                                    <th className="border p-2 bg-gray-200">
+                                        <div className="flex justify-between items-center">
+                                            Area {isFilterOn && <ChevronDown size={14} className="bg-white border rounded p-0.5 cursor-pointer"/>}
+                                        </div>
+                                    </th>
+                                    <th className="border p-2 bg-gray-200 relative">
+                                        <div className="flex justify-between items-center">
+                                            Status 
+                                            {isFilterOn && (
+                                                <div 
+                                                    className={`bg-white border rounded p-0.5 cursor-pointer hover:bg-gray-100 ${filterStatus !== 'All' ? 'text-blue-600' : ''}`}
+                                                    onClick={() => setShowFilterMenu(!showFilterMenu)}
+                                                >
+                                                    <ListFilter size={14} />
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* Dropdown simulation */}
+                                        {showFilterMenu && isFilterOn && (
+                                            <div className="absolute top-full right-0 mt-1 w-32 bg-white border shadow-xl rounded z-50 text-xs text-gray-700">
+                                                <div className="p-2 border-b font-bold bg-gray-50">Filter Status</div>
+                                                <div className="p-2 hover:bg-blue-50 cursor-pointer flex gap-2" onClick={() => {setFilterStatus('All'); setShowFilterMenu(false);}}>
+                                                    {filterStatus === 'All' && <Check size={12}/>} Select All
+                                                </div>
+                                                <div className="p-2 hover:bg-blue-50 cursor-pointer flex gap-2" onClick={() => {setFilterStatus('Pending'); setShowFilterMenu(false);}}>
+                                                    {filterStatus === 'Pending' && <Check size={12}/>} Pending
+                                                </div>
+                                                <div className="p-2 hover:bg-blue-50 cursor-pointer flex gap-2" onClick={() => {setFilterStatus('Delivered'); setShowFilterMenu(false);}}>
+                                                    {filterStatus === 'Delivered' && <Check size={12}/>} Delivered
+                                                </div>
+                                            </div>
+                                        )}
+                                    </th>
+                                    <th className="border p-2 bg-gray-200 text-right">Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {visibleData.map((row) => (
+                                    <tr key={row.id} className="hover:bg-blue-50 transition-colors">
+                                        <td className="border p-2 text-center text-gray-500">{row.id}</td>
+                                        <td className="border p-2">{row.date}</td>
+                                        <td className="border p-2">{row.area}</td>
+                                        <td className="border p-2">
+                                            <span className={`px-2 py-0.5 rounded text-xs font-bold ${row.status === 'Pending' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                                                {row.status}
+                                            </span>
+                                        </td>
+                                        <td className="border p-2 text-right">{row.qty}</td>
+                                    </tr>
+                                ))}
+                                {/* Add dummy empty rows to force scroll if needed */}
+                                {visibleData.length < 5 && (
+                                    <tr><td colSpan={5} className="p-10 text-center text-gray-400">Data lain disembunyikan oleh Filter...</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                    {/* Scroll hint overlay if not frozen */}
+                    {!isFrozen && visibleData.length > 10 && (
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-3 py-1 rounded-full pointer-events-none animate-bounce">
+                            Scroll ke bawah untuk lihat masalahnya
+                        </div>
+                    )}
+                </div>
+            </ExcelWindow>
+        </div>
+    );
 };
 
 // --- SLIDE 1: GOLDEN RULE ---
