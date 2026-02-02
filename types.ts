@@ -1,3 +1,4 @@
+
 export enum SlideStep {
   INTRO = 0,
   EXCEL_INTRO = 1,
@@ -12,15 +13,16 @@ export enum SlideStep {
   MEDIAN_MODE = 10,
   LOOKUPS = 11,
   XLOOKUP = 12,
-  FILTER_FREEZE = 13,
-  PIVOT_PREP = 14,
-  PIVOT_CREATE = 15,
-  PIVOT_ANATOMY = 16,
-  PIVOT_OPS = 17,
-  PIVOT_DRILLDOWN = 18,
-  PIVOT_CHART = 19,
-  TIPS_TRICKS = 20,
-  SUMMARY = 21
+  FREEZE_PANES = 13,
+  FILTER_DATA = 14,
+  PIVOT_PREP = 15,
+  PIVOT_CREATE = 16,
+  PIVOT_ANATOMY = 17,
+  PIVOT_OPS = 18,
+  PIVOT_DRILLDOWN = 19,
+  PIVOT_CHART = 20,
+  TIPS_TRICKS = 21,
+  SUMMARY = 22
 }
 
 export interface SlideProps {

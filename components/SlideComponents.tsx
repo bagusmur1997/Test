@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet, Snowflake, ListFilter, Check, FilePlus, Trash2 } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet, Snowflake, ListFilter, Check, FilePlus, Trash2, Database, Key, X, CheckCheck, RefreshCw, Layers, PieChart, FunctionSquare, ArrowLeftRight } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
 
 // --- SLIDE 1 (NEW): EXCEL INTRO ---
@@ -71,235 +71,6 @@ export const ExcelIntroDemo: React.FC = () => {
         </div>
     </div>
   );
-};
-
-// --- SLIDE: FILTER & FREEZE PANES ---
-export const FilterFreezeDemo: React.FC = () => {
-    const [isFrozen, setIsFrozen] = useState(false);
-    const [isFilterOn, setIsFilterOn] = useState(false);
-    const [filterStatus, setFilterStatus] = useState<'All' | 'Pending' | 'Delivered'>('All');
-    const [showFilterMenu, setShowFilterMenu] = useState(false);
-
-    // Mock data generator for scrolling simulation
-    const generateData = () => {
-        const rows = [];
-        const areas = ['Cikarang', 'Jakarta', 'Surabaya', 'Bandung'];
-        const statuses = ['Delivered', 'Pending', 'Delivered', 'Pending'];
-        for (let i = 1; i <= 20; i++) {
-            rows.push({
-                id: 1000 + i,
-                date: `2024-01-${i < 10 ? '0' + i : i}`,
-                area: areas[i % 4],
-                status: statuses[i % 4],
-                qty: (i * 10) + 5
-            });
-        }
-        return rows;
-    };
-
-    const allData = generateData();
-    const visibleData = allData.filter(d => filterStatus === 'All' || d.status === filterStatus);
-
-    return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-            <div className="space-y-6 flex flex-col justify-center h-full overflow-y-auto">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">Mengelola Data Besar</h3>
-                    
-                    {/* Freeze Panes Section */}
-                    <div className="mb-6">
-                        <div className="flex items-center gap-2 mb-2">
-                            <Snowflake className="text-blue-500" size={20} />
-                            <h4 className="font-bold text-blue-700">1. Freeze Panes (Membekukan Panel)</h4>
-                        </div>
-                        <p className="text-sm text-gray-600 mb-2">Masalah: Judul kolom (Header) hilang atau tertutup saat melakukan scroll ke bawah.</p>
-                        
-                        {/* New Description Box */}
-                        <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-[11px] leading-tight text-blue-900 space-y-2 mb-3">
-                            <h5 className="font-bold border-b border-blue-200 pb-1 text-xs">Cara Mengunci Layar (Freeze Panes) dengan Tepat</h5>
-                            <p><span className="font-bold">Lokasi Menu:</span> Tab View &rarr; Group Window &rarr; Freeze Panes.</p>
-                            
-                            <div>
-                                <p className="font-bold mb-1">Terdapat 3 Opsi Penguncian:</p>
-                                <ul className="list-disc list-inside space-y-1 text-blue-800">
-                                    <li>
-                                        <span className="font-bold">Freeze Top Row:</span> Otomatis mengunci Baris Paling Atas yang terlihat di layar (biasanya Baris 1/Header).
-                                    </li>
-                                    <li>
-                                        <span className="font-bold">Freeze First Column:</span> Otomatis mengunci Kolom Paling Kiri (Kolom A).
-                                    </li>
-                                    <li>
-                                        <span className="font-bold">Freeze Panes (Custom) - Paling Sering Dipakai:</span>
-                                        <div className="pl-3 mt-0.5 text-gray-700">
-                                            Mengunci Baris dan Kolom sekaligus sesuai keinginan (Misal: Kunci Baris 1-3 DAN Kolom A-B).
-                                            <div className="mt-1 bg-white p-2 rounded border border-blue-200 shadow-sm">
-                                                <span className="font-bold text-blue-700 block mb-0.5">Kunci Rahasianya: Posisi Kursor/Klik Mouse.</span>
-                                                <span className="font-bold text-blue-700">Rumus Posisi:</span> Klik sel di <span className="font-bold text-red-600 bg-red-50 px-1 rounded">KANAN</span> kolom yang mau dikunci dan di <span className="font-bold text-red-600 bg-red-50 px-1 rounded">BAWAH</span> baris yang mau dikunci.
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <p><span className="font-bold">Cara Membatalkan:</span> Pilih Unfreeze Panes.</p>
-                        </div>
-
-                        <button 
-                            onClick={() => setIsFrozen(!isFrozen)}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all w-full flex items-center justify-center gap-2 ${isFrozen ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
-                        >
-                            {isFrozen ? "Header Frozen (Aktif)" : "Aktifkan Freeze Top Row (Simulasi)"}
-                        </button>
-                    </div>
-
-                    {/* Filter Section */}
-                    <div>
-                        <div className="flex items-center gap-2 mb-2">
-                            <ListFilter className="text-green-600" size={20} />
-                            <h4 className="font-bold text-green-700">2. Filter (Shortcut: Ctrl + Shift + L)</h4>
-                        </div>
-                        <p className="text-sm text-gray-600 mb-2">Menyaring data untuk menampilkan informasi spesifik dan menyembunyikan sisanya sementara.</p>
-                        
-                        {/* New Description Box for Filtering */}
-                        <div className="bg-green-50 p-3 rounded-lg border border-green-100 text-[11px] leading-tight text-green-900 space-y-2 mb-3">
-                            <h5 className="font-bold border-b border-green-200 pb-1 text-xs">Cara Melakukan Filtering Data (Menyaring Informasi)</h5>
-                            
-                            <div>
-                                <p className="font-bold text-green-800 mb-0.5">Langkah 1: Mengaktifkan Mode Filter</p>
-                                <ul className="list-disc list-inside space-y-0.5 ml-1 text-green-800">
-                                    <li>Klik pada <b>Judul Kolom (Header)</b> data Anda (Baris paling atas).</li>
-                                    <li>Pilih <b>Tab Data</b> di Ribbon menu &rarr; Klik icon <b>Filter</b> (Gambar Corong).</li>
-                                    <li><b>Shortcut Cepat:</b> Tekan <kbd className="font-mono bg-white px-1 border rounded">Ctrl + Shift + L</kbd>.</li>
-                                    <li><b>Indikator:</b> Akan muncul tombol panah kecil di setiap judul kolom.</li>
-                                </ul>
-                            </div>
-
-                            <div>
-                                <p className="font-bold text-green-800 mb-0.5">Langkah 2: Menggunakan Filter</p>
-                                <ul className="list-disc list-inside space-y-0.5 ml-1 text-green-800">
-                                    <li>Klik tombol panah di kolom yang ingin disaring (misal: Kolom 'Kota').</li>
-                                    <li><b>Cara Basic:</b> Hilangkan centang (Select All), lalu centang hanya data yang diinginkan (misal: 'Surabaya').</li>
-                                    <li><b>Cara Cepat (Search):</b> Ketik kata kunci di kotak Search untuk mencari data spesifik di daftar yang panjang.</li>
-                                </ul>
-                            </div>
-
-                            <div>
-                                <p className="font-bold text-green-800 mb-0.5">Langkah 3: Membersihkan Filter (Clear)</p>
-                                <p className="ml-1">
-                                    Jika ingin melihat semua data kembali tanpa mematikan mode filter, klik tombol filter tadi, lalu pilih <b>"Clear Filter from [Nama Kolom]"</b>.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-2">
-                            <button 
-                                onClick={() => {
-                                    setIsFilterOn(!isFilterOn);
-                                    if(isFilterOn) { setFilterStatus('All'); setShowFilterMenu(false); }
-                                }}
-                                className={`flex-1 px-3 py-2 rounded-lg text-sm font-bold border transition-all ${isFilterOn ? 'bg-green-100 text-green-800 border-green-300' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
-                            >
-                                {isFilterOn ? "Filter ON" : "Filter OFF"}
-                            </button>
-                            
-                            <select 
-                                disabled={!isFilterOn}
-                                value={filterStatus} 
-                                onChange={(e) => setFilterStatus(e.target.value as any)}
-                                className="flex-1 px-3 py-2 rounded-lg text-sm border border-gray-300 bg-white disabled:opacity-50 disabled:bg-gray-100"
-                            >
-                                <option value="All">Show All</option>
-                                <option value="Pending">Only Pending</option>
-                                <option value="Delivered">Only Delivered</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 text-sm text-yellow-800 italic">
-                    "Jadi mau scroll sampai baris ke sejuta pun, judulnya tetap nempel di atas jika di-Freeze."
-                </div>
-            </div>
-
-            <ExcelWindow title="Data Pengiriman (20 Baris)">
-                <div className="h-full flex flex-col relative overflow-hidden bg-white border rounded">
-                    {/* Simulated Table Area */}
-                    <div className="overflow-auto h-[400px] w-full relative">
-                        <table className="w-full text-sm border-collapse text-left">
-                            <thead className={`${isFrozen ? 'sticky top-0 z-20 shadow-md' : ''}`}>
-                                <tr className="bg-gray-200 text-gray-700">
-                                    <th className="border p-2 w-10 text-center bg-gray-200">No</th>
-                                    <th className="border p-2 bg-gray-200">
-                                        <div className="flex justify-between items-center">
-                                            Date {isFilterOn && <ChevronDown size={14} className="bg-white border rounded p-0.5 cursor-pointer"/>}
-                                        </div>
-                                    </th>
-                                    <th className="border p-2 bg-gray-200">
-                                        <div className="flex justify-between items-center">
-                                            Area {isFilterOn && <ChevronDown size={14} className="bg-white border rounded p-0.5 cursor-pointer"/>}
-                                        </div>
-                                    </th>
-                                    <th className="border p-2 bg-gray-200 relative">
-                                        <div className="flex justify-between items-center">
-                                            Status 
-                                            {isFilterOn && (
-                                                <div 
-                                                    className={`bg-white border rounded p-0.5 cursor-pointer hover:bg-gray-100 ${filterStatus !== 'All' ? 'text-blue-600' : ''}`}
-                                                    onClick={() => setShowFilterMenu(!showFilterMenu)}
-                                                >
-                                                    <ListFilter size={14} />
-                                                </div>
-                                            )}
-                                        </div>
-                                        {/* Dropdown simulation */}
-                                        {showFilterMenu && isFilterOn && (
-                                            <div className="absolute top-full right-0 mt-1 w-32 bg-white border shadow-xl rounded z-50 text-xs text-gray-700">
-                                                <div className="p-2 border-b font-bold bg-gray-50">Filter Status</div>
-                                                <div className="p-2 hover:bg-blue-50 cursor-pointer flex gap-2" onClick={() => {setFilterStatus('All'); setShowFilterMenu(false);}}>
-                                                    {filterStatus === 'All' && <Check size={12}/>} Select All
-                                                </div>
-                                                <div className="p-2 hover:bg-blue-50 cursor-pointer flex gap-2" onClick={() => {setFilterStatus('Pending'); setShowFilterMenu(false);}}>
-                                                    {filterStatus === 'Pending' && <Check size={12}/>} Pending
-                                                </div>
-                                                <div className="p-2 hover:bg-blue-50 cursor-pointer flex gap-2" onClick={() => {setFilterStatus('Delivered'); setShowFilterMenu(false);}}>
-                                                    {filterStatus === 'Delivered' && <Check size={12}/>} Delivered
-                                                </div>
-                                            </div>
-                                        )}
-                                    </th>
-                                    <th className="border p-2 bg-gray-200 text-right">Qty</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {visibleData.map((row) => (
-                                    <tr key={row.id} className="hover:bg-blue-50 transition-colors">
-                                        <td className="border p-2 text-center text-gray-500">{row.id}</td>
-                                        <td className="border p-2">{row.date}</td>
-                                        <td className="border p-2">{row.area}</td>
-                                        <td className="border p-2">
-                                            <span className={`px-2 py-0.5 rounded text-xs font-bold ${row.status === 'Pending' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
-                                                {row.status}
-                                            </span>
-                                        </td>
-                                        <td className="border p-2 text-right">{row.qty}</td>
-                                    </tr>
-                                ))}
-                                {/* Add dummy empty rows to force scroll if needed */}
-                                {visibleData.length < 5 && (
-                                    <tr><td colSpan={5} className="p-10 text-center text-gray-400">Data lain disembunyikan oleh Filter...</td></tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                    {/* Scroll hint overlay if not frozen */}
-                    {!isFrozen && visibleData.length > 10 && (
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-3 py-1 rounded-full pointer-events-none animate-bounce">
-                            Scroll ke bawah untuk lihat masalahnya
-                        </div>
-                    )}
-                </div>
-            </ExcelWindow>
-        </div>
-    );
 };
 
 // --- SLIDE 1: GOLDEN RULE ---
@@ -2039,27 +1810,99 @@ export const PivotAnatomyDemo: React.FC = () => {
     const [activeQuad, setActiveQuad] = useState<'ROWS' | 'COLS' | 'VALS' | 'FILT' | null>(null);
 
     const info = {
-        ROWS: {
-            title: "ROWS (Baris)",
-            desc: "Menampilkan data secara vertikal (turun ke bawah). Cocok untuk data utama yang itemnya banyak seperti Nama Sales, Tanggal, atau Nama Produk.",
-            color: "bg-blue-50 border-blue-500 text-blue-800"
+        FILT: {
+            title: "1. FILTERS (Saringan Global)",
+            content: (
+                <div className="space-y-4 text-sm sm:text-base">
+                    <div>
+                        <span className="font-bold block text-purple-800">Fungsi:</span>
+                        Menyaring seluruh tampilan data pada Pivot Table sekaligus berdasarkan kriteria tertentu.
+                    </div>
+                    <div>
+                        <span className="font-bold block text-purple-800">Penggunaan:</span>
+                        Letakkan data yang bersifat umum/kategori besar di sini.
+                    </div>
+                    <div className="bg-white/60 p-3 rounded-lg border border-purple-200 text-sm">
+                        <span className="font-bold text-purple-800">Contoh:</span> Menampilkan data khusus wilayah 'Bali' saja, atau khusus Status 'Lunas'.
+                    </div>
+                </div>
+            ),
+            color: "bg-purple-50 border-purple-500 text-purple-900"
         },
         COLS: {
-            title: "COLUMNS (Kolom)",
-            desc: "Menampilkan data secara horizontal (menyamping). Cocok untuk pembanding seperti Tahun, Bulan, atau Wilayah. Hati-hati jangan taruh data yang terlalu panjang di sini.",
-            color: "bg-orange-50 border-orange-500 text-orange-800"
+            title: "2. COLUMNS (Kolom/Horizontal)",
+            content: (
+                <div className="space-y-4 text-sm sm:text-base">
+                    <div>
+                        <span className="font-bold block text-orange-800">Fungsi:</span>
+                        Menampilkan pengelompokan data secara menyamping (Kiri ke Kanan).
+                    </div>
+                    <div>
+                        <span className="font-bold block text-orange-800">Penggunaan:</span>
+                        Ideal untuk pembanding data dengan item yang tidak terlalu banyak.
+                    </div>
+                    <div className="text-sm italic text-orange-800 bg-orange-100/50 p-2 rounded border border-orange-200">
+                        <span className="font-bold">Tips:</span> Hindari menaruh data panjang (seperti Nama Orang) di sini agar tabel tidak melebar tak terbatas.
+                    </div>
+                    <div className="bg-white/60 p-3 rounded-lg border border-orange-200 text-sm">
+                        <span className="font-bold text-orange-800">Contoh:</span> Periode (Tahun 2023, 2024), Nama Bulan, atau Jenis Kelamin.
+                    </div>
+                </div>
+            ),
+            color: "bg-orange-50 border-orange-500 text-orange-900"
+        },
+        ROWS: {
+            title: "3. ROWS (Baris/Vertikal)",
+            content: (
+                <div className="space-y-4 text-sm sm:text-base">
+                    <div>
+                        <span className="font-bold block text-blue-800">Fungsi:</span>
+                        Menampilkan pengelompokan data secara menurun (Atas ke Bawah).
+                    </div>
+                    <div>
+                        <span className="font-bold block text-blue-800">Penggunaan:</span>
+                        Tempat untuk Subjek Utama laporan yang memiliki banyak item/daftar.
+                    </div>
+                    <div className="bg-white/60 p-3 rounded-lg border border-blue-200 text-sm">
+                        <span className="font-bold text-blue-800">Contoh:</span> Daftar Nama Karyawan, Daftar SKU Produk, atau Tanggal Transaksi.
+                    </div>
+                </div>
+            ),
+            color: "bg-blue-50 border-blue-500 text-blue-900"
         },
         VALS: {
-            title: "VALUES (Nilai)",
-            desc: "Area untuk BERHITUNG (Sum, Count, Average). Hanya masukkan kolom yang berisi ANGKA (Harga, Qty, Total) di sini.",
-            color: "bg-green-50 border-green-500 text-green-800"
-        },
-        FILT: {
-            title: "FILTERS (Saringan)",
-            desc: "Saringan global. Menyaring seluruh tabel berdasarkan kriteria tertentu. Contoh: Lihat laporan penjualan (Rows), tapi difilter hanya 'Cabang Jakarta'.",
-            color: "bg-purple-50 border-purple-500 text-purple-800"
+            title: "4. VALUES (Area Hitung)",
+            content: (
+                <div className="space-y-4 text-sm">
+                    <div>
+                        <span className="font-bold block text-green-800">Fungsi:</span>
+                        "Mesin" kalkulasi Pivot Table. Tempat meletakkan angka yang ingin diolah.
+                    </div>
+                    <div>
+                        <span className="font-bold block text-green-800 mb-2 border-b border-green-200 pb-1">Logika Perhitungan (Summarize Value By):</span>
+                        <ul className="space-y-3">
+                            <li className="bg-white/70 p-2 rounded shadow-sm border border-green-100">
+                                <div className="font-bold text-green-800">SUM (Penjumlahan)</div>
+                                <div className="text-xs mb-1">Menotalkan nilai angka secara keseluruhan.</div>
+                                <div className="text-xs text-green-600 italic">Contoh: Total Omzet (Rp), Total Qty Barang.</div>
+                            </li>
+                            <li className="bg-white/70 p-2 rounded shadow-sm border border-blue-100">
+                                <div className="font-bold text-blue-700">COUNT (Frekuensi)</div>
+                                <div className="text-xs mb-1">Menghitung banyaknya data/transaksi (bukan menjumlahkan isinya).</div>
+                                <div className="text-xs text-blue-600 italic">Contoh: Jumlah struk transaksi, Jumlah karyawan hadir.</div>
+                            </li>
+                            <li className="bg-white/70 p-2 rounded shadow-sm border border-purple-100">
+                                <div className="font-bold text-purple-700">AVERAGE (Rata-Rata)</div>
+                                <div className="text-xs mb-1">Menghitung nilai rata-rata dari sekumpulan data.</div>
+                                <div className="text-xs text-purple-600 italic">Contoh: Rata-rata penjualan per hari.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            ),
+            color: "bg-green-50 border-green-500 text-green-900"
         }
-    }
+    };
 
     const currentInfo = activeQuad ? info[activeQuad] : null;
 
@@ -2068,7 +1911,7 @@ export const PivotAnatomyDemo: React.FC = () => {
             <div className="mb-4 text-center">
                  <h3 className="text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
                     <LayoutDashboard className="text-excel-base" />
-                    Anatomi Pivot Table (4 Kuadran)
+                    Komponen Utama Pivot Table
                 </h3>
                 <p className="text-sm text-gray-500">Klik salah satu kotak di bawah untuk mempelajari fungsinya.</p>
             </div>
@@ -2121,16 +1964,11 @@ export const PivotAnatomyDemo: React.FC = () => {
                 </div>
 
                 {/* Explanation Area */}
-                <div className="flex flex-col justify-center">
+                <div className="flex flex-col justify-center h-full">
                     {currentInfo ? (
-                        <div className={`p-8 rounded-xl border-l-8 shadow-sm transition-all animate-fade-in ${currentInfo.color}`}>
-                            <h2 className="text-2xl font-bold mb-4">{currentInfo.title}</h2>
-                            <p className="text-lg leading-relaxed">{currentInfo.desc}</p>
-                            
-                            {activeQuad === 'ROWS' && <div className="mt-4 text-sm font-bold opacity-75">Contoh: Daftar Nama Karyawan</div>}
-                            {activeQuad === 'COLS' && <div className="mt-4 text-sm font-bold opacity-75">Contoh: Tahun (2023, 2024), Bulan</div>}
-                            {activeQuad === 'VALS' && <div className="mt-4 text-sm font-bold opacity-75">Contoh: Sum of Sales, Count of Transaksi</div>}
-                            {activeQuad === 'FILT' && <div className="mt-4 text-sm font-bold opacity-75">Contoh: Filter hanya Wilayah 'Bali'</div>}
+                        <div className={`p-6 rounded-xl border-l-8 shadow-sm transition-all animate-fade-in ${currentInfo.color} h-full overflow-y-auto`}>
+                            <h2 className="text-xl font-bold mb-4 border-b border-black/10 pb-2">{currentInfo.title}</h2>
+                            {currentInfo.content}
                         </div>
                     ) : (
                          <div className="h-full flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">
@@ -2614,6 +2452,286 @@ export const TipsTrickDemo: React.FC = () => {
                     )}
                 </div>
             </div>
+        </div>
+    );
+};
+
+export const FreezePanesDemo: React.FC = () => {
+    const [isFrozen, setIsFrozen] = useState(false);
+
+    // Mock data generator for scrolling simulation
+    const generateData = () => {
+        const rows = [];
+        const areas = ['Cikarang', 'Jakarta', 'Surabaya', 'Bandung'];
+        const statuses = ['Delivered', 'Pending', 'Delivered', 'Pending'];
+        for (let i = 1; i <= 20; i++) {
+            rows.push({
+                id: 1000 + i,
+                date: `2024-01-${i < 10 ? '0' + i : i}`,
+                area: areas[i % 4],
+                status: statuses[i % 4],
+                qty: (i * 10) + 5
+            });
+        }
+        return rows;
+    };
+
+    const visibleData = generateData();
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+            <div className="space-y-6 flex flex-col justify-center h-full overflow-y-auto">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4">Mengelola Data Besar (1/2)</h3>
+                    
+                    <div className="animate-fade-in">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Snowflake className="text-blue-600" size={24} />
+                            <h4 className="font-bold text-blue-700 text-lg">Freeze Panes (Membekukan Panel)</h4>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">Masalah: Judul kolom (Header) hilang atau tertutup saat melakukan scroll ke bawah pada data yang panjang.</p>
+                        
+                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 text-sm leading-relaxed text-blue-900 space-y-3 mb-6">
+                            <h5 className="font-bold border-b border-blue-200 pb-2">Cara Mengunci Layar dengan Tepat</h5>
+                            <p className="text-xs"><span className="font-bold">Lokasi Menu:</span> Tab View &rarr; Group Window &rarr; Freeze Panes.</p>
+                            
+                            <ul className="list-disc list-inside space-y-2 text-xs">
+                                <li>
+                                    <span className="font-bold">Freeze Top Row:</span> Mengunci Baris Paling Atas (Header).
+                                </li>
+                                <li>
+                                    <span className="font-bold">Freeze First Column:</span> Mengunci Kolom Paling Kiri.
+                                </li>
+                                <li>
+                                    <span className="font-bold">Freeze Panes (Custom):</span>
+                                    <div className="pl-4 mt-1 text-gray-700">
+                                        Untuk mengunci baris & kolom sekaligus.
+                                        <div className="mt-1 bg-white p-2 rounded border border-blue-200 shadow-sm font-semibold text-blue-700">
+                                            Rumus Posisi Klik: <br/>
+                                            KANAN dari kolom yang mau dikunci <br/>
+                                            & BAWAH dari baris yang mau dikunci.
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button 
+                            onClick={() => setIsFrozen(!isFrozen)}
+                            className={`px-4 py-3 rounded-lg text-sm font-bold border transition-all w-full flex items-center justify-center gap-2 shadow-sm ${isFrozen ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
+                        >
+                            {isFrozen ? <Lock size={16} /> : <Unlock size={16} />}
+                            {isFrozen ? "Header Frozen (Aktif)" : "Aktifkan Freeze Top Row (Simulasi)"}
+                        </button>
+                    </div>
+                </div>
+
+                <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 text-sm text-yellow-800 italic">
+                    "Jadi mau scroll sampai baris ke sejuta pun, judulnya tetap nempel di atas jika di-Freeze."
+                </div>
+            </div>
+
+            <ExcelWindow title="Data Pengiriman (20 Baris)">
+                <div className="h-full flex flex-col relative overflow-hidden bg-white border rounded">
+                    <div className="overflow-auto h-[400px] w-full relative">
+                        <table className="w-full text-sm border-collapse text-left">
+                            <thead className={`${isFrozen ? 'sticky top-0 z-20 shadow-md' : ''}`}>
+                                <tr className="bg-gray-200 text-gray-700">
+                                    <th className="border p-2 w-10 text-center bg-gray-200">No</th>
+                                    <th className="border p-2 bg-gray-200">Date</th>
+                                    <th className="border p-2 bg-gray-200">Area</th>
+                                    <th className="border p-2 bg-gray-200">Status</th>
+                                    <th className="border p-2 bg-gray-200 text-right">Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {visibleData.map((row) => (
+                                    <tr key={row.id} className="hover:bg-blue-50 transition-colors">
+                                        <td className="border p-2 text-center text-gray-500">{row.id}</td>
+                                        <td className="border p-2">{row.date}</td>
+                                        <td className="border p-2">{row.area}</td>
+                                        <td className="border p-2">
+                                            <span className={`px-2 py-0.5 rounded text-xs font-bold ${row.status === 'Pending' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                                                {row.status}
+                                            </span>
+                                        </td>
+                                        <td className="border p-2 text-right">{row.qty}</td>
+                                    </tr>
+                                ))}
+                                {visibleData.length < 5 && (
+                                    <tr><td colSpan={5} className="p-10 text-center text-gray-400">Data lain disembunyikan oleh Filter...</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                    {!isFrozen && visibleData.length > 10 && (
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-3 py-1 rounded-full pointer-events-none animate-bounce">
+                            Scroll ke bawah untuk lihat masalahnya
+                        </div>
+                    )}
+                </div>
+            </ExcelWindow>
+        </div>
+    );
+};
+
+export const FilterDataDemo: React.FC = () => {
+    const [isFilterOn, setIsFilterOn] = useState(false);
+    const [filterStatus, setFilterStatus] = useState<'All' | 'Pending' | 'Delivered'>('All');
+    const [showFilterMenu, setShowFilterMenu] = useState(false);
+
+    const generateData = () => {
+        const rows = [];
+        const areas = ['Cikarang', 'Jakarta', 'Surabaya', 'Bandung'];
+        const statuses = ['Delivered', 'Pending', 'Delivered', 'Pending'];
+        for (let i = 1; i <= 20; i++) {
+            rows.push({
+                id: 1000 + i,
+                date: `2024-01-${i < 10 ? '0' + i : i}`,
+                area: areas[i % 4],
+                status: statuses[i % 4],
+                qty: (i * 10) + 5
+            });
+        }
+        return rows;
+    };
+
+    const allData = generateData();
+    const visibleData = allData.filter(d => filterStatus === 'All' || d.status === filterStatus);
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+            <div className="space-y-6 flex flex-col justify-center h-full overflow-y-auto">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4">Mengelola Data Besar (2/2)</h3>
+                    
+                    <div className="animate-fade-in">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ListFilter className="text-green-600" size={24} />
+                            <h4 className="font-bold text-green-700 text-lg">Filter Data (Ctrl + Shift + L)</h4>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">Menyaring data untuk menampilkan informasi spesifik dan menyembunyikan sisanya sementara.</p>
+                        
+                        <div className="bg-green-50 p-4 rounded-lg border border-green-100 text-sm leading-relaxed text-green-900 space-y-3 mb-6">
+                            <h5 className="font-bold border-b border-green-200 pb-2">Cara Melakukan Filtering Data</h5>
+                            
+                            <div>
+                                <p className="font-bold text-green-800 mb-1">Langkah 1: Mengaktifkan Mode Filter</p>
+                                <ul className="list-disc list-inside space-y-0.5 ml-1 text-xs">
+                                    <li>Klik pada <b>Judul Kolom (Header)</b>.</li>
+                                    <li>Tab Data &rarr; Filter (Corong).</li>
+                                    <li>Shortcut: <kbd className="font-mono bg-white px-1 border rounded shadow-sm">Ctrl + Shift + L</kbd>.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <p className="font-bold text-green-800 mb-1">Langkah 2: Menggunakan Filter</p>
+                                <ul className="list-disc list-inside space-y-0.5 ml-1 text-xs">
+                                    <li>Klik tombol panah di kolom target.</li>
+                                    <li>Uncheck "Select All", pilih data yang diinginkan.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-2">
+                            <button 
+                                onClick={() => {
+                                    setIsFilterOn(!isFilterOn);
+                                    if(isFilterOn) { setFilterStatus('All'); setShowFilterMenu(false); }
+                                }}
+                                className={`flex-1 px-3 py-3 rounded-lg text-sm font-bold border transition-all shadow-sm ${isFilterOn ? 'bg-green-100 text-green-800 border-green-300' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
+                            >
+                                {isFilterOn ? "Filter ON" : "Filter OFF"}
+                            </button>
+                            
+                            <select 
+                                disabled={!isFilterOn}
+                                value={filterStatus} 
+                                onChange={(e) => setFilterStatus(e.target.value as any)}
+                                className="flex-1 px-3 py-3 rounded-lg text-sm border border-gray-300 bg-white disabled:opacity-50 disabled:bg-gray-100 cursor-pointer shadow-sm"
+                            >
+                                <option value="All">Show All</option>
+                                <option value="Pending">Only Pending</option>
+                                <option value="Delivered">Only Delivered</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 text-sm text-yellow-800 italic">
+                    "Filter memudahkan kita fokus pada data penting saja, tanpa menghapus data lainnya."
+                </div>
+            </div>
+
+            <ExcelWindow title="Data Pengiriman (20 Baris)">
+                <div className="h-full flex flex-col relative overflow-hidden bg-white border rounded">
+                    <div className="overflow-auto h-[400px] w-full relative">
+                        <table className="w-full text-sm border-collapse text-left">
+                            <thead className="sticky top-0 z-20 shadow-md">
+                                <tr className="bg-gray-200 text-gray-700">
+                                    <th className="border p-2 w-10 text-center bg-gray-200">No</th>
+                                    <th className="border p-2 bg-gray-200">
+                                        <div className="flex justify-between items-center">
+                                            Date {isFilterOn && <ChevronDown size={14} className="bg-white border rounded p-0.5 cursor-pointer"/>}
+                                        </div>
+                                    </th>
+                                    <th className="border p-2 bg-gray-200">
+                                        <div className="flex justify-between items-center">
+                                            Area {isFilterOn && <ChevronDown size={14} className="bg-white border rounded p-0.5 cursor-pointer"/>}
+                                        </div>
+                                    </th>
+                                    <th className="border p-2 bg-gray-200 relative">
+                                        <div className="flex justify-between items-center">
+                                            Status 
+                                            {isFilterOn && (
+                                                <div 
+                                                    className={`bg-white border rounded p-0.5 cursor-pointer hover:bg-gray-100 ${filterStatus !== 'All' ? 'text-blue-600' : ''}`}
+                                                    onClick={() => setShowFilterMenu(!showFilterMenu)}
+                                                >
+                                                    <ListFilter size={14} />
+                                                </div>
+                                            )}
+                                        </div>
+                                        {showFilterMenu && isFilterOn && (
+                                            <div className="absolute top-full right-0 mt-1 w-32 bg-white border shadow-xl rounded z-50 text-xs text-gray-700">
+                                                <div className="p-2 border-b font-bold bg-gray-50">Filter Status</div>
+                                                <div className="p-2 hover:bg-blue-50 cursor-pointer flex gap-2" onClick={() => {setFilterStatus('All'); setShowFilterMenu(false);}}>
+                                                    {filterStatus === 'All' && <Check size={12}/>} Select All
+                                                </div>
+                                                <div className="p-2 hover:bg-blue-50 cursor-pointer flex gap-2" onClick={() => {setFilterStatus('Pending'); setShowFilterMenu(false);}}>
+                                                    {filterStatus === 'Pending' && <Check size={12}/>} Pending
+                                                </div>
+                                                <div className="p-2 hover:bg-blue-50 cursor-pointer flex gap-2" onClick={() => {setFilterStatus('Delivered'); setShowFilterMenu(false);}}>
+                                                    {filterStatus === 'Delivered' && <Check size={12}/>} Delivered
+                                                </div>
+                                            </div>
+                                        )}
+                                    </th>
+                                    <th className="border p-2 bg-gray-200 text-right">Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {visibleData.map((row) => (
+                                    <tr key={row.id} className="hover:bg-blue-50 transition-colors">
+                                        <td className="border p-2 text-center text-gray-500">{row.id}</td>
+                                        <td className="border p-2">{row.date}</td>
+                                        <td className="border p-2">{row.area}</td>
+                                        <td className="border p-2">
+                                            <span className={`px-2 py-0.5 rounded text-xs font-bold ${row.status === 'Pending' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                                                {row.status}
+                                            </span>
+                                        </td>
+                                        <td className="border p-2 text-right">{row.qty}</td>
+                                    </tr>
+                                ))}
+                                {visibleData.length < 5 && (
+                                    <tr><td colSpan={5} className="p-10 text-center text-gray-400">Data lain disembunyikan oleh Filter...</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ExcelWindow>
         </div>
     );
 };
