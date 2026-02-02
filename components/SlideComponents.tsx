@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet, Snowflake, ListFilter, Check, FilePlus, Trash2, Database, Key, X, CheckCheck, RefreshCw, Layers, PieChart, FunctionSquare, ArrowLeftRight, Download, Link as LinkIcon, Box } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet, Snowflake, ListFilter, Check, FilePlus, Trash2, Database, Key, X, CheckCheck, RefreshCw, Layers, PieChart, FunctionSquare, ArrowLeftRight, Download, Link as LinkIcon, Box, CalendarClock, History } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
 
 // --- SLIDE 1 (NEW): EXCEL INTRO ---
@@ -3106,6 +3106,287 @@ export const ScenarioPivotDemo: React.FC = () => {
                             <Truck size={24} className="mx-auto mb-1 text-blue-600"/>
                             <div className="text-xs text-gray-500">Kesimpulan Jakarta 1</div>
                             <div className="font-bold text-gray-800">45 CBM &rarr; Butuh Wingbox</div>
+                        </div>
+                    </div>
+                </div>
+            </ExcelWindow>
+        </div>
+    );
+};
+
+// --- SCENARIO 2: LEAD TIME & DELAY ANALYSIS ---
+
+export const Scenario2IntroDemo: React.FC = () => {
+    const fileUrl = "https://zpssgpatientsolutions.sharepoint.com/:x:/s/APLPlanningTeamLeader/IQBYdpu0FOr-Qa_6BLybNTxvASNn29Fs1YVOGScs7ICZKH8?e=etzFrQ";
+
+    return (
+        <div className="h-full flex flex-col justify-center items-center gap-8 animate-fade-in text-center p-4">
+            <div className="inline-flex items-center justify-center p-6 bg-red-100 rounded-full ring-8 ring-red-50 mb-2">
+                <CalendarClock size={64} className="text-red-600" />
+            </div>
+
+            <div className="max-w-3xl space-y-4">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                    Case Study 2: Monitoring Lead Time & Aging
+                </h2>
+                <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm text-left space-y-4">
+                    <div>
+                        <span className="font-bold text-gray-800 block mb-1">Masalah:</span>
+                        <p className="text-gray-600">Manajemen ingin memantau performa pengiriman secara real-time. Kita perlu menghitung <span className="font-bold text-blue-600">Lead Time</span> dan tingkat <span className="font-bold text-red-600">Keterlambatan</span> untuk pengiriman yang sudah tiba maupun yang masih In Transit.</p>
+                    </div>
+                    <div>
+                        <span className="font-bold text-gray-800 block mb-1">Misi:</span>
+                        <ul className="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>
+                                <b>Hitung Lead Time:</b> Selisih hari GI PLAN s/d GR DATE (Gunakan TODAY jika belum sampai).
+                            </li>
+                            <li>
+                                <b>Hitung Overleadtime:</b> Selisih hari ETA FINAL s/d GR DATE.
+                            </li>
+                            <li>
+                                <b>Kategori Aging (IFS):</b> Kelompokkan keterlambatan (On Time, Late 1-3, Late {'>'} 9).
+                            </li>
+                            <li>
+                                <b>Analisa Pivot:</b> Summary jumlah pengiriman per status.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <a 
+                href={fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-8 py-4 bg-excel-dark text-white rounded-xl font-bold text-lg hover:bg-excel-base hover:scale-105 transition-all shadow-lg hover:shadow-xl"
+            >
+                <Download size={24} />
+                Download Raw Data Practice File
+            </a>
+        </div>
+    );
+};
+
+export const Scenario2FormulasDemo: React.FC = () => {
+    // Mock TODAY = 20 Jan
+    const today = "20-Jan";
+    const data = [
+        { id: "DO-001", gi: "10-Jan", eta: "15-Jan", gr: "14-Jan", status: "Delivered" },
+        { id: "DO-002", gi: "10-Jan", eta: "15-Jan", gr: "", status: "In Transit" }, // Late (Today 20 Jan)
+        { id: "DO-003", gi: "18-Jan", eta: "22-Jan", gr: "", status: "In Transit" }, // On Track
+    ];
+
+    const getLeadTime = (gi: string, gr: string) => {
+        // Simple logic for demo display
+        if (gr) return 4; // 10 to 14
+        if (gi === "10-Jan") return 10; // 10 to 20 (Today)
+        return 2; // 18 to 20 (Today)
+    }
+
+    const getOverLeadTime = (eta: string, gr: string) => {
+        if (gr) return -1; // 15 to 14 (Early 1 day)
+        if (eta === "15-Jan") return 5; // 15 to 20 (Late 5 days)
+        return -2; // 22 to 20 (Still has 2 days)
+    }
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+            <div className="space-y-6 flex flex-col justify-center">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <Calculator size={24} className="text-blue-600"/>
+                        Langkah 1 & 2: Kalkulasi Hari
+                    </h3>
+                    
+                    <div className="space-y-4">
+                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <h4 className="font-bold text-blue-800 text-sm mb-1">1. Rumus Lead Time (Durasi)</h4>
+                            <p className="text-xs text-gray-600 mb-2">Menghitung lama perjalanan. Jika belum sampai (GR kosong), hitung sampai Hari Ini.</p>
+                            <code className="block bg-white p-2 rounded border border-blue-100 font-mono text-xs text-blue-900">
+                                =IF([@[GR_DATE]]="", TODAY() - [@[GI PLAN]], [@[GR_DATE]] - [@[GI PLAN]])
+                            </code>
+                        </div>
+
+                        <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                            <h4 className="font-bold text-red-800 text-sm mb-1">2. Rumus Overleadtime (Telat)</h4>
+                            <p className="text-xs text-gray-600 mb-2">Menghitung selisih dari janji ETA. Positif = Terlambat.</p>
+                            <code className="block bg-white p-2 rounded border border-red-100 font-mono text-xs text-red-900">
+                                =IF([@[GR_DATE]]="", TODAY() - [@[ETA FINAL]], [@[GR_DATE]] - [@[ETA FINAL]])
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ExcelWindow title="Shipment Tracking (Today: 20-Jan)">
+                <div className="grid grid-cols-[60px_60px_60px_60px_60px_60px] text-xs">
+                    <Cell value="ID" isHeader />
+                    <Cell value="GI PLAN" isHeader />
+                    <Cell value="ETA" isHeader />
+                    <Cell value="GR DATE" isHeader />
+                    <Cell value="LeadTime" isHeader className="bg-blue-100 text-blue-900 font-bold" />
+                    <Cell value="OverTime" isHeader className="bg-red-100 text-red-900 font-bold" />
+
+                    {data.map((row, i) => {
+                        const lt = getLeadTime(row.gi, row.gr);
+                        const ot = getOverLeadTime(row.eta, row.gr);
+                        return (
+                            <React.Fragment key={i}>
+                                <Cell value={row.id} />
+                                <Cell value={row.gi} />
+                                <Cell value={row.eta} />
+                                <Cell value={row.gr || "-"} className={!row.gr ? "text-gray-400 italic" : ""} />
+                                <Cell value={lt} className="font-mono text-right font-bold text-blue-700 bg-blue-50" />
+                                <Cell value={ot} className={`font-mono text-right font-bold ${ot > 0 ? "text-red-600 bg-red-50" : "text-green-600 bg-green-50"}`} />
+                            </React.Fragment>
+                        )
+                    })}
+                </div>
+                <div className="mt-4 text-xs text-gray-500 italic text-center">
+                    Note: OverTime positif (+) artinya terlambat, negatif (-) artinya aman/lebih cepat.
+                </div>
+            </ExcelWindow>
+        </div>
+    );
+};
+
+export const Scenario2AgingDemo: React.FC = () => {
+    // Mock Data based on previous calculation
+    const data = [
+        { ot: -1, status: "On Time" },
+        { ot: 2, status: "Late 1-3 Hari" },
+        { ot: 5, status: "Late 4-6 Hari" },
+        { ot: 10, status: "Late > 9 Hari" },
+    ];
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full items-center">
+            <div className="space-y-6">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <Split size={24} className="text-purple-600"/>
+                        Langkah 3: Aging Keterlambatan (IFS)
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                        Kita perlu mengelompokkan tingkat keterlambatan agar mudah dipivot. Gunakan fungsi <b>IFS</b> agar rumusnya rapi.
+                    </p>
+
+                    <div className="bg-gray-100 p-4 rounded-lg border border-gray-300 font-mono text-xs text-gray-800 space-y-1">
+                        <div className="text-purple-700 font-bold mb-2">=IFS(</div>
+                        <div className="pl-4">[@Overleadtime] &lt;= 0, <span className="text-green-600">"On Time"</span>,</div>
+                        <div className="pl-4">[@Overleadtime] &lt;= 3, <span className="text-yellow-600">"Late 1-3 Hari"</span>,</div>
+                        <div className="pl-4">[@Overleadtime] &lt;= 6, <span className="text-orange-600">"Late 4-6 Hari"</span>,</div>
+                        <div className="pl-4">[@Overleadtime] &lt;= 9, <span className="text-red-600">"Late 7-9 Hari"</span>,</div>
+                        <div className="pl-4"><span className="text-blue-600">TRUE</span>, <span className="text-red-800 font-bold">"Late &gt; 9 Hari"</span></div>
+                        <div className="text-purple-700 font-bold">)</div>
+                    </div>
+                </div>
+            </div>
+
+            <ExcelWindow title="Kategorisasi Aging">
+                <FormulaBar value='=IFS([@OT]<=0,"On Time", ...)' label="Status" />
+                <div className="grid grid-cols-[80px_1fr] text-sm">
+                    <Cell value="OverTime" isHeader />
+                    <Cell value="Aging Status" isHeader className="bg-purple-100 text-purple-900 font-bold" />
+
+                    {data.map((row, i) => (
+                        <React.Fragment key={i}>
+                            <Cell value={row.ot} align="right" className="font-mono"/>
+                            <Cell 
+                                value={row.status} 
+                                className={`font-bold ${
+                                    row.status === "On Time" ? "text-green-700 bg-green-50" : 
+                                    row.status.includes("1-3") ? "text-yellow-700 bg-yellow-50" : 
+                                    row.status.includes("4-6") ? "text-orange-700 bg-orange-50" : 
+                                    "text-red-700 bg-red-50"
+                                }`}
+                            />
+                        </React.Fragment>
+                    ))}
+                </div>
+            </ExcelWindow>
+        </div>
+    );
+};
+
+export const Scenario2PivotDemo: React.FC = () => {
+    // Pivot Result Data
+    const pivotData = [
+        { label: "On Time", count: 120, pct: 60, color: "bg-green-500" },
+        { label: "Late 1-3 Hari", count: 40, pct: 20, color: "bg-yellow-500" },
+        { label: "Late 4-6 Hari", count: 20, pct: 10, color: "bg-orange-500" },
+        { label: "Late 7-9 Hari", count: 10, pct: 5, color: "bg-red-500" },
+        { label: "Late > 9 Hari", count: 10, pct: 5, color: "bg-red-800" },
+    ];
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full items-center">
+            <div className="space-y-6">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <LayoutDashboard size={24} className="text-blue-600"/>
+                        Langkah 4: Analisa Akhir (Pivot)
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-6">
+                        Buat Pivot Table untuk melihat sebaran performa pengiriman.
+                    </p>
+
+                    <div className="bg-gray-100 p-4 rounded-lg border border-gray-200 space-y-3">
+                        <h4 className="font-bold text-gray-700 text-sm border-b pb-2 mb-2">Setting Pivot Fields:</h4>
+                        
+                        <div className="flex items-center gap-3">
+                            <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-bold border border-blue-300 w-16 text-center">ROWS</div>
+                            <ArrowRight size={14} className="text-gray-400"/>
+                            <div className="text-sm text-gray-700">Aging Status</div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <div className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold border border-green-300 w-16 text-center">VALUES</div>
+                            <ArrowRight size={14} className="text-gray-400"/>
+                            <div className="text-sm text-gray-700 font-bold">Count of SJ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ExcelWindow title="Report Keterlambatan">
+                <div className="flex flex-col gap-6">
+                    {/* Table View */}
+                    <div className="border border-gray-300 shadow-sm bg-white overflow-hidden rounded">
+                        <div className="grid grid-cols-[2fr_1fr] bg-gray-100 border-b border-gray-300 text-xs font-bold text-gray-700">
+                            <div className="p-2 border-r border-gray-300">Row Labels</div>
+                            <div className="p-2 text-right">Count of SJ</div>
+                        </div>
+                        {pivotData.map((row, i) => (
+                            <div key={i} className="grid grid-cols-[2fr_1fr] border-b border-gray-200 text-xs hover:bg-gray-50">
+                                <div className="p-2 border-r border-gray-300">{row.label}</div>
+                                <div className="p-2 text-right font-mono">{row.count}</div>
+                            </div>
+                        ))}
+                        <div className="grid grid-cols-[2fr_1fr] bg-gray-200 text-xs font-bold">
+                            <div className="p-2 border-r border-gray-300">Grand Total</div>
+                            <div className="p-2 text-right font-mono">200</div>
+                        </div>
+                    </div>
+
+                    {/* Simple Bar Chart */}
+                    <div className="bg-white p-4 rounded border border-gray-200">
+                        <h4 className="text-xs font-bold text-gray-500 mb-3 uppercase">Visualisasi Chart</h4>
+                        <div className="flex items-end h-32 gap-2 border-b border-gray-300 pb-1">
+                            {pivotData.map((row, i) => (
+                                <div key={i} className="flex-1 flex flex-col justify-end items-center gap-1 group">
+                                    <div className="text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity">{row.count}</div>
+                                    <div 
+                                        className={`w-full rounded-t ${row.color} hover:opacity-80 transition-all`} 
+                                        style={{ height: `${row.pct}%` }}
+                                    ></div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex gap-2 text-[8px] text-center text-gray-500 mt-1">
+                            {pivotData.map((row, i) => (
+                                <div key={i} className="flex-1 leading-tight">{row.label}</div>
+                            ))}
                         </div>
                     </div>
                 </div>

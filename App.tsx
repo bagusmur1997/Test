@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, FileSpreadsheet, LayoutGrid, Terminal, Share2, Lock, BarChart3, Users, TrendingUp, Split, Filter, Home, Search, Table, Grid } from 'lucide-react';
 import { SlideStep } from './types';
-import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo, ExcelIntroDemo, FreezePanesDemo, FilterDataDemo, PivotDrillDownDemo, ScenarioIntroDemo, ScenarioXLookupDemo, ScenarioMathDemo, ScenarioPivotDemo } from './components/SlideComponents';
+import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo, ExcelIntroDemo, FreezePanesDemo, FilterDataDemo, PivotDrillDownDemo, ScenarioIntroDemo, ScenarioXLookupDemo, ScenarioMathDemo, ScenarioPivotDemo, Scenario2IntroDemo, Scenario2FormulasDemo, Scenario2AgingDemo, Scenario2PivotDemo } from './components/SlideComponents';
 
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<SlideStep>(SlideStep.INTRO);
@@ -21,8 +21,8 @@ const App: React.FC = () => {
 
   const goToStep = (step: SlideStep) => setCurrentStep(step);
 
-  // Total steps for progress bar (updated for Module 3)
-  const TOTAL_STEPS = 27; 
+  // Total steps for progress bar (updated for Module 3 Scenario 2)
+  const TOTAL_STEPS = 31; 
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 md:p-8 font-sans text-gray-900">
@@ -137,12 +137,22 @@ const App: React.FC = () => {
                             <div className="grid grid-cols-1 gap-y-2 text-sm text-gray-600">
                                 <div>
                                     <button onClick={() => goToStep(SlideStep.SCENARIO_INTRO)} className="hover:text-purple-600 hover:underline text-left font-bold truncate w-full mb-1 flex items-center gap-1">
-                                        <span className="text-purple-400">•</span> Skenario Freight In
+                                        <span className="text-purple-400">•</span> CS1: Freight In
                                     </button>
                                     <div className="pl-5 flex flex-col gap-1.5 border-l-2 border-purple-100 ml-1.5 py-1">
                                         <button onClick={() => goToStep(SlideStep.SCENARIO_1_XLOOKUP)} className="hover:text-purple-600 hover:underline text-left text-xs font-medium text-gray-500 truncate pl-2">1. Mapping (XLOOKUP)</button>
                                         <button onClick={() => goToStep(SlideStep.SCENARIO_1_MATH)} className="hover:text-purple-600 hover:underline text-left text-xs font-medium text-gray-500 truncate pl-2">2. Kalkulasi (Math)</button>
                                         <button onClick={() => goToStep(SlideStep.SCENARIO_1_PIVOT)} className="hover:text-purple-600 hover:underline text-left text-xs font-medium text-gray-500 truncate pl-2">3. Summary (Pivot)</button>
+                                    </div>
+                                </div>
+                                <div className="mt-2">
+                                    <button onClick={() => goToStep(SlideStep.SCENARIO_2_INTRO)} className="hover:text-purple-600 hover:underline text-left font-bold truncate w-full mb-1 flex items-center gap-1">
+                                        <span className="text-purple-400">•</span> CS2: Lead Time
+                                    </button>
+                                    <div className="pl-5 flex flex-col gap-1.5 border-l-2 border-purple-100 ml-1.5 py-1">
+                                        <button onClick={() => goToStep(SlideStep.SCENARIO_2_FORMULAS)} className="hover:text-purple-600 hover:underline text-left text-xs font-medium text-gray-500 truncate pl-2">1. Calculate Days</button>
+                                        <button onClick={() => goToStep(SlideStep.SCENARIO_2_AGING)} className="hover:text-purple-600 hover:underline text-left text-xs font-medium text-gray-500 truncate pl-2">2. Aging (IFS)</button>
+                                        <button onClick={() => goToStep(SlideStep.SCENARIO_2_PIVOT)} className="hover:text-purple-600 hover:underline text-left text-xs font-medium text-gray-500 truncate pl-2">3. Report (Pivot)</button>
                                     </div>
                                 </div>
                             </div>
@@ -407,12 +417,12 @@ const App: React.FC = () => {
                 </div>
             )}
 
-            {/* --- MODUL 3 SLIDES --- */}
+            {/* --- MODUL 3: SCENARIO 1 (FREIGHT) --- */}
 
             {currentStep === SlideStep.SCENARIO_INTRO && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
-                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - Case Study</span>
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - CS1: Freight</span>
                         <h2 className="text-3xl font-bold text-gray-900">Latihan Praktik: Freight In</h2>
                     </div>
                     <div className="flex-1">
@@ -424,7 +434,7 @@ const App: React.FC = () => {
             {currentStep === SlideStep.SCENARIO_1_XLOOKUP && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
-                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - Langkah 1</span>
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - CS1: Step 1</span>
                         <h2 className="text-3xl font-bold text-gray-900">Mapping Master Data (XLOOKUP)</h2>
                     </div>
                     <div className="flex-1">
@@ -436,7 +446,7 @@ const App: React.FC = () => {
             {currentStep === SlideStep.SCENARIO_1_MATH && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
-                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - Langkah 2</span>
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - CS1: Step 2</span>
                         <h2 className="text-3xl font-bold text-gray-900">Kalkulasi Muatan Truk</h2>
                     </div>
                     <div className="flex-1">
@@ -448,11 +458,61 @@ const App: React.FC = () => {
              {currentStep === SlideStep.SCENARIO_1_PIVOT && (
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
-                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - Langkah 3</span>
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - CS1: Step 3</span>
                         <h2 className="text-3xl font-bold text-gray-900">Summary Kebutuhan Truk (Pivot)</h2>
                     </div>
                     <div className="flex-1">
                         <ScenarioPivotDemo />
+                    </div>
+                </div>
+            )}
+
+            {/* --- MODUL 3: SCENARIO 2 (LEAD TIME) --- */}
+
+            {currentStep === SlideStep.SCENARIO_2_INTRO && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - CS2: Lead Time</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Latihan Praktik: Delay Analysis</h2>
+                    </div>
+                    <div className="flex-1">
+                        <Scenario2IntroDemo />
+                    </div>
+                </div>
+            )}
+
+            {currentStep === SlideStep.SCENARIO_2_FORMULAS && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - CS2: Step 1</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Calculate Days</h2>
+                    </div>
+                    <div className="flex-1">
+                        <Scenario2FormulasDemo />
+                    </div>
+                </div>
+            )}
+
+            {currentStep === SlideStep.SCENARIO_2_AGING && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - CS2: Step 2</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Aging Keterlambatan (IFS)</h2>
+                    </div>
+                    <div className="flex-1">
+                        <Scenario2AgingDemo />
+                    </div>
+                </div>
+            )}
+
+            {currentStep === SlideStep.SCENARIO_2_PIVOT && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - CS2: Step 3</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Delay Report (Pivot)</h2>
+                    </div>
+                    <div className="flex-1">
+                        <Scenario2PivotDemo />
                     </div>
                 </div>
             )}
@@ -493,14 +553,14 @@ const App: React.FC = () => {
 
             <button 
                 onClick={nextStep}
-                disabled={currentStep === SlideStep.SCENARIO_1_PIVOT} // Last slide
+                disabled={currentStep === SlideStep.SCENARIO_2_PIVOT} // Last slide
                 className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all ${
-                    currentStep === SlideStep.SCENARIO_1_PIVOT
+                    currentStep === SlideStep.SCENARIO_2_PIVOT
                     ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                     : 'bg-excel-base text-white hover:bg-excel-dark shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
                 }`}
             >
-                {currentStep === SlideStep.SCENARIO_1_PIVOT ? 'Selesai' : 'Lanjut'}
+                {currentStep === SlideStep.SCENARIO_2_PIVOT ? 'Selesai' : 'Lanjut'}
                 <ChevronRight size={20} />
             </button>
         </div>

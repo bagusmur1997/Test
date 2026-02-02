@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -5,6 +6,6 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   // Set the base path to your repository name for GitHub Pages deployment.
-  // This corresponds to https://bagusmur1997.github.io/Test/
-  base: '/Test/', 
+  // This corresponds to https://bagusmur1997.github.io/ExcelTraining-1/
+  base: '/ExcelTraining-1/', 
 });

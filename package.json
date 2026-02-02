@@ -1,8 +1,9 @@
+
 {
   "name": "excel-formula-anatomy",
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://bagusmur1997.github.io/Test",
+  "homepage": "https://bagusmur1997.github.io/ExcelTraining-1/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
