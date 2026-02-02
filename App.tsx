@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, FileSpreadsheet, LayoutGrid, Terminal, Share2, Lock, BarChart3, Users, TrendingUp, Split, Filter, Home, Search, Table, Grid } from 'lucide-react';
 import { SlideStep } from './types';
-import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo, ExcelIntroDemo, FreezePanesDemo, FilterDataDemo, PivotDrillDownDemo } from './components/SlideComponents';
+import { GoldenRuleDemo, OperatorsDemo, ReferenceDemo, AbsoluteReferenceDemo, BasicStatsDemo, CountFamilyDemo, MedianModeDemo, LogicFunctionsDemo, SumifsDemo, LookupsDemo, XLookupDemo, PivotPrepDemo, PivotOpsDemo, PivotChartDemo, TipsTrickDemo, PivotCreateDemo, PivotAnatomyDemo, ExcelIntroDemo, FreezePanesDemo, FilterDataDemo, PivotDrillDownDemo, ScenarioIntroDemo, ScenarioXLookupDemo, ScenarioMathDemo, ScenarioPivotDemo } from './components/SlideComponents';
 
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<SlideStep>(SlideStep.INTRO);
@@ -21,8 +21,8 @@ const App: React.FC = () => {
 
   const goToStep = (step: SlideStep) => setCurrentStep(step);
 
-  // Total steps for progress bar
-  const TOTAL_STEPS = 23; 
+  // Total steps for progress bar (updated for Module 3)
+  const TOTAL_STEPS = 27; 
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 md:p-8 font-sans text-gray-900">
@@ -36,7 +36,7 @@ const App: React.FC = () => {
             <div>
                 <h1 className="text-xl font-bold text-gray-800 tracking-tight">Excel Training: Formulas & Data</h1>
                 <p className="text-xs text-gray-500 uppercase tracking-widest font-semibold">
-                    {currentStep <= 10 ? 'Modul 1: Dasar & Logika' : 'Modul 2: Data & Laporan'}
+                    {currentStep <= 10 ? 'Modul 1: Dasar & Logika' : currentStep <= 21 ? 'Modul 2: Data & Laporan' : 'Modul 3: Case Study'}
                 </p>
             </div>
         </div>
@@ -86,24 +86,24 @@ const App: React.FC = () => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl text-left">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl text-left">
                         {/* Module 1 */}
                         <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200">
                             <h3 className="text-excel-dark font-bold text-lg mb-4 flex items-center gap-2">
                                 <span className="bg-excel-dark text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
                                 Modul 1: Fundamental & Logika
                             </h3>
-                            <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-                                <button onClick={() => goToStep(SlideStep.EXCEL_INTRO)} className="hover:text-excel-base hover:underline text-left font-bold">• Introduction</button>
-                                <button onClick={() => goToStep(SlideStep.GOLDEN_RULE)} className="hover:text-excel-base hover:underline text-left font-bold">• Golden Rule</button>
-                                <button onClick={() => goToStep(SlideStep.OPERATORS)} className="hover:text-excel-base hover:underline text-left font-bold">• Operator Matematika</button>
-                                <button onClick={() => goToStep(SlideStep.REFERENCES)} className="hover:text-excel-base hover:underline text-left font-bold">• Referensi Sel (Cell Reference)</button>
-                                <button onClick={() => goToStep(SlideStep.ABSOLUTE_REFS)} className="hover:text-excel-base hover:underline text-left font-bold">• Penguncian Sel (Absolute Reference)</button>
-                                <button onClick={() => goToStep(SlideStep.LOGIC_FUNCTIONS)} className="hover:text-excel-base hover:underline text-left">• Logika IF/IFS</button>
-                                <button onClick={() => goToStep(SlideStep.SUMIFS)} className="hover:text-excel-base hover:underline text-left">• SUMIF/SUMIFS</button>
-                                <button onClick={() => goToStep(SlideStep.BASIC_STATS)} className="hover:text-excel-base hover:underline text-left font-bold">• Statistik Dasar (Min, Max, Average)</button>
-                                <button onClick={() => goToStep(SlideStep.COUNT_FAMILY)} className="hover:text-excel-base hover:underline text-left">• Count Family</button>
-                                <button onClick={() => goToStep(SlideStep.MEDIAN_MODE)} className="hover:text-excel-base hover:underline text-left font-bold">• Nilai Tengah (Median) & Modus</button>
+                            <div className="grid grid-cols-1 gap-y-2 text-sm text-gray-600">
+                                <button onClick={() => goToStep(SlideStep.EXCEL_INTRO)} className="hover:text-excel-base hover:underline text-left font-bold truncate">• Introduction</button>
+                                <button onClick={() => goToStep(SlideStep.GOLDEN_RULE)} className="hover:text-excel-base hover:underline text-left font-bold truncate">• Golden Rule</button>
+                                <button onClick={() => goToStep(SlideStep.OPERATORS)} className="hover:text-excel-base hover:underline text-left font-bold truncate">• Operator Matematika</button>
+                                <button onClick={() => goToStep(SlideStep.REFERENCES)} className="hover:text-excel-base hover:underline text-left font-bold truncate">• Referensi Sel (Cell Reference)</button>
+                                <button onClick={() => goToStep(SlideStep.ABSOLUTE_REFS)} className="hover:text-excel-base hover:underline text-left font-bold truncate">• Penguncian Sel (Absolute Reference)</button>
+                                <button onClick={() => goToStep(SlideStep.LOGIC_FUNCTIONS)} className="hover:text-excel-base hover:underline text-left truncate">• Logika IF/IFS</button>
+                                <button onClick={() => goToStep(SlideStep.SUMIFS)} className="hover:text-excel-base hover:underline text-left truncate">• SUMIF/SUMIFS</button>
+                                <button onClick={() => goToStep(SlideStep.BASIC_STATS)} className="hover:text-excel-base hover:underline text-left font-bold truncate">• Statistik Dasar (Min, Max, Average)</button>
+                                <button onClick={() => goToStep(SlideStep.COUNT_FAMILY)} className="hover:text-excel-base hover:underline text-left truncate">• Count Family</button>
+                                <button onClick={() => goToStep(SlideStep.MEDIAN_MODE)} className="hover:text-excel-base hover:underline text-left font-bold truncate">• Nilai Tengah (Median) & Modus</button>
                             </div>
                         </div>
 
@@ -113,18 +113,38 @@ const App: React.FC = () => {
                                 <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
                                 Modul 2: Data & Pelaporan
                             </h3>
-                            <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-                                <button onClick={() => goToStep(SlideStep.LOOKUPS)} className="hover:text-blue-600 hover:underline text-left font-bold">• Lookup Series (VLOOKUP & HLOOKUP)</button>
-                                <button onClick={() => goToStep(SlideStep.XLOOKUP)} className="hover:text-blue-600 hover:underline text-left font-bold">• The Modern Way (XLOOKUP)</button>
-                                <button onClick={() => goToStep(SlideStep.FREEZE_PANES)} className="hover:text-blue-600 hover:underline text-left font-bold">• Freeze Panes (Membekukan Panel)</button>
-                                <button onClick={() => goToStep(SlideStep.FILTER_DATA)} className="hover:text-blue-600 hover:underline text-left font-bold">• Filtering Data</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_PREP)} className="hover:text-blue-600 hover:underline text-left font-bold">• Pivot Table (Preparation & Rules)</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_CREATE)} className="hover:text-blue-600 hover:underline text-left font-bold">• Langkah Pembuatan Pivot Table</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_ANATOMY)} className="hover:text-blue-600 hover:underline text-left font-bold">• Komponen Utama Pivot Table (Pivot Fields)</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_OPS)} className="hover:text-blue-600 hover:underline text-left">• Pivot Operations</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_DRILLDOWN)} className="hover:text-blue-600 hover:underline text-left font-bold">• Pivot Drill Down (Detailing)</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_CHART)} className="hover:text-blue-600 hover:underline text-left font-bold">• Pivot Chart & Slicer</button>
-                                <button onClick={() => goToStep(SlideStep.TIPS_TRICKS)} className="hover:text-blue-600 hover:underline text-left font-bold">• Tips: Clean Copy-Paste</button>
+                            <div className="grid grid-cols-1 gap-y-2 text-sm text-gray-600">
+                                <button onClick={() => goToStep(SlideStep.LOOKUPS)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• Lookup Series (VLOOKUP & HLOOKUP)</button>
+                                <button onClick={() => goToStep(SlideStep.XLOOKUP)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• The Modern Way (XLOOKUP)</button>
+                                <button onClick={() => goToStep(SlideStep.FREEZE_PANES)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• Freeze Panes (Membekukan Panel)</button>
+                                <button onClick={() => goToStep(SlideStep.FILTER_DATA)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• Filtering Data</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_PREP)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• Pivot Table (Preparation & Rules)</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_CREATE)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• Langkah Pembuatan Pivot Table</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_ANATOMY)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• Komponen Utama Pivot Table (Pivot Fields)</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_OPS)} className="hover:text-blue-600 hover:underline text-left truncate">• Pivot Operations</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_DRILLDOWN)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• Pivot Drill Down (Detailing)</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_CHART)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• Pivot Chart & Slicer</button>
+                                <button onClick={() => goToStep(SlideStep.TIPS_TRICKS)} className="hover:text-blue-600 hover:underline text-left font-bold truncate">• Tips: Clean Copy-Paste</button>
+                            </div>
+                        </div>
+
+                        {/* Module 3 (NEW) */}
+                        <div className="bg-purple-50 p-6 rounded-2xl border border-purple-200">
+                            <h3 className="text-purple-700 font-bold text-lg mb-4 flex items-center gap-2">
+                                <span className="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
+                                Modul 3: Case Study
+                            </h3>
+                            <div className="grid grid-cols-1 gap-y-2 text-sm text-gray-600">
+                                <div>
+                                    <button onClick={() => goToStep(SlideStep.SCENARIO_INTRO)} className="hover:text-purple-600 hover:underline text-left font-bold truncate w-full mb-1 flex items-center gap-1">
+                                        <span className="text-purple-400">•</span> Skenario Freight In
+                                    </button>
+                                    <div className="pl-5 flex flex-col gap-1.5 border-l-2 border-purple-100 ml-1.5 py-1">
+                                        <button onClick={() => goToStep(SlideStep.SCENARIO_1_XLOOKUP)} className="hover:text-purple-600 hover:underline text-left text-xs font-medium text-gray-500 truncate pl-2">1. Mapping (XLOOKUP)</button>
+                                        <button onClick={() => goToStep(SlideStep.SCENARIO_1_MATH)} className="hover:text-purple-600 hover:underline text-left text-xs font-medium text-gray-500 truncate pl-2">2. Kalkulasi (Math)</button>
+                                        <button onClick={() => goToStep(SlideStep.SCENARIO_1_PIVOT)} className="hover:text-purple-600 hover:underline text-left text-xs font-medium text-gray-500 truncate pl-2">3. Summary (Pivot)</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -387,6 +407,56 @@ const App: React.FC = () => {
                 </div>
             )}
 
+            {/* --- MODUL 3 SLIDES --- */}
+
+            {currentStep === SlideStep.SCENARIO_INTRO && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - Case Study</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Latihan Praktik: Freight In</h2>
+                    </div>
+                    <div className="flex-1">
+                        <ScenarioIntroDemo />
+                    </div>
+                </div>
+            )}
+
+            {currentStep === SlideStep.SCENARIO_1_XLOOKUP && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - Langkah 1</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Mapping Master Data (XLOOKUP)</h2>
+                    </div>
+                    <div className="flex-1">
+                        <ScenarioXLookupDemo />
+                    </div>
+                </div>
+            )}
+
+            {currentStep === SlideStep.SCENARIO_1_MATH && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - Langkah 2</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Kalkulasi Muatan Truk</h2>
+                    </div>
+                    <div className="flex-1">
+                        <ScenarioMathDemo />
+                    </div>
+                </div>
+            )}
+
+             {currentStep === SlideStep.SCENARIO_1_PIVOT && (
+                <div className="h-full flex flex-col">
+                    <div className="mb-6 border-b pb-4">
+                        <span className="text-purple-600 font-bold text-sm tracking-widest uppercase">Modul 3 - Langkah 3</span>
+                        <h2 className="text-3xl font-bold text-gray-900">Summary Kebutuhan Truk (Pivot)</h2>
+                    </div>
+                    <div className="flex-1">
+                        <ScenarioPivotDemo />
+                    </div>
+                </div>
+            )}
+
         </div>
 
         {/* Footer Navigation */}
@@ -412,7 +482,7 @@ const App: React.FC = () => {
                         onClick={() => goToStep(step)}
                         className={`w-2 h-2 rounded-full transition-all duration-300 shrink-0 outline-none hover:scale-150 focus:scale-150 ${
                             currentStep === step 
-                            ? (step > 10 ? 'bg-blue-600 scale-125' : 'bg-excel-base scale-125') 
+                            ? (step > 21 ? 'bg-purple-600 scale-125' : step > 10 ? 'bg-blue-600 scale-125' : 'bg-excel-base scale-125') 
                             : 'bg-gray-300 hover:bg-gray-400'
                         }`}
                         title={`Go to Slide ${step}`}
@@ -423,14 +493,14 @@ const App: React.FC = () => {
 
             <button 
                 onClick={nextStep}
-                disabled={currentStep === SlideStep.TIPS_TRICKS} // Last slide
+                disabled={currentStep === SlideStep.SCENARIO_1_PIVOT} // Last slide
                 className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all ${
-                    currentStep === SlideStep.TIPS_TRICKS
+                    currentStep === SlideStep.SCENARIO_1_PIVOT
                     ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                     : 'bg-excel-base text-white hover:bg-excel-dark shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
                 }`}
             >
-                {currentStep === SlideStep.TIPS_TRICKS ? 'Selesai' : 'Lanjut'}
+                {currentStep === SlideStep.SCENARIO_1_PIVOT ? 'Selesai' : 'Lanjut'}
                 <ChevronRight size={20} />
             </button>
         </div>

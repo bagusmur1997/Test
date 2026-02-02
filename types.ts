@@ -22,7 +22,12 @@ export enum SlideStep {
   PIVOT_DRILLDOWN = 19,
   PIVOT_CHART = 20,
   TIPS_TRICKS = 21,
-  SUMMARY = 22
+  // Module 3: Case Study
+  SCENARIO_INTRO = 22,
+  SCENARIO_1_XLOOKUP = 23,
+  SCENARIO_1_MATH = 24,
+  SCENARIO_1_PIVOT = 25,
+  SUMMARY = 26
 }
 
 export interface SlideProps {

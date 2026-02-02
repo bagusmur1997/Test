@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet, Snowflake, ListFilter, Check, FilePlus, Trash2, Database, Key, X, CheckCheck, RefreshCw, Layers, PieChart, FunctionSquare, ArrowLeftRight } from 'lucide-react';
+import { Calculator, AlertCircle, ArrowRight, XCircle, CheckCircle2, Lock, Unlock, ArrowDown, ArrowUp, Copy, MousePointerClick, BarChart3, Users, Sigma, AlertTriangle, TrendingUp, Truck, Package, Clock, Split, Filter, Search, Table, LayoutDashboard, Eye, EyeOff, Grid, ChevronRight, Settings, HelpCircle, Columns, Rows, PlusSquare, MousePointer2, ChevronDown, FileSpreadsheet, Snowflake, ListFilter, Check, FilePlus, Trash2, Database, Key, X, CheckCheck, RefreshCw, Layers, PieChart, FunctionSquare, ArrowLeftRight, Download, Link as LinkIcon, Box } from 'lucide-react';
 import { Cell, FormulaBar, ExcelWindow } from './ExcelUI';
 
 // --- SLIDE 1 (NEW): EXCEL INTRO ---
@@ -2729,6 +2730,383 @@ export const FilterDataDemo: React.FC = () => {
                                 )}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </ExcelWindow>
+        </div>
+    );
+};
+
+// --- MODULE 3: CASE STUDY SCENARIO COMPONENTS ---
+
+// --- SLIDE 22: SCENARIO INTRO ---
+export const ScenarioIntroDemo: React.FC = () => {
+    const fileUrl = "https://zpssgpatientsolutions.sharepoint.com/:x:/s/APLPlanningTeamLeader/IQBYdpu0FOr-Qa_6BLybNTxvASNn29Fs1YVOGScs7ICZKH8?e=etzFrQ";
+
+    return (
+        <div className="h-full flex flex-col justify-center items-center gap-8 animate-fade-in text-center p-4">
+            <div className="inline-flex items-center justify-center p-6 bg-blue-100 rounded-full ring-8 ring-blue-50 mb-2">
+                <Truck size={64} className="text-blue-600" />
+            </div>
+
+            <div className="max-w-3xl space-y-4">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                    Latihan Praktik: Perhitungan Kapasitas Armada (Freight In)
+                </h2>
+                <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm text-left space-y-4">
+                    <div>
+                        <span className="font-bold text-gray-800 block mb-1">Peran Anda:</span>
+                        <p className="text-gray-600">Transportation Planner.</p>
+                    </div>
+                    <div>
+                        <span className="font-bold text-gray-800 block mb-1">Skenario:</span>
+                        <p className="text-gray-600">Hari ini turun data STO (Stock Transfer Order) untuk pengiriman Replenishment dari NDC ke berbagai Cabang.</p>
+                    </div>
+                    <div>
+                        <span className="font-bold text-red-600 block mb-1">Tantangan:</span>
+                        <p className="text-gray-600">Data order hanya berisi Kode Produk dan Qty (SJ_QTY). Anda belum tahu berapa kubikasi totalnya untuk menentukan jenis truk (CDE/CDD/Fuso/Wingbox).</p>
+                    </div>
+                    <div>
+                        <span className="font-bold text-green-600 block mb-1">Misi:</span>
+                        <ul className="list-disc list-inside text-gray-600 space-y-1">
+                            <li>Ambil data <b>Volume & Weight</b> dari sheet "Master SKU" menggunakan XLOOKUP.</li>
+                            <li>Hitung <b>Total CBM & Tonnage</b> muatan.</li>
+                            <li>Lakukan rekap total muatan per <b>Destination Branch</b> untuk booking armada.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <a 
+                href={fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-8 py-4 bg-excel-dark text-white rounded-xl font-bold text-lg hover:bg-excel-base hover:scale-105 transition-all shadow-lg hover:shadow-xl"
+            >
+                <Download size={24} />
+                Download Raw Data Practice File
+            </a>
+             <p className="text-sm text-gray-500 italic">Klik tombol di atas untuk mengunduh file latihan.</p>
+        </div>
+    );
+};
+
+// --- SLIDE 23: SCENARIO STEP 1 (XLOOKUP) ---
+export const ScenarioXLookupDemo: React.FC = () => {
+    const [targetCol, setTargetCol] = useState<'VOL' | 'WEIGHT'>('VOL');
+
+    // Mock Data
+    const transaction = [
+        { code: "SKU-001", qty: 200 },
+        { code: "SKU-002", qty: 50 },
+    ];
+
+    const master = [
+        { code: "SKU-001", vol: 0.1, w: 5 },
+        { code: "SKU-002", vol: 0.5, w: 20 },
+        { code: "SKU-003", vol: 0.2, w: 10 },
+    ];
+
+    const formula = targetCol === 'VOL' 
+        ? "=XLOOKUP([@PRODUCT_CODE], 'Master SKU'!A:A, 'Master SKU'!B:B)"
+        : "=XLOOKUP([@PRODUCT_CODE], 'Master SKU'!A:A, 'Master SKU'!C:C)";
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+            <div className="space-y-6">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <Database size={24} className="text-blue-600"/>
+                        Langkah 1: Mapping Master Data
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-6">
+                        Kita perlu melengkapi data pengiriman dengan dimensi barang dari sheet Master SKU.
+                    </p>
+
+                    <div className="space-y-4">
+                        <button 
+                            onClick={() => setTargetCol('VOL')}
+                            className={`w-full text-left p-4 rounded-lg border transition-all ${targetCol === 'VOL' ? 'bg-blue-50 border-blue-400 ring-1 ring-blue-400' : 'bg-white border-gray-200'}`}
+                        >
+                            <h4 className="font-bold text-blue-800 mb-1">1. Mengisi Kolom Volume</h4>
+                            <p className="text-xs text-gray-600 font-mono mb-2">=XLOOKUP(Kode, Master_Kode, Master_Vol)</p>
+                            <div className="text-xs text-gray-500">Cari Kode Produk ini di Master SKU Kolom A, ambil nilai Volume di Kolom B.</div>
+                        </button>
+
+                        <button 
+                             onClick={() => setTargetCol('WEIGHT')}
+                             className={`w-full text-left p-4 rounded-lg border transition-all ${targetCol === 'WEIGHT' ? 'bg-orange-50 border-orange-400 ring-1 ring-orange-400' : 'bg-white border-gray-200'}`}
+                        >
+                            <h4 className="font-bold text-orange-800 mb-1">2. Mengisi Kolom Weight</h4>
+                            <p className="text-xs text-gray-600 font-mono mb-2">=XLOOKUP(Kode, Master_Kode, Master_Weight)</p>
+                            <div className="text-xs text-gray-500">Lakukan hal yang sama untuk kolom Weight.</div>
+                        </button>
+                    </div>
+
+                    <div className="mt-6 p-3 bg-yellow-50 text-yellow-800 text-xs rounded border border-yellow-200 flex gap-2">
+                        <Key size={16} className="shrink-0"/>
+                        <span><b>Tips:</b> Kunci tabel referensi dengan <b>F4</b> jika data Master berbentuk Range biasa (bukan Table Formatting).</span>
+                    </div>
+                </div>
+            </div>
+
+            <ExcelWindow title="Freight In Data vs Master SKU">
+                <FormulaBar value={formula} label="Formula" wrapText/>
+                
+                <div className="flex flex-col gap-6">
+                    {/* Transaction Table */}
+                    <div className="bg-white border rounded p-2">
+                        <div className="text-xs font-bold text-gray-500 mb-1">Sheet: Freight In Data</div>
+                        <div className="grid grid-cols-[1fr_50px_60px_60px] text-xs border-t border-l border-gray-300">
+                             <div className="bg-gray-100 p-1 font-bold border-r border-b">PRODUCT_CODE</div>
+                             <div className="bg-gray-100 p-1 font-bold border-r border-b text-right">SJ_QTY</div>
+                             <div className={`p-1 font-bold border-r border-b ${targetCol === 'VOL' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}>Volume</div>
+                             <div className={`p-1 font-bold border-r border-b ${targetCol === 'WEIGHT' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100'}`}>Weight</div>
+
+                             {transaction.map((row, i) => {
+                                 const mData = master.find(m => m.code === row.code);
+                                 return (
+                                     <React.Fragment key={i}>
+                                         <div className="p-1 border-r border-b bg-yellow-50">{row.code}</div>
+                                         <div className="p-1 border-r border-b text-right">{row.qty}</div>
+                                         <div className={`p-1 border-r border-b text-right transition-colors duration-500 ${targetCol === 'VOL' ? 'bg-blue-50 font-bold' : ''}`}>
+                                             {mData?.vol}
+                                         </div>
+                                         <div className={`p-1 border-r border-b text-right transition-colors duration-500 ${targetCol === 'WEIGHT' ? 'bg-orange-50 font-bold' : ''}`}>
+                                             {mData?.w}
+                                         </div>
+                                     </React.Fragment>
+                                 )
+                             })}
+                        </div>
+                    </div>
+
+                    {/* Arrow Connector */}
+                    <div className="flex justify-center -my-3 z-10">
+                        <ArrowDown className="text-gray-400 animate-bounce" />
+                    </div>
+
+                    {/* Master Data Table */}
+                     <div className="bg-gray-50 border rounded p-2 opacity-80">
+                        <div className="text-xs font-bold text-gray-500 mb-1">Sheet: Master SKU</div>
+                        <div className="grid grid-cols-[30px_1fr_60px_60px] text-xs border-t border-l border-gray-300">
+                             <div className="bg-gray-200 p-1 font-bold border-r border-b text-center"></div>
+                             <div className="bg-gray-200 p-1 font-bold border-r border-b">A (Code)</div>
+                             <div className="bg-gray-200 p-1 font-bold border-r border-b text-right">B (Vol)</div>
+                             <div className="bg-gray-200 p-1 font-bold border-r border-b text-right">C (W)</div>
+
+                             {master.map((row, i) => (
+                                 <React.Fragment key={i}>
+                                     <div className="bg-gray-100 p-1 border-r border-b text-center">{i+1}</div>
+                                     <div className="p-1 border-r border-b bg-yellow-50">{row.code}</div>
+                                     <div className={`p-1 border-r border-b text-right ${targetCol === 'VOL' ? 'bg-blue-200 font-bold' : ''}`}>{row.vol}</div>
+                                     <div className={`p-1 border-r border-b text-right ${targetCol === 'WEIGHT' ? 'bg-orange-200 font-bold' : ''}`}>{row.w}</div>
+                                 </React.Fragment>
+                             ))}
+                        </div>
+                    </div>
+                </div>
+            </ExcelWindow>
+        </div>
+    );
+};
+
+// --- SLIDE 24: SCENARIO STEP 2 (MATH FORMULA) ---
+export const ScenarioMathDemo: React.FC = () => {
+    const [calculated, setCalculated] = useState(false);
+
+    // Mock Data
+    const data = [
+        { code: "SKU-001", qty: 200, vol: 0.1, w: 5 },
+        { code: "SKU-002", qty: 50, vol: 0.5, w: 20 },
+    ];
+
+    const cbmFormula = "=[@SJ_QTY] * [@Volume]";
+    const tonFormula = "=([@SJ_QTY] * [@Weight]) / 1000";
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+            <div className="space-y-6 flex flex-col justify-center">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <FunctionSquare size={24} className="text-green-600"/>
+                        Langkah 2: Kalkulasi Muatan Truk
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-6">
+                        Setelah dimensi per unit didapatkan, saatnya menghitung total muatan aktual.
+                    </p>
+
+                    <div className="space-y-4">
+                        <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                            <h4 className="font-bold text-green-800 text-sm mb-1">1. Menghitung CBM (Total Kubikasi)</h4>
+                            <code className="bg-white px-2 py-1 rounded border border-green-300 text-xs font-mono text-green-900 block w-full mb-2">
+                                {cbmFormula}
+                            </code>
+                            <p className="text-xs text-green-700">Logika: Qty Barang dikali Volume per Unit.</p>
+                        </div>
+
+                         <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                            <h4 className="font-bold text-purple-800 text-sm mb-1">2. Menghitung TONNAGE (Total Berat)</h4>
+                            <code className="bg-white px-2 py-1 rounded border border-purple-300 text-xs font-mono text-purple-900 block w-full mb-2">
+                                {tonFormula}
+                            </code>
+                            <p className="text-xs text-purple-700">Logika: (Qty x Berat Kg) / 1000. Dibagi 1000 untuk konversi Kg ke Ton.</p>
+                        </div>
+                    </div>
+
+                    <div className="mt-4 text-xs text-gray-500 italic">
+                         Catatan: Pastikan satuan Volume di Master Data adalah m3 dan Weight adalah Kg.
+                    </div>
+
+                    <button 
+                        onClick={() => setCalculated(!calculated)}
+                        className={`mt-6 w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-all shadow-md ${calculated ? 'bg-gray-100 text-gray-500' : 'bg-excel-base text-white hover:bg-excel-dark'}`}
+                    >
+                        {calculated ? <RefreshCw size={16}/> : <Calculator size={16}/>}
+                        {calculated ? "Reset Simulasi" : "Hitung Total (Double Click)"}
+                    </button>
+                </div>
+            </div>
+
+            <ExcelWindow title="Freight In Data (Calculated)">
+                <FormulaBar value={calculated ? cbmFormula : ""} label="Formula" />
+                
+                <div className="overflow-auto bg-white border rounded">
+                    <div className="grid grid-cols-[80px_60px_60px_60px_80px_80px] text-xs min-w-[400px]">
+                        {/* Headers */}
+                        <div className="bg-gray-100 p-2 font-bold border-r border-b">Code</div>
+                        <div className="bg-gray-100 p-2 font-bold border-r border-b text-right">SJ_QTY</div>
+                        <div className="bg-gray-100 p-2 font-bold border-r border-b text-right">Volume</div>
+                        <div className="bg-gray-100 p-2 font-bold border-r border-b text-right">Weight</div>
+                        <div className="bg-green-100 p-2 font-bold border-r border-b text-right text-green-900">Total CBM</div>
+                        <div className="bg-purple-100 p-2 font-bold border-b text-right text-purple-900">Total Ton</div>
+
+                        {/* Rows */}
+                        {data.map((row, i) => (
+                            <React.Fragment key={i}>
+                                <div className="p-2 border-r border-b">{row.code}</div>
+                                <div className="p-2 border-r border-b text-right">{row.qty}</div>
+                                <div className="p-2 border-r border-b text-right text-gray-500">{row.vol}</div>
+                                <div className="p-2 border-r border-b text-right text-gray-500">{row.w}</div>
+                                
+                                {/* CBM Calc */}
+                                <div className={`p-2 border-r border-b text-right font-mono transition-all duration-700 ${calculated ? 'bg-green-50 text-green-900 font-bold' : 'bg-gray-50'}`}>
+                                    {calculated ? (row.qty * row.vol).toFixed(1) : ""}
+                                </div>
+                                
+                                {/* Ton Calc */}
+                                <div className={`p-2 border-b text-right font-mono transition-all duration-700 delay-100 ${calculated ? 'bg-purple-50 text-purple-900 font-bold' : 'bg-gray-50'}`}>
+                                    {calculated ? ((row.qty * row.w) / 1000).toFixed(2) : ""}
+                                </div>
+                            </React.Fragment>
+                        ))}
+                    </div>
+                </div>
+
+                {calculated && (
+                    <div className="mt-4 p-3 bg-blue-50 text-blue-800 text-xs rounded border border-blue-200 animate-fade-in text-center">
+                        <CheckCheck className="inline mr-1" size={14}/>
+                        Data siap dianalisa untuk booking truk!
+                    </div>
+                )}
+            </ExcelWindow>
+        </div>
+    );
+};
+
+// --- SLIDE 25: SCENARIO STEP 3 (PIVOT) ---
+export const ScenarioPivotDemo: React.FC = () => {
+    // Mock Result Data
+    const pivotData = [
+        { branch: "Jakarta 1", cbm: 45.0, ton: 12.5, rec: "Wingbox" },
+        { branch: "Bandung", cbm: 12.0, ton: 4.2, rec: "CDD Long" },
+        { branch: "Semarang", cbm: 28.5, ton: 8.1, rec: "Fuso" },
+    ];
+
+    const grandTotalCBM = pivotData.reduce((a,b) => a + b.cbm, 0);
+    const grandTotalTon = pivotData.reduce((a,b) => a + b.ton, 0);
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full items-center">
+            <div className="space-y-6">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                     <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <LayoutDashboard size={24} className="text-purple-600"/>
+                        Langkah 3: Summary Kebutuhan Truk
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-6">
+                        Manager Transport bertanya: <i>"Untuk Cabang Jakarta 1, apakah cukup pakai Fuso atau harus Wingbox?"</i>
+                    </p>
+
+                    <div className="bg-gray-100 p-4 rounded-lg border border-gray-200 space-y-3">
+                        <h4 className="font-bold text-gray-700 text-sm border-b pb-2 mb-2">Setting Pivot Fields:</h4>
+                        
+                        <div className="flex items-center gap-3">
+                            <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-bold border border-blue-300 w-16 text-center">ROWS</div>
+                            <ArrowRight size={14} className="text-gray-400"/>
+                            <div className="text-sm text-gray-700">Destination Branch</div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <div className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold border border-green-300 w-16 text-center">VALUES</div>
+                            <ArrowRight size={14} className="text-gray-400"/>
+                            <div className="text-sm text-gray-700 font-bold">Sum of Total CBM</div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <div className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold border border-green-300 w-16 text-center">VALUES</div>
+                            <ArrowRight size={14} className="text-gray-400"/>
+                            <div className="text-sm text-gray-700 font-bold">Sum of Total Ton</div>
+                        </div>
+                    </div>
+
+                    <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-900">
+                        <b>Analisa Kapasitas:</b>
+                        <ul className="list-disc list-inside mt-1 space-y-1">
+                            <li>&lt; 14 CBM : CDD Long</li>
+                            <li>14 - 30 CBM : Fuso</li>
+                            <li>&gt; 30 CBM : Wingbox</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <ExcelWindow title="Pivot Table Result">
+                <div className="flex flex-col h-full justify-center">
+                    <div className="border border-gray-300 shadow-sm bg-white self-center w-full max-w-md overflow-hidden rounded">
+                        {/* Header */}
+                        <div className="grid grid-cols-[2fr_1fr_1fr_1.5fr] bg-gray-100 border-b border-gray-300 text-xs font-bold text-gray-700">
+                            <div className="p-3 border-r border-gray-300">Destination Branch</div>
+                            <div className="p-3 border-r border-gray-300 text-right">Sum of CBM</div>
+                            <div className="p-3 border-r border-gray-300 text-right">Sum of Ton</div>
+                            <div className="p-3 text-center bg-blue-50 text-blue-800">Analisa</div>
+                        </div>
+
+                        {/* Body */}
+                        {pivotData.map((row, i) => (
+                            <div key={i} className="grid grid-cols-[2fr_1fr_1fr_1.5fr] border-b border-gray-200 text-xs hover:bg-blue-50 transition-colors">
+                                <div className="p-3 border-r border-gray-300 text-gray-800 font-bold">{row.branch}</div>
+                                <div className="p-3 border-r border-gray-300 text-right font-mono">{row.cbm.toFixed(1)}</div>
+                                <div className="p-3 border-r border-gray-300 text-right font-mono">{row.ton.toFixed(1)}</div>
+                                <div className="p-3 text-center font-bold text-excel-dark bg-green-50/50">{row.rec}</div>
+                            </div>
+                        ))}
+
+                        {/* Grand Total */}
+                        <div className="grid grid-cols-[2fr_1fr_1fr_1.5fr] bg-gray-200 text-xs font-bold border-t-2 border-gray-300">
+                            <div className="p-3 border-r border-gray-300 text-gray-800">Grand Total</div>
+                            <div className="p-3 border-r border-gray-300 text-right font-mono text-excel-dark">{grandTotalCBM.toFixed(1)}</div>
+                            <div className="p-3 border-r border-gray-300 text-right font-mono text-excel-dark">{grandTotalTon.toFixed(1)}</div>
+                            <div className="p-3 text-center text-gray-400">-</div>
+                        </div>
+                    </div>
+                    
+                    <div className="mt-6 flex justify-center gap-4">
+                        <div className="bg-white p-3 rounded shadow-sm border border-gray-200 text-center w-full max-w-xs">
+                            <Truck size={24} className="mx-auto mb-1 text-blue-600"/>
+                            <div className="text-xs text-gray-500">Kesimpulan Jakarta 1</div>
+                            <div className="font-bold text-gray-800">45 CBM &rarr; Butuh Wingbox</div>
+                        </div>
                     </div>
                 </div>
             </ExcelWindow>
