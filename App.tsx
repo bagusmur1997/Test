@@ -94,16 +94,16 @@ const App: React.FC = () => {
                                 Modul 1: Fundamental & Logika
                             </h3>
                             <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-                                <button onClick={() => goToStep(SlideStep.EXCEL_INTRO)} className="hover:text-excel-base hover:underline text-left">• Introduction</button>
-                                <button onClick={() => goToStep(SlideStep.GOLDEN_RULE)} className="hover:text-excel-base hover:underline text-left">• Golden Rule</button>
-                                <button onClick={() => goToStep(SlideStep.OPERATORS)} className="hover:text-excel-base hover:underline text-left">• Operator Math</button>
-                                <button onClick={() => goToStep(SlideStep.REFERENCES)} className="hover:text-excel-base hover:underline text-left">• Cell References</button>
-                                <button onClick={() => goToStep(SlideStep.ABSOLUTE_REFS)} className="hover:text-excel-base hover:underline text-left">• Penguncian ($)</button>
+                                <button onClick={() => goToStep(SlideStep.EXCEL_INTRO)} className="hover:text-excel-base hover:underline text-left font-bold">• Introduction</button>
+                                <button onClick={() => goToStep(SlideStep.GOLDEN_RULE)} className="hover:text-excel-base hover:underline text-left font-bold">• Golden Rule</button>
+                                <button onClick={() => goToStep(SlideStep.OPERATORS)} className="hover:text-excel-base hover:underline text-left font-bold">• Operator Matematika</button>
+                                <button onClick={() => goToStep(SlideStep.REFERENCES)} className="hover:text-excel-base hover:underline text-left font-bold">• Referensi Sel (Cell Reference)</button>
+                                <button onClick={() => goToStep(SlideStep.ABSOLUTE_REFS)} className="hover:text-excel-base hover:underline text-left font-bold">• Penguncian Sel (Absolute Reference)</button>
                                 <button onClick={() => goToStep(SlideStep.LOGIC_FUNCTIONS)} className="hover:text-excel-base hover:underline text-left">• Logika IF/IFS</button>
                                 <button onClick={() => goToStep(SlideStep.SUMIFS)} className="hover:text-excel-base hover:underline text-left">• SUMIF/SUMIFS</button>
-                                <button onClick={() => goToStep(SlideStep.BASIC_STATS)} className="hover:text-excel-base hover:underline text-left">• Statistik Dasar</button>
+                                <button onClick={() => goToStep(SlideStep.BASIC_STATS)} className="hover:text-excel-base hover:underline text-left font-bold">• Statistik Dasar (Min, Max, Average)</button>
                                 <button onClick={() => goToStep(SlideStep.COUNT_FAMILY)} className="hover:text-excel-base hover:underline text-left">• Count Family</button>
-                                <button onClick={() => goToStep(SlideStep.MEDIAN_MODE)} className="hover:text-excel-base hover:underline text-left">• Median & Mode</button>
+                                <button onClick={() => goToStep(SlideStep.MEDIAN_MODE)} className="hover:text-excel-base hover:underline text-left font-bold">• Nilai Tengah (Median) & Modus</button>
                             </div>
                         </div>
 
@@ -114,17 +114,17 @@ const App: React.FC = () => {
                                 Modul 2: Data & Pelaporan
                             </h3>
                             <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-                                <button onClick={() => goToStep(SlideStep.LOOKUPS)} className="hover:text-blue-600 hover:underline text-left">• VLOOKUP & HLOOKUP</button>
-                                <button onClick={() => goToStep(SlideStep.XLOOKUP)} className="hover:text-blue-600 hover:underline text-left">• XLOOKUP (Modern)</button>
-                                <button onClick={() => goToStep(SlideStep.FREEZE_PANES)} className="hover:text-blue-600 hover:underline text-left">• Freeze Panes</button>
-                                <button onClick={() => goToStep(SlideStep.FILTER_DATA)} className="hover:text-blue-600 hover:underline text-left">• Filter Data</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_PREP)} className="hover:text-blue-600 hover:underline text-left">• Pivot Preparation</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_CREATE)} className="hover:text-blue-600 hover:underline text-left">• Pivot Steps</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_ANATOMY)} className="hover:text-blue-600 hover:underline text-left">• Komponen Pivot</button>
+                                <button onClick={() => goToStep(SlideStep.LOOKUPS)} className="hover:text-blue-600 hover:underline text-left font-bold">• Lookup Series (VLOOKUP & HLOOKUP)</button>
+                                <button onClick={() => goToStep(SlideStep.XLOOKUP)} className="hover:text-blue-600 hover:underline text-left font-bold">• The Modern Way (XLOOKUP)</button>
+                                <button onClick={() => goToStep(SlideStep.FREEZE_PANES)} className="hover:text-blue-600 hover:underline text-left font-bold">• Freeze Panes (Membekukan Panel)</button>
+                                <button onClick={() => goToStep(SlideStep.FILTER_DATA)} className="hover:text-blue-600 hover:underline text-left font-bold">• Filtering Data</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_PREP)} className="hover:text-blue-600 hover:underline text-left font-bold">• Pivot Table (Preparation & Rules)</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_CREATE)} className="hover:text-blue-600 hover:underline text-left font-bold">• Langkah Pembuatan Pivot Table</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_ANATOMY)} className="hover:text-blue-600 hover:underline text-left font-bold">• Komponen Utama Pivot Table (Pivot Fields)</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_OPS)} className="hover:text-blue-600 hover:underline text-left">• Pivot Operations</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_DRILLDOWN)} className="hover:text-blue-600 hover:underline text-left">• Drill Down (Detail)</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_CHART)} className="hover:text-blue-600 hover:underline text-left">• Pivot Charts</button>
-                                <button onClick={() => goToStep(SlideStep.TIPS_TRICKS)} className="hover:text-blue-600 hover:underline text-left">• Clean Copy-Paste</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_DRILLDOWN)} className="hover:text-blue-600 hover:underline text-left font-bold">• Pivot Drill Down (Detailing)</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_CHART)} className="hover:text-blue-600 hover:underline text-left font-bold">• Pivot Chart & Slicer</button>
+                                <button onClick={() => goToStep(SlideStep.TIPS_TRICKS)} className="hover:text-blue-600 hover:underline text-left font-bold">• Tips: Clean Copy-Paste</button>
                             </div>
                         </div>
                     </div>
