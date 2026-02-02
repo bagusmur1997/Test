@@ -120,7 +120,7 @@ const App: React.FC = () => {
                                 <button onClick={() => goToStep(SlideStep.FILTER_DATA)} className="hover:text-blue-600 hover:underline text-left">• Filter Data</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_PREP)} className="hover:text-blue-600 hover:underline text-left">• Pivot Preparation</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_CREATE)} className="hover:text-blue-600 hover:underline text-left">• Pivot Steps</button>
-                                <button onClick={() => goToStep(SlideStep.PIVOT_ANATOMY)} className="hover:text-blue-600 hover:underline text-left">• Pivot Anatomy</button>
+                                <button onClick={() => goToStep(SlideStep.PIVOT_ANATOMY)} className="hover:text-blue-600 hover:underline text-left">• Komponen Pivot</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_OPS)} className="hover:text-blue-600 hover:underline text-left">• Pivot Operations</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_DRILLDOWN)} className="hover:text-blue-600 hover:underline text-left">• Drill Down (Detail)</button>
                                 <button onClick={() => goToStep(SlideStep.PIVOT_CHART)} className="hover:text-blue-600 hover:underline text-left">• Pivot Charts</button>
@@ -331,7 +331,7 @@ const App: React.FC = () => {
                 <div className="h-full flex flex-col">
                     <div className="mb-6 border-b pb-4">
                         <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">Modul 2 - Bagian 6</span>
-                        <h2 className="text-3xl font-bold text-gray-900">Anatomi Pivot Table (Pivot Fields)</h2>
+                        <h2 className="text-3xl font-bold text-gray-900">Komponen Utama Pivot Table (Pivot Fields)</h2>
                     </div>
                     <div className="flex-1">
                         <PivotAnatomyDemo />
