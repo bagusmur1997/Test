@@ -102,7 +102,7 @@ export const FilterFreezeDemo: React.FC = () => {
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-            <div className="space-y-6 flex flex-col justify-center">
+            <div className="space-y-6 flex flex-col justify-center h-full overflow-y-auto">
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                     <h3 className="text-xl font-bold text-gray-800 mb-4">Mengelola Data Besar</h3>
                     
@@ -110,14 +110,44 @@ export const FilterFreezeDemo: React.FC = () => {
                     <div className="mb-6">
                         <div className="flex items-center gap-2 mb-2">
                             <Snowflake className="text-blue-500" size={20} />
-                            <h4 className="font-bold text-blue-700">1. Freeze Panes (Bekukan Layar)</h4>
+                            <h4 className="font-bold text-blue-700">1. Freeze Panes (Membekukan Panel)</h4>
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">Masalah "Amnesia Kolom": Scroll ke bawah, judul hilang.</p>
+                        <p className="text-sm text-gray-600 mb-2">Masalah: Judul kolom (Header) hilang atau tertutup saat melakukan scroll ke bawah.</p>
+                        
+                        {/* New Description Box */}
+                        <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-[11px] leading-tight text-blue-900 space-y-2 mb-3">
+                            <h5 className="font-bold border-b border-blue-200 pb-1 text-xs">Cara Mengunci Layar (Freeze Panes) dengan Tepat</h5>
+                            <p><span className="font-bold">Lokasi Menu:</span> Tab View &rarr; Group Window &rarr; Freeze Panes.</p>
+                            
+                            <div>
+                                <p className="font-bold mb-1">Terdapat 3 Opsi Penguncian:</p>
+                                <ul className="list-disc list-inside space-y-1 text-blue-800">
+                                    <li>
+                                        <span className="font-bold">Freeze Top Row:</span> Otomatis mengunci Baris Paling Atas yang terlihat di layar (biasanya Baris 1/Header).
+                                    </li>
+                                    <li>
+                                        <span className="font-bold">Freeze First Column:</span> Otomatis mengunci Kolom Paling Kiri (Kolom A).
+                                    </li>
+                                    <li>
+                                        <span className="font-bold">Freeze Panes (Custom) - Paling Sering Dipakai:</span>
+                                        <div className="pl-3 mt-0.5 text-gray-700">
+                                            Mengunci Baris dan Kolom sekaligus sesuai keinginan (Misal: Kunci Baris 1-3 DAN Kolom A-B).
+                                            <div className="mt-1 bg-white p-2 rounded border border-blue-200 shadow-sm">
+                                                <span className="font-bold text-blue-700 block mb-0.5">Kunci Rahasianya: Posisi Kursor/Klik Mouse.</span>
+                                                <span className="font-bold text-blue-700">Rumus Posisi:</span> Klik sel di <span className="font-bold text-red-600 bg-red-50 px-1 rounded">KANAN</span> kolom yang mau dikunci dan di <span className="font-bold text-red-600 bg-red-50 px-1 rounded">BAWAH</span> baris yang mau dikunci.
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p><span className="font-bold">Cara Membatalkan:</span> Pilih Unfreeze Panes.</p>
+                        </div>
+
                         <button 
                             onClick={() => setIsFrozen(!isFrozen)}
                             className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all w-full flex items-center justify-center gap-2 ${isFrozen ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
                         >
-                            {isFrozen ? "Header Frozen (Aktif)" : "Aktifkan Freeze Top Row"}
+                            {isFrozen ? "Header Frozen (Aktif)" : "Aktifkan Freeze Top Row (Simulasi)"}
                         </button>
                     </div>
 
@@ -125,9 +155,41 @@ export const FilterFreezeDemo: React.FC = () => {
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <ListFilter className="text-green-600" size={20} />
-                            <h4 className="font-bold text-green-700">2. Filter (Ctrl + Shift + L)</h4>
+                            <h4 className="font-bold text-green-700">2. Filter (Shortcut: Ctrl + Shift + L)</h4>
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">Menyembunyikan data yang tidak perlu.</p>
+                        <p className="text-sm text-gray-600 mb-2">Menyaring data untuk menampilkan informasi spesifik dan menyembunyikan sisanya sementara.</p>
+                        
+                        {/* New Description Box for Filtering */}
+                        <div className="bg-green-50 p-3 rounded-lg border border-green-100 text-[11px] leading-tight text-green-900 space-y-2 mb-3">
+                            <h5 className="font-bold border-b border-green-200 pb-1 text-xs">Cara Melakukan Filtering Data (Menyaring Informasi)</h5>
+                            
+                            <div>
+                                <p className="font-bold text-green-800 mb-0.5">Langkah 1: Mengaktifkan Mode Filter</p>
+                                <ul className="list-disc list-inside space-y-0.5 ml-1 text-green-800">
+                                    <li>Klik pada <b>Judul Kolom (Header)</b> data Anda (Baris paling atas).</li>
+                                    <li>Pilih <b>Tab Data</b> di Ribbon menu &rarr; Klik icon <b>Filter</b> (Gambar Corong).</li>
+                                    <li><b>Shortcut Cepat:</b> Tekan <kbd className="font-mono bg-white px-1 border rounded">Ctrl + Shift + L</kbd>.</li>
+                                    <li><b>Indikator:</b> Akan muncul tombol panah kecil di setiap judul kolom.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <p className="font-bold text-green-800 mb-0.5">Langkah 2: Menggunakan Filter</p>
+                                <ul className="list-disc list-inside space-y-0.5 ml-1 text-green-800">
+                                    <li>Klik tombol panah di kolom yang ingin disaring (misal: Kolom 'Kota').</li>
+                                    <li><b>Cara Basic:</b> Hilangkan centang (Select All), lalu centang hanya data yang diinginkan (misal: 'Surabaya').</li>
+                                    <li><b>Cara Cepat (Search):</b> Ketik kata kunci di kotak Search untuk mencari data spesifik di daftar yang panjang.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <p className="font-bold text-green-800 mb-0.5">Langkah 3: Membersihkan Filter (Clear)</p>
+                                <p className="ml-1">
+                                    Jika ingin melihat semua data kembali tanpa mematikan mode filter, klik tombol filter tadi, lalu pilih <b>"Clear Filter from [Nama Kolom]"</b>.
+                                </p>
+                            </div>
+                        </div>
+
                         <div className="flex gap-2">
                             <button 
                                 onClick={() => {
